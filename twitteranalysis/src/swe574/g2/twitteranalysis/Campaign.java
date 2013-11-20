@@ -4,6 +4,7 @@ public class Campaign implements Comparable<Campaign> {
 	private int id;
 	private String name;
 	private String description;
+	private int ownerUserId;
 	
 	public int getId() {
 		return id;
@@ -22,6 +23,12 @@ public class Campaign implements Comparable<Campaign> {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public int getOwnerUserId() {
+		return ownerUserId;
+	}
+	public void setOwnerUserId(int ownerUserId) {
+		this.ownerUserId = ownerUserId;
 	}
 	
 	@Override

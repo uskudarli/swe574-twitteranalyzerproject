@@ -2,6 +2,8 @@ package swe574.g2.twitteranalysis.view;
 
 import javax.servlet.annotation.WebServlet;
 
+import swe574.g2.twitteranalysis.controller.LoginController;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -26,6 +28,7 @@ public class TwitterAnalysisUI extends UI {
         // itself automatically to this view.
         //
         new Navigator(this, this);
+        
 
         //
         // The initial log view where the user can login to the application
@@ -53,7 +56,8 @@ public class TwitterAnalysisUI extends UI {
                 if (!isLoggedIn && !isLoginView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
-                    getNavigator().navigateTo(LoginView.NAME);
+                    // getNavigator().navigateTo(LoginView.NAME);
+                	new LoginController(getNavigator()).showLoginPage();
                     return false;
 
                 } else if (isLoggedIn && isLoginView) {

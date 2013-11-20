@@ -6,6 +6,7 @@ public class ApplicationUser {
 	private int id;
 	private String email;
 	private String name;
+	private String hashedPassword;
 
 	private List<Campaign> campaigns;
 
@@ -26,6 +27,12 @@ public class ApplicationUser {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getHashedPassword() {
+		return hashedPassword;
+	}
+	public void setHashedPassword(String hashedPassword) {
+		this.hashedPassword = hashedPassword;
 	}
 	public List<Campaign> getCampaigns() {
 		return this.campaigns;
