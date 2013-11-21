@@ -132,7 +132,7 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 	}
 
 	@Override
-	public Campaign get(Campaign dataObject) throws SQLException {
+	public Campaign[] get(Campaign dataObject) throws SQLException {
 		String query = "select * from t_campaign where ";
 		Object[] bindVariables = new Object[4];
 		int bindVariableCount = 0;
@@ -172,17 +172,25 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 		}
 		
 		ResultSet rs = s.executeQuery();
-		rs.next();
-		
-		Campaign campaign = new Campaign();
-		campaign.setId( rs.getInt("id") );
-		campaign.setName( rs.getString("name") );
-		campaign.setDescription( rs.getString("description") );
-		campaign.setOwnerUserId( rs.getInt("applicationuser_id") );
+		Campaign[] campaignsCache = new Campaign[100];
+		int i=0;
+		while(rs.next()) {
+			Campaign campaign = new Campaign();
+			campaign.setId( rs.getInt("id") );
+			campaign.setName( rs.getString("name") );
+			campaign.setDescription( rs.getString("description") );
+			campaign.setOwnerUserId( rs.getInt("applicationuser_id") );
+			campaignsCache[i++] = campaign;
+		}
 
+		Campaign[] campaigns = new Campaign[i];
+		for (int k=0; k<i; ++k) {
+			campaigns[k] = campaignsCache[k];
+		}
+		
 		connection.close();
 		
-		return campaign;
+		return campaigns;
 	}
 
 	@Override

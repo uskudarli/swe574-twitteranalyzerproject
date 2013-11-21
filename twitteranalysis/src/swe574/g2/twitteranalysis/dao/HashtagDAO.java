@@ -20,7 +20,7 @@ public class HashtagDAO implements DataAccessObject<Hashtag> {
 	}
 
 	@Override
-	public Hashtag get(Hashtag dataObject) throws SQLException {
+	public Hashtag[] get(Hashtag dataObject) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}

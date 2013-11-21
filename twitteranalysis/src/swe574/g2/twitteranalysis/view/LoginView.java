@@ -1,9 +1,6 @@
 package swe574.g2.twitteranalysis.view;
 
-import java.sql.SQLException;
-
-import swe574.g2.twitteranalysis.Campaign;
-import swe574.g2.twitteranalysis.dao.CampaignDAO;
+import swe574.g2.twitteranalysis.controller.LoginController;
 
 import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.data.validator.EmailValidator;
@@ -22,12 +19,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 
+@SuppressWarnings("serial")
 public class LoginView extends CustomComponent implements View, Button.ClickListener {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4719814235682428652L;
 
 	public static final String NAME = "login";
 
@@ -128,23 +121,9 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
        String username = this.username.getValue();
        String password = this.password.getValue();
 
-        //
-        // Validate username and password with database here. For examples sake
-        // I use a dummy username and password.
-        //
-       boolean isValid = username.equals("test@test.com")
-               && password.equals("123");
-
-       if(isValid){
-           // Store the current user in the service session
-           getSession().setAttribute("user", username);
-
-           // Navigate to main view
-           getUI().getNavigator().navigateTo(DashBoardView.NAME);
-
-       } else {
-
-           // Wrong password clear the password field and refocuses it
+       boolean loggedIn = new LoginController(getUI()).login(username, password);
+       if (!loggedIn) {
+    	   // Wrong password clear the password field and refocuses it
            this.password.setValue(null);
            this.password.focus();
        }

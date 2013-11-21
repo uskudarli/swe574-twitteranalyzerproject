@@ -20,7 +20,7 @@ public class TweetDAO implements DataAccessObject<Tweet> {
 	}
 
 	@Override
-	public Tweet get(Tweet dataObject) throws SQLException {
+	public Tweet[] get(Tweet dataObject) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}

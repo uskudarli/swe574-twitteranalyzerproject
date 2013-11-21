@@ -18,14 +18,15 @@ public class QueryDAO implements DataAccessObject<Query> {
 	public boolean save(Query dataObject) throws SQLException {
 		Connection connection = DatabaseConnector.getInstance().getConnection(); 
 		
-		String query = "insert into t_query () values () ";
-		Statement s = connection.createStatement();
-		s.executeUpdate(query);
-		s.close();
+		String query = "insert into t_query (campaign_id) values (?) ";
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setInt(1, dataObject.getCampaignId());
+		ps.executeUpdate(query);
+		ps.close();
 		
 		int queryId = -1;
 		query = "select max(id) from t_query ";
-		s = connection.createStatement();
+		Statement s = connection.createStatement();
 		ResultSet rs = s.executeQuery(query);
 		rs.next();
 		queryId = rs.getInt(1);
@@ -37,7 +38,6 @@ public class QueryDAO implements DataAccessObject<Query> {
 		
 
 		query = "insert into t_querykeyword (name, type, query_id) values (?,?,?) ";
-		PreparedStatement ps;
 		if (includingKeywords != null) {
 			for (String k : includingKeywords) {
 				ps = connection.prepareStatement(query);
@@ -99,37 +99,81 @@ public class QueryDAO implements DataAccessObject<Query> {
 	}
 
 	@Override
-	public Query get(Query dataObject) throws SQLException {
-		String query = "select * from t_querykeyword where id = ?";
+	public Query[] get(Query dataObject) throws SQLException {
+		String query = "select * from t_query where ";
+		Object[] bindVariables = new Object[3];
+		int bindVariableCount = 0;
+		if (dataObject.getId() > 0) {
+			query += "name = ? and ";
+			bindVariables[bindVariableCount++] = dataObject.getId();
+		}
+		if (dataObject.getCampaignId() > 0) {
+			query += "campaign_id = ? and ";
+			bindVariables[bindVariableCount++] = dataObject.getCampaignId();
+		}
+		
+		query = query.substring(0, query.length() - 4);
 						
 		Connection connection = DatabaseConnector.getInstance().getConnection(); 
 		PreparedStatement s = connection.prepareStatement(query);
 		
-		if (dataObject.getId() <= 0) {
+		if (bindVariableCount == 0) {
 			return null;
 		}
 		
+		for (int i=0; i<bindVariableCount; ++i) {
+			if (bindVariables[i] instanceof String) {
+				s.setString(i+1, (String)bindVariables[i]);
+			}
+			else {
+				s.setInt(i+1, (Integer)bindVariables[i]);
+			}
+		}
+		
 		ResultSet rs = s.executeQuery();
-		
-		Query queryObject = new Query();
-		queryObject.setId(dataObject.getId());
-		List<String> includingKeywords = new ArrayList<String>();
-		List<String> excludingKeywords = new ArrayList<String>();
-		
+		int count = 0;
+		Query[] qCache = new Query[100];
 		while (rs.next()) {
-			if ("including".equals( rs.getString("type") )) {
-				includingKeywords.add( rs.getString("name") );
+			
+			Query q = new Query();
+			q.setId( rs.getInt("id") );
+			q.setCampaignId( rs.getInt("campaign_id") );
+			
+			qCache[count++] = q;
+			
+			List<String> includingKeywords = new ArrayList<String>();
+			List<String> excludingKeywords = new ArrayList<String>();
+			
+			String kQuery = "select * from t_querykeyword where query_id = ? ";
+			PreparedStatement ps2 = connection.prepareStatement(kQuery);
+			ps2.setInt(1, q.getId());
+			ResultSet rs2 = ps2.executeQuery();
+			
+			while (rs.next()) {
+				if ("including".equals( rs.getString("type") )) {
+					includingKeywords.add( rs.getString("name") );
+				}
+				else if ("excluding".equals( rs.getString("type") )) {
+					excludingKeywords.add( rs.getString("name") );
+				}
 			}
-			else if ("excluding".equals( rs.getString("type") )) {
-				excludingKeywords.add( rs.getString("name") );
-			}
-		}		
-		queryObject.setIncludingKeywords(includingKeywords);
-		queryObject.setExcludingKeywords(excludingKeywords);
+			q.setIncludingKeywords(includingKeywords);
+			q.setExcludingKeywords(excludingKeywords);
+			
+			rs2.close();
+			ps2.close();
+			
+		}
 		
+		rs.close();
+		s.close();
 		connection.close();
 		
-		return queryObject;
+		Query[] queries = new Query[count];
+		for (int k=0;k<count;++k) {
+			queries[k] = qCache[k];
+		}
+		return queries;
 	}
 
 	@Override
@@ -147,7 +191,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 		s.executeUpdate(query);
 		s.close();
 
-		query = "create table IF NOT EXISTS t_query (id int(10) NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)) ";
+		query = "create table IF NOT EXISTS t_query (id int(10) NOT NULL AUTO_INCREMENT, campaign_id int(10), PRIMARY KEY (id)) ";
 		s = connection.createStatement();
 		s.executeUpdate(query);
 		s.close();
@@ -155,6 +199,34 @@ public class QueryDAO implements DataAccessObject<Query> {
 		connection.close();
 		
 		return true;
+	}
+	
+	public void addKeyword(int queryId, String keyword, String type) throws SQLException {
+		Connection connection = DatabaseConnector.getInstance().getConnection(); 
+
+		String query = "insert into t_querykeyword (name, type, query_id) values (?,?,?) ";
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setString(1, keyword);
+		ps.setString(2, type);
+		ps.setInt(3, queryId);
+		ps.executeUpdate();
+		ps.close();
+
+		connection.close();
+	}
+	
+	public void removeKeyword(int queryId, String keyword, String type) throws SQLException {
+		Connection connection = DatabaseConnector.getInstance().getConnection(); 
+
+		String query = "delete from t_querykeyword where name = ? and type = ? and query_id = ? ";
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setString(1, keyword);
+		ps.setString(2, type);
+		ps.setInt(3, queryId);
+		ps.executeUpdate();
+		ps.close();
+		
+		connection.close();
 	}
 
 }

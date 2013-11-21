@@ -40,6 +40,10 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 				query += "email = ?,";
 				bindVariables[bindVariableCount++] = dataObject.getEmail();
 			}
+			if (dataObject.getHashedPassword() != null) {
+				query += "password = ? and ";
+				bindVariables[bindVariableCount++] = dataObject.getHashedPassword();
+			}
 			
 			if (bindVariableCount == 0) {
 				return false;
@@ -57,6 +61,10 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 			if (dataObject.getEmail() != null) {
 				query += "email,";
 				bindVariables[bindVariableCount++] = dataObject.getEmail();
+			}
+			if (dataObject.getHashedPassword() != null) {
+				query += "password = ? and ";
+				bindVariables[bindVariableCount++] = dataObject.getHashedPassword();
 			}
 			
 			if (bindVariableCount == 0) {
@@ -91,7 +99,7 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 	@Override
 	public boolean remove(ApplicationUser dataObject) throws SQLException {
 		String query = "delete from t_applicationuser where ";
-		Object[] bindVariables = new Object[4];
+		Object[] bindVariables = new Object[5];
 		int bindVariableCount = 0;
 		if (dataObject.getName() != null) {
 			query += "name = ? and ";
@@ -100,6 +108,10 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 		if (dataObject.getEmail() != null) {
 			query += "email = ? and ";
 			bindVariables[bindVariableCount++] = dataObject.getEmail();
+		}
+		if (dataObject.getHashedPassword() != null) {
+			query += "password = ? and ";
+			bindVariables[bindVariableCount++] = dataObject.getHashedPassword();
 		}
 		if (dataObject.getId() > 0) {
 			query += "id = ? and ";
@@ -131,7 +143,7 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 	}
 
 	@Override
-	public ApplicationUser get(ApplicationUser dataObject) throws SQLException {
+	public ApplicationUser[] get(ApplicationUser dataObject) throws SQLException {
 		String query = "select * from t_applicationuser where ";
 		Object[] bindVariables = new Object[4];
 		int bindVariableCount = 0;
@@ -142,6 +154,10 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 		if (dataObject.getEmail() != null) {
 			query += "email = ? and ";
 			bindVariables[bindVariableCount++] = dataObject.getEmail();
+		}
+		if (dataObject.getHashedPassword() != null) {
+			query += "password = ? and ";
+			bindVariables[bindVariableCount++] = dataObject.getHashedPassword();
 		}
 		if (dataObject.getId() > 0) {
 			query += "id = ? and ";
@@ -167,16 +183,24 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 		}
 		
 		ResultSet rs = s.executeQuery();
-		rs.next();
+		int i=0;
+		ApplicationUser[] appUsersCache = new ApplicationUser[100];
 		
-		ApplicationUser applicationUser = new ApplicationUser();
-		applicationUser.setId( rs.getInt("id") );
-		applicationUser.setName( rs.getString("name") );
-		applicationUser.setEmail( rs.getString("description") );
-		applicationUser.setHashedPassword( rs.getString("password") );
+		while (rs.next()) {
+			ApplicationUser applicationUser = new ApplicationUser();
+			applicationUser.setId( rs.getInt("id") );
+			applicationUser.setName( rs.getString("name") );
+			applicationUser.setEmail( rs.getString("email") );
+			applicationUser.setHashedPassword( rs.getString("password") );
+			appUsersCache[i++] = applicationUser;
+		}
+		ApplicationUser[] appUsers = new ApplicationUser[i];
+		for (int k=0; k<i; ++k) {
+			appUsers[k] = appUsersCache[k];
+		}
+		
 		connection.close();
-		
-		return applicationUser;
+		return appUsers;
 	}
 
 	@Override
