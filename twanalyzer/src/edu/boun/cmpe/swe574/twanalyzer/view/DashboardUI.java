@@ -20,7 +20,6 @@ import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -34,7 +33,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PasswordField;
@@ -43,7 +41,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-import edu.boun.cmpe.swe574.twanalyzer.User;
+import edu.boun.cmpe.swe574.twanalyzer.model.User;
+
 
 @Theme("dashboard")
 @Title("Twitter Analyzer")
@@ -78,12 +77,13 @@ public class DashboardUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-    	/*EntityManager em = Persistence
-		.createEntityManagerFactory(DashboardUI.PERSISTENCE_UNIT)
-		.createEntityManager();*/
     	
-//       userList = JPAContainerFactory.make(User.class, DashboardUI.PERSISTENCE_UNIT);        
-//        userRoleList = JPAContainerFactory.make(UserRole.class, DashboardUI.PERSISTENCE_UNIT);        
+    	EntityManager em = Persistence
+		.createEntityManagerFactory(DashboardUI.PERSISTENCE_UNIT)
+		.createEntityManager();
+    	
+       userList = JPAContainerFactory.make(User.class, DashboardUI.PERSISTENCE_UNIT);        
+//>        userRoleList = JPAContainerFactory.make(UserRole.class, DashboardUI.PERSISTENCE_UNIT);        
         
         setLocale(Locale.US);
 
@@ -176,7 +176,7 @@ public class DashboardUI extends UI {
                         loginPanel.removeComponent(loginPanel.getComponent(2));
                     }
                     Label error = new Label(
-                            "Wrong username.<span>Hint: try 'bkara' for admin view, '2012719081' for student view <br> or 'ucaglayan' for instructor view with no password.</span>",
+                            "Wrong username.<span>Hint: Try 'suskudarli' with empty password.</span>",
                             ContentMode.HTML);
                     error.addStyleName("error");
                     error.setSizeUndefined();
@@ -223,7 +223,7 @@ public class DashboardUI extends UI {
                             {
                                 addStyleName("branding");
                                 Label logo = new Label(
-                                        "<span>BOUN Project Upload and Evaulation System</span> Dashboard",
+                                        "<span>Twitter Analyzer</span> Dashboard",
                                         ContentMode.HTML);
                                 logo.setSizeUndefined();
                                 addComponent(logo);
@@ -241,9 +241,7 @@ public class DashboardUI extends UI {
                                 setSizeUndefined();
                                 addStyleName("user");
 
-                                Label userName = new Label(user.getName()
-                                        + " "
-                                        + user.getSurname());
+                                Label userName = new Label(user.getFullName());
                                 userName.setSizeUndefined();
                                 addComponent(userName);
 
@@ -365,10 +363,13 @@ public class DashboardUI extends UI {
     private void buildDashboardView(){
     	views = new String[]{"query", "reports", "settings"};
 
-//    	routes.put("/reports", Reports.class);
     	
-    	menuNames.put("/query", "Submit a Query");
-    	menuNames.put("reports", "Reports");
+    	routes.put("/query", QueryView.class);
+    	routes.put("/reports", ReportsView.class);
+    	routes.put("/settings", SettingsView.class);
+    	
+    	menuNames.put("/query", "Submit Query");
+    	menuNames.put("/reports", "Reports");
     	menuNames.put("/settings", "Settings");
     }
 }
