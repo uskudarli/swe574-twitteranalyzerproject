@@ -7,6 +7,7 @@ import swe574.g2.twitteranalysis.Campaign;
 import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
+import swe574.g2.twitteranalysis.tclient.TwitterClient;
 import swe574.g2.twitteranalysis.view.QueryView;
 
 import com.vaadin.ui.ComboBox;
@@ -31,20 +32,21 @@ public class QueryController extends AbstractController {
 		
 	}
 	
-	public void removeQuery(int queryId) {
+	public void removeQuery(ComboBox queriesComboBox) {
 		
 	}
 	
-	public void addKeyword(int queryId, String keyword, String type) {
+	public void addKeyword(ComboBox queriesComboBox, String keyword, String type) {
 		
 	}
 	
-	public void removeKeyword(int queryId, String keyword, String type) {
+	public void removeKeyword(ComboBox queriesComboBox, String keyword, String type) {
 		
 	}
 	
-	public void runQuery(int queryId) {
-		
+	public void runQuery(ComboBox queriesComboBox) {
+		TwitterClient tc = new TwitterClient();
+		tc.runQuery((Query)queriesComboBox.getValue());
 	}
 	
 	public void loadQueries(ComboBox queriesComboBox) {
@@ -77,11 +79,21 @@ public class QueryController extends AbstractController {
 		}
 	}
 	
-	public void loadIncludingKeywords(String queryId, ListSelect list) {
+	public void loadIncludingKeywords(ComboBox queriesComboBox, ListSelect list) {
 		System.out.println("loadIncludings");
+		Query q = (Query)queriesComboBox.getValue();
+		list.removeAllItems();
+		for (String i : q.getIncludingKeywords()) {
+			list.addItem(i);
+		}
 	}
 	
-	public void loadExcludingKeywords(String queryId, ListSelect list) {
+	public void loadExcludingKeywords(ComboBox queriesComboBox, ListSelect list) {
 		System.out.println("loadExcludings");
+		Query q = (Query)queriesComboBox.getValue();
+		list.removeAllItems();
+		for (String i : q.getExcludingKeywords()) {
+			list.addItem(i);
+		}
 	}
 }

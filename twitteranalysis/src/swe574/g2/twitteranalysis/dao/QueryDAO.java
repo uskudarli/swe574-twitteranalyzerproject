@@ -139,8 +139,6 @@ public class QueryDAO implements DataAccessObject<Query> {
 			q.setId( rs.getInt("id") );
 			q.setCampaignId( rs.getInt("campaign_id") );
 			
-			qCache[count++] = q;
-			
 			List<String> includingKeywords = new ArrayList<String>();
 			List<String> excludingKeywords = new ArrayList<String>();
 			
@@ -149,16 +147,18 @@ public class QueryDAO implements DataAccessObject<Query> {
 			ps2.setInt(1, q.getId());
 			ResultSet rs2 = ps2.executeQuery();
 			
-			while (rs.next()) {
-				if ("including".equals( rs.getString("type") )) {
-					includingKeywords.add( rs.getString("name") );
+			while (rs2.next()) {
+				if ("including".equals( rs2.getString("type") )) {
+					includingKeywords.add( rs2.getString("name") );
 				}
-				else if ("excluding".equals( rs.getString("type") )) {
-					excludingKeywords.add( rs.getString("name") );
+				else if ("excluding".equals( rs2.getString("type") )) {
+					excludingKeywords.add( rs2.getString("name") );
 				}
 			}
 			q.setIncludingKeywords(includingKeywords);
 			q.setExcludingKeywords(excludingKeywords);
+			
+			qCache[count++] = q;
 			
 			rs2.close();
 			ps2.close();

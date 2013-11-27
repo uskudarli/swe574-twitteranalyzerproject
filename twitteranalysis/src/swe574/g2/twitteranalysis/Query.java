@@ -1,8 +1,9 @@
 package swe574.g2.twitteranalysis;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Query {
+public class Query{
 	private int id;
 	private List<String> includingKeywords;
 	private List<String> excludingKeywords;
@@ -43,6 +44,11 @@ public class Query {
 	
 	@Override
 	public String toString() {
-		return id + "  - " + campaignId;
+		return id + " :: " + super.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && obj instanceof Query && this.id == ((Query)obj).getId();
 	}
 }
