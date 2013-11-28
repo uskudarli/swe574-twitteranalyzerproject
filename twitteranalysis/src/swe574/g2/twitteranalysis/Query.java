@@ -1,6 +1,6 @@
 package swe574.g2.twitteranalysis;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Query{
@@ -40,6 +40,41 @@ public class Query{
 	
 	public Tweet getTweet(int id) {
 		return null;
+	}
+	
+	public void addKeyword(String name, String type) {
+		if ("including".equals(type)) {
+			if (this.includingKeywords !=null) {
+				this.includingKeywords.add(name);
+			}
+			else {
+				this.includingKeywords = new ArrayList<String>();
+				this.includingKeywords.add(name);
+			}
+		}
+		else if ("excluding".equals(type)) {
+			if (this.excludingKeywords !=null) {
+				this.excludingKeywords.add(name);
+			}
+			else {
+				this.excludingKeywords = new ArrayList<String>();
+				this.excludingKeywords.add(name);
+			}
+		}
+	}
+	
+	public void removeKeyword(String name, String type) {
+		
+		if (name != null && "including".equals(type)) {
+			if (this.includingKeywords !=null) {
+				this.includingKeywords.remove(name);
+			}
+		}
+		else if (name!=null && "excluding".equals(type)) {
+			if (this.excludingKeywords !=null) {
+				this.excludingKeywords.remove(name);
+			}
+		}
 	}
 	
 	@Override

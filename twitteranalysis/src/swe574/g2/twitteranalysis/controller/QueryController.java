@@ -32,16 +32,38 @@ public class QueryController extends AbstractController {
 		
 	}
 	
-	public void removeQuery(ComboBox queriesComboBox) {
+	public void removeQuery(ComboBox queriesComboBox, String keyword, String type) {
 		
 	}
 	
 	public void addKeyword(ComboBox queriesComboBox, String keyword, String type) {
-		
+		Query q = (Query)queriesComboBox.getValue();
+		if (q != null) {
+			q.addKeyword(keyword, type);
+			try 
+			{
+				new QueryDAO().save(q);
+			} 
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void removeKeyword(ComboBox queriesComboBox, String keyword, String type) {
-		
+		Query q = (Query)queriesComboBox.getValue();
+		if (q != null) {
+			q.removeKeyword(keyword, type);
+			try 
+			{
+				new QueryDAO().save(q);
+			} 
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void runQuery(ComboBox queriesComboBox) {
@@ -68,10 +90,7 @@ public class QueryController extends AbstractController {
 					queriesComboBox.addItem(q);
 					
 				}
-			}
-			
-			
-			
+			}			
 		} 
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -83,8 +102,10 @@ public class QueryController extends AbstractController {
 		System.out.println("loadIncludings");
 		Query q = (Query)queriesComboBox.getValue();
 		list.removeAllItems();
-		for (String i : q.getIncludingKeywords()) {
-			list.addItem(i);
+		if (q != null) {
+			for (String i : q.getIncludingKeywords()) {
+				list.addItem(i);
+			}			
 		}
 	}
 	
@@ -92,8 +113,10 @@ public class QueryController extends AbstractController {
 		System.out.println("loadExcludings");
 		Query q = (Query)queriesComboBox.getValue();
 		list.removeAllItems();
-		for (String i : q.getExcludingKeywords()) {
-			list.addItem(i);
+		if (q != null) {
+			for (String i : q.getExcludingKeywords()) {
+				list.addItem(i);
+			}
 		}
 	}
 }

@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.database.DataAccessObject;
 import swe574.g2.twitteranalysis.database.DatabaseConnector;
@@ -20,43 +22,81 @@ public class QueryDAO implements DataAccessObject<Query> {
 		
 		String query = "insert into t_query (campaign_id) values (?) ";
 		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setInt(1, dataObject.getCampaignId());
-		ps.executeUpdate(query);
-		ps.close();
-		
 		int queryId = -1;
-		query = "select max(id) from t_query ";
-		Statement s = connection.createStatement();
-		ResultSet rs = s.executeQuery(query);
-		rs.next();
-		queryId = rs.getInt(1);
-		rs.close();
-		s.close();
+		
+		if (dataObject != null && dataObject.getId() < 1) {
+			query = "insert into t_query (campaign_id) values (?) ";
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, dataObject.getCampaignId());
+			ps.executeUpdate();
+			ps.close();
 
+			query = "select max(id) from t_query ";
+			Statement s = connection.createStatement();
+			ResultSet rs = s.executeQuery(query);
+			rs.next();
+			queryId = rs.getInt(1);
+			rs.close();
+			s.close();
+		}
+		else {
+			queryId = dataObject.getId();
+		}
+		
+		
 		List<String> includingKeywords = dataObject.getIncludingKeywords();
 		List<String> excludingKeywords = dataObject.getExcludingKeywords();
 		
-
+		try {
+			query = "delete from t_querykeyword where query_id = ? ";
+			ps = connection.prepareStatement(query);
+			
+			try {
+				ps.setInt(1, queryId);
+				ps.executeUpdate();
+			} catch (Exception e) {
+				// do nothing
+			}
+			finally {
+				ps.close();
+			}
+		} catch (SQLException e1) {
+			// do nothing
+		}
+		
 		query = "insert into t_querykeyword (name, type, query_id) values (?,?,?) ";
 		if (includingKeywords != null) {
 			for (String k : includingKeywords) {
-				ps = connection.prepareStatement(query);
-				ps.setString(1, k);
-				ps.setString(2, "including");
-				ps.setInt(3, queryId);
-				ps.executeUpdate();
-				ps.close();
+				try {
+					ps = connection.prepareStatement(query);
+					ps.setString(1, k);
+					ps.setString(2, "including");
+					ps.setInt(3, queryId);
+					ps.executeUpdate();
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					// do nothing
+				}
+				finally {
+					ps.close();
+				}
+				
 			}
 		}
 		
 		if (excludingKeywords != null) {
 			for (String k : excludingKeywords) {
-				ps = connection.prepareStatement(query);
-				ps.setString(1, k);
-				ps.setString(2, "excluding");
-				ps.setInt(3, queryId);
-				ps.executeUpdate();
-				ps.close();
+				try {
+					ps = connection.prepareStatement(query);
+					ps.setString(1, k);
+					ps.setString(2, "excluding");
+					ps.setInt(3, queryId);
+					ps.executeUpdate();
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					// do nothing
+				}
+				finally {
+					ps.close();
+				}
 			}
 		}
 		
@@ -184,7 +224,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 
 	@Override
 	public boolean init() throws SQLException {
-		String query = "create table IF NOT EXISTS t_querykeyword (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), type varchar(512), query_id int(10), PRIMARY KEY (id)) ";
+		String query = "create table IF NOT EXISTS t_querykeyword (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), type varchar(512), query_id int(10), PRIMARY KEY (id), UNIQUE(name(100),type(10),query_id)) ";
 		Connection connection = DatabaseConnector.getInstance().getConnection(); 
 
 		Statement s = connection.createStatement();
