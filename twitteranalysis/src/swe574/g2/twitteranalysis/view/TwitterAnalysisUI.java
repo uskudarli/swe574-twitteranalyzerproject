@@ -48,6 +48,7 @@ public class TwitterAnalysisUI extends UI {
         getNavigator().addView(LoginView.NAME, LoginView.class);
         getNavigator().addView(DashBoardView.NAME, DashBoardView.class);
         getNavigator().addView(QueryView.NAME, QueryView.class);
+        getNavigator().addView(RegisterView.NAME, RegisterView.class);
         
         
         //
@@ -62,15 +63,16 @@ public class TwitterAnalysisUI extends UI {
                 // Check if a user has logged in
                 boolean isLoggedIn = getSession().getAttribute("user_email") != null;
                 boolean isLoginView = event.getNewView() instanceof LoginView;
+                boolean isRegisterView = event.getNewView() instanceof RegisterView;
 
-                if (!isLoggedIn && !isLoginView) {
+                if (!isLoggedIn && !isLoginView && !isRegisterView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
                     // getNavigator().navigateTo(LoginView.NAME);
                 	new LoginController(getUI()).showLoginPage();
                     return false;
 
-                } else if (isLoggedIn && isLoginView) {
+                } else if (isLoggedIn && (isLoginView || isRegisterView)) {
                     // If someone tries to access to login view while logged in,
                     // then cancel
                     return false;
