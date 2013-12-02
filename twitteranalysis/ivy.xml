@@ -18,27 +18,63 @@
 	</configurations>
 	<dependencies defaultconf="default" defaultconfmapping="default->default">
 		<!-- The core server part of Vaadin -->
-		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;" />
+		<!-- <dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;" /> -->
 
 		<!-- Vaadin themes -->
-		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
+		<!-- <dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" /> -->
 
 		<!-- Push support -->
-		<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />
+		<!-- <dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" /> -->
 
 		<!-- Servlet 3.0 API -->
 		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="nodeploy->default" />
+
+		<!-- Precompiled DefaultWidgetSet -->
+		<!-- <dependency org="com.vaadin" name="vaadin-client-compiled"
+			rev="&vaadin.version;" /> -->
+
+		<!-- Vaadin client side, needed for widget set compilation -->
+		<!-- <dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;"
+			 conf="widgetset-compile->default" /> -->
+
+		<!-- Compiler for custom widget sets. Should not be deployed -->
+		<!-- <dependency org="com.vaadin" name="vaadin-client-compiler"
+			rev="&vaadin.version;" conf="widgetset-compile->default" /> -->
+		
+				<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;"
+			conf="default->default" />
+
+		<!-- Vaadin themes -->
+		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
 
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
 			rev="&vaadin.version;" />
 
 		<!-- Vaadin client side, needed for widget set compilation -->
-		<dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;"
-			 conf="widgetset-compile->default" />
+		<dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
 			rev="&vaadin.version;" conf="widgetset-compile->default" />
+		<dependency org="com.google.code.gson" name="gson" rev="1.4"/>
+
+		<dependency org="com.vaadin"
+                name="vaadin-theme-compiler"
+                rev="&vaadin.version;"/>
+		
+		
+		<dependency org="com.vaadin.addon"
+                name="vaadin-calendar-cval-2.0"
+                rev="2.0.0.beta3"/>
+		
+		<dependency org="com.vaadin.addon"
+                name="vaadin-charts"
+                rev="1.0.0"/>
+		
+		<dependency org="org.vaadin.addons"
+                name="cssinject"
+                rev="2.0.3"/>	
+                
 	</dependencies>
 </ivy-module>
