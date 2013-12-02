@@ -2,6 +2,7 @@ package swe574.g2.twitteranalysis.controller;
 
 import java.sql.SQLException;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.UI;
 
@@ -9,6 +10,7 @@ import swe574.g2.twitteranalysis.ApplicationUser;
 import swe574.g2.twitteranalysis.Campaign;
 import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
+import swe574.g2.twitteranalysis.exception.CampaignException;
 import swe574.g2.twitteranalysis.view.DashBoardView;
 
 public class CampaignController extends AbstractController {
@@ -22,12 +24,33 @@ public class CampaignController extends AbstractController {
 		super(ui);
 	}
 	
-    public void addCampaign(String campaignName) {
-		
+    public void addCampaign(String campaignName) throws CampaignException {
+    	Campaign campaign = new Campaign();
+		campaign.setName(campaignName);
+		campaign.setOwnerUserId((Integer)getSession().getAttribute("user_id"));
+		CampaignDAO dao = new CampaignDAO();
+		try {
+			dao.save(campaign);
+		} 
+		catch (MySQLIntegrityConstraintViolationException e) {
+			throw new CampaignException("Campaign Already exists!");
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-    public void removeCampaign(String campaignName) {
-		
+    public void removeCampaign(String campaignName) throws CampaignException {
+    	Campaign campaign = new Campaign();
+		campaign.setName(campaignName);
+		campaign.setOwnerUserId((Integer)getSession().getAttribute("user_id"));
+		CampaignDAO dao = new CampaignDAO();
+		try {
+			dao.remove(campaign);
+		}
+		catch (SQLException e) {
+			throw new CampaignException(e.getMessage());
+		}
 	}
     
     public void loadUserCampaigns(ComboBox campaignsComboBox) {

@@ -8,6 +8,7 @@ import swe574.g2.twitteranalysis.Campaign;
 import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
+import swe574.g2.twitteranalysis.exception.QueryException;
 import swe574.g2.twitteranalysis.tclient.TwitterClient;
 import swe574.g2.twitteranalysis.view.QueryView;
 
@@ -29,12 +30,33 @@ public class QueryController extends AbstractController {
 		getNavigator().navigateTo(QueryView.NAME);
 	}
 	
-	public void addQuery(List<String> includingKeywords, List<String> excludingKeywords) {
+	public void addQuery(List<String> includingKeywords, List<String> excludingKeywords) throws QueryException {
+		Query query = new Query();
+		query.setIncludingKeywords(includingKeywords);
+		query.setExcludingKeywords(excludingKeywords);
+		query.setCampaignId((Integer)getSession().getAttribute("active_campaign_id"));
 		
+		QueryDAO dao = new QueryDAO();
+		try {
+			dao.save(query);
+		} 
+		catch (SQLException e) {
+			throw new QueryException(e.getMessage());
+		}
 	}
 	
-	public void removeQuery(ComboBox queriesComboBox, String keyword, String type) {
+	public void removeQuery(ComboBox queriesComboBox, String keyword, String type) throws QueryException {
+		Query query = (Query)queriesComboBox.getValue();
+		if (query == null)
+			throw new QueryException("Select a query to remove.");
 		
+		QueryDAO dao = new QueryDAO();
+		try {
+			dao.remove(query);
+		} 
+		catch (SQLException e) {
+			throw new QueryException(e.getMessage());
+		}
 	}
 	
 	public void addKeyword(ComboBox queriesComboBox, String keyword, String type) {

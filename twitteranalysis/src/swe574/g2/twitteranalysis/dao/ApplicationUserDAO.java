@@ -14,7 +14,7 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 
 	@Override
 	public boolean init() throws SQLException {
-		String query = "create table IF NOT EXISTS t_applicationuser (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), email varchar(512), password varchar(512), PRIMARY KEY (id)) ";
+		String query = "create table IF NOT EXISTS t_applicationuser (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), email varchar(512), password varchar(512), PRIMARY KEY (id), UNIQUE(email)) ";
 		Connection connection = DatabaseConnector.getInstance().getConnection(); 
 		Statement s = connection.createStatement();
 		s.executeUpdate(query);
@@ -33,15 +33,15 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 		
 		    query = "update t_applicationuser set ";
 			if (dataObject.getName() != null) {
-				query += "name = ?,";
+				query += "name = ?, ";
 				bindVariables[bindVariableCount++] = dataObject.getName();
 			}
 			if (dataObject.getEmail() != null) {
-				query += "email = ?,";
+				query += "email = ?, ";
 				bindVariables[bindVariableCount++] = dataObject.getEmail();
 			}
 			if (dataObject.getHashedPassword() != null) {
-				query += "password = ? and ";
+				query += "password = ?, ";
 				bindVariables[bindVariableCount++] = dataObject.getHashedPassword();
 			}
 			
@@ -49,11 +49,11 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 				return false;
 			}
 			
-			query = query.substring(0, query.length() - 1) + " where id = ? ";
+			query = query.substring(0, query.length() - 2) + " where id = ? ";
 			bindVariables[bindVariableCount++] = dataObject.getId();
 		}
 		else {
-			query = "insert into t_campaign (";
+			query = "insert into t_applicationuser (";
 			if (dataObject.getName() != null) {
 				query += "name,";
 				bindVariables[bindVariableCount++] = dataObject.getName();
@@ -63,7 +63,7 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 				bindVariables[bindVariableCount++] = dataObject.getEmail();
 			}
 			if (dataObject.getHashedPassword() != null) {
-				query += "password = ? and ";
+				query += "password,";
 				bindVariables[bindVariableCount++] = dataObject.getHashedPassword();
 			}
 			

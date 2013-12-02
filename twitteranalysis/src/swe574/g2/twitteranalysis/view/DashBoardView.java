@@ -6,10 +6,8 @@ import swe574.g2.twitteranalysis.controller.QueryController;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -23,8 +21,9 @@ public class DashBoardView extends CustomComponent implements View {
 	public static final String NAME = "";
     		
 	Label text = new Label();
-
 	ComboBox campaignsComboBox = new ComboBox();
+	Button addCampaign = new Button("Add Campaign");
+	Button removeCampaign = new Button("Remove Campaign");
 	
     Button logout = new Button("Logout", new Button.ClickListener() {
 		@Override
@@ -44,7 +43,9 @@ public class DashBoardView extends CustomComponent implements View {
     public DashBoardView() {
 
     	HorizontalLayout hLayout = new HorizontalLayout(campaignsComboBox, showQueryViewButton);
-    	VerticalLayout vLayout = new VerticalLayout(text, hLayout, logout);
+    	HorizontalLayout hLayout2 = new HorizontalLayout(addCampaign, removeCampaign);
+
+    	VerticalLayout vLayout = new VerticalLayout(text, hLayout, hLayout2, new Label(""), logout);
     	//vLayout.setComponentAlignment(text, Alignment.MIDDLE_LEFT);
     	vLayout.setStyleName(Reindeer.LAYOUT_WHITE);
         setCompositionRoot(vLayout);

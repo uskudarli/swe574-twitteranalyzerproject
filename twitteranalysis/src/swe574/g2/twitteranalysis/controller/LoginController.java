@@ -39,6 +39,7 @@ public class LoginController extends AbstractController {
 				getSession().setAttribute("user_email", users[0].getEmail());
 				getSession().setAttribute("user_id", users[0].getId());
 				getSession().setAttribute("user_name", users[0].getName());
+				getSession().setAttribute("user", users[0]);
 				
 				// Navigate to main view
 		        // getNavigator().navigateTo(DashBoardView.NAME);

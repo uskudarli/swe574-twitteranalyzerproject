@@ -1,9 +1,9 @@
 package swe574.g2.twitteranalysis.view;
 
 import swe574.g2.twitteranalysis.controller.LoginController;
+import swe574.g2.twitteranalysis.controller.RegisterController;
 
 import com.vaadin.data.validator.AbstractValidator;
-import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ThemeResource;
@@ -11,7 +11,9 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -20,7 +22,7 @@ import com.vaadin.ui.themes.Reindeer;
 
 
 @SuppressWarnings("serial")
-public class LoginView extends CustomComponent implements View, Button.ClickListener {
+public class LoginView extends CustomComponent implements View, ClickListener {
 
 	public static final String NAME = "login";
 
@@ -28,6 +30,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 	private final PasswordField password;
 	private final Button loginButton;
 	private final Image loginLogo;
+	private final Button signupButton;
 	
 	public LoginView() {
 		setSizeFull();
@@ -41,22 +44,34 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		username.setWidth("300px");
 		username.setRequired(true);
 		username.setInputPrompt("Your username (eg. su@boun.edu.tr)");
-		username.addValidator(new EmailValidator("Username must be an email address"));
+		// username.addValidator(new EmailValidator("Username must be an email address"));
 		username.setInvalidAllowed(false);
 
 		// Create the password input field
 		password = new PasswordField("Password:");
 		password.setWidth("300px");
-		password.addValidator(new PasswordValidator());
+		// password.addValidator(new PasswordValidator());
 		password.setRequired(true);
 		password.setValue("");
 		password.setNullRepresentation("");
 
+		signupButton = new Button("Register");
+		signupButton.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				RegisterController controller = new RegisterController(getUI());
+				controller.showRegisterView();
+			}
+		});
+		
 		// Create login button
 		loginButton = new Button("Login", this);
+		
+		HorizontalLayout hl = new HorizontalLayout(loginButton, signupButton);
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(loginLogo, username, password, loginButton);
+		VerticalLayout fields = new VerticalLayout(loginLogo, username, password, hl);
 		fields.setCaption("Please login to access the application. (test@test.com / 123)");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
@@ -76,6 +91,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		username.focus();		
 	}
 
+	@SuppressWarnings("unused")
 	private static final class PasswordValidator extends AbstractValidator<String> {
 
 		/**
