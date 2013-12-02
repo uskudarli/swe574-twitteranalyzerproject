@@ -11,5 +11,5 @@
                username="fall2013g2" 
                password="s2013g2ka" 
                driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://127.0.0.1:3305/fall2013g2"/>
+               url="jdbc:mysql://127.0.0.1:3306/fall2013g2"/>
 </Context>
