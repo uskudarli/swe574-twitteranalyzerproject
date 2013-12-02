@@ -1,6 +1,7 @@
 package swe574.g2.twitteranalysis.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import swe574.g2.twitteranalysis.Campaign;
@@ -51,6 +52,18 @@ public class QueryController extends AbstractController {
 		}
 	}
 	
+	public void saveQuery(Query q){
+		if (q != null) {
+			try 
+			{
+				new QueryDAO().save(q);
+			} 
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void removeKeyword(ComboBox queriesComboBox, String keyword, String type) {
 		Query q = (Query)queriesComboBox.getValue();
 		if (q != null) {
@@ -71,26 +84,27 @@ public class QueryController extends AbstractController {
 		tc.runQuery((Query)queriesComboBox.getValue());
 	}
 	
-	public void loadQueries(ComboBox queriesComboBox) {
+	public void loadQueries(ComboBox queriesComboBox, int campaignId) {
 		System.out.println("LoadQueries");
 		Query dataObject  = new Query();
-		Campaign campaign = new Campaign();
-		campaign.setOwnerUserId((Integer)(getSession().getAttribute("user_id")));
-		campaign.setName(String.valueOf( getSession().getAttribute("campaign_name") ));
+//		Campaign campaign = new Campaign();
+//		campaign.setOwnerUserId((Integer)(getSession().getAttribute("user_id")));
+//		campaign.setName(String.valueOf( getSession().getAttribute("campaign_name") ));
 		
 		try 
 		{
-			Campaign[] campaigns = new CampaignDAO().get(campaign);
-			if (campaigns != null && campaigns.length > 0) {
-				dataObject.setCampaignId(campaigns[0].getId());
+//			Campaign[] campaigns = new CampaignDAO().get(campaign);
+ //   		if (campaigns != null && campaigns.length > 0) {
+				dataObject.setCampaignId(campaignId);
 				
 				Query[] qs = new QueryDAO().get(dataObject);
 				for (Query q : qs) {
 					
 					queriesComboBox.addItem(q);
+					queriesComboBox.setItemCaption(q, String.valueOf(q.getId()));
 					
 				}
-			}			
+//			}			
 		} 
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
