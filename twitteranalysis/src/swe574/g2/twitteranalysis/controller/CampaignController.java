@@ -31,21 +31,24 @@ public class CampaignController extends AbstractController {
 	}
     
     public void loadUserCampaigns(ComboBox campaignsComboBox) {
-    	String username = String.valueOf(getSession().getAttribute("user_email"));
+//    	String username = String.valueOf(getSession().getAttribute("user_email"));
     	
-    	ApplicationUser queryUser = new ApplicationUser();
-    	queryUser.setEmail(username);
+    	int userId = (Integer) getSession().getAttribute("user_id");
+    	
+//   	ApplicationUser queryUser = new ApplicationUser();
+//   	queryUser.setEmail(username);
     	try {
-			ApplicationUser[] appUsers = new ApplicationUserDAO().get(queryUser);
-			if (appUsers != null && appUsers.length > 0) {
+//			ApplicationUser[] appUsers = new ApplicationUserDAO().get(queryUser);
+//			if (appUsers != null && appUsers.length > 0) {
 				Campaign queryCampaign = new Campaign();
-				queryCampaign.setOwnerUserId(appUsers[0].getId());
+				queryCampaign.setOwnerUserId(userId);
 				Campaign[] campaigns = new CampaignDAO().get(queryCampaign);
 				
 				for (Campaign c : campaigns) {
-					campaignsComboBox.addItem(c.getName());
+					campaignsComboBox.addItem(c.getId());
+					campaignsComboBox.setItemCaption(c.getId(), c.getName());
 				}
-			}
+//			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
