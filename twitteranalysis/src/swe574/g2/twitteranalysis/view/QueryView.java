@@ -1,47 +1,40 @@
 package swe574.g2.twitteranalysis.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import swe574.g2.twitteranalysis.Query;
+import swe574.g2.twitteranalysis.controller.CampaignController;
 import swe574.g2.twitteranalysis.controller.QueryController;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
+import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.Reindeer;
 
 @SuppressWarnings("serial")
-public class QueryView extends CustomComponent implements View {
+public class QueryView extends VerticalLayout  implements View {
 
 	public static final String NAME = "query";
 
-	private ComboBox queries = new ComboBox();
+//	private Button removeInclude = new Button("Remove Include");
 	
-	private ListSelect includesList = new ListSelect("Include Keyword: ");
-	private Button addInclude = new Button("Add Include");
-	private Button removeInclude = new Button("Remove Include");
-	
-	private ListSelect excludesList = new ListSelect("Exclude Keyword: ");
-	private Button addExclude = new Button("Add Exclude");
-	private Button removeExclude = new Button("Remove Exclude");
+//	private Button addExclude = new Button("Add Exclude");
+//	private Button removeExclude = new Button("Remove Exclude");
 
-	private Button runQuery = new Button("Run Query");
-	
-	private Label keywordLabel = new Label("Keyword: ");
-	private TextField keywordField = new TextField();
-
-	
 	public QueryView() {
-		queries.setImmediate(true);
+		/*queries.setImmediate(true);
 		queries.setWidth("380px");
 		queries.addValueChangeListener(new ValueChangeListener() {
 			
@@ -164,13 +157,221 @@ public class QueryView extends CustomComponent implements View {
 		vLayout.setComponentAlignment(hLayout3, Alignment.MIDDLE_CENTER);
 		vLayout.setComponentAlignment(hLayout4, Alignment.MIDDLE_CENTER);
 		vLayout.setStyleName(Reindeer.LAYOUT_WHITE);
-		setCompositionRoot(vLayout);
+		setCompositionRoot(vLayout);*/
 	}
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		QueryController queryController = new QueryController(getUI());
-		queryController.loadQueries(queries);
+		final QueryController queryController = new QueryController(getUI());
+		final CampaignController campaignController = new CampaignController(getUI());
+		
+        VerticalLayout toolbar = new VerticalLayout();
+        toolbar.setWidth("100%");
+        toolbar.setSpacing(true);
+        toolbar.setMargin(true);
+        toolbar.addStyleName("toolbar");
+        addComponent(toolbar);
+
+        Label header = new Label("Submit Query");
+        header.addStyleName("h1");
+        toolbar.addComponent(header);
+        
+        FormLayout formLayout = new FormLayout();
+        formLayout.setSizeUndefined();
+        
+        final ComboBox campaignCmb = new ComboBox("Campaign Name:");
+        campaignCmb.setNewItemsAllowed(true);
+        campaignCmb.setTextInputAllowed(false); //TODO: will be set to true
+        campaignCmb.setNullSelectionAllowed(false);
+        campaignCmb.setRequired(true);
+        campaignCmb.setImmediate(true);
+        campaignCmb.setScrollToSelectedItem(true);
+        campaignController.loadUserCampaigns(campaignCmb);
+        
+        formLayout.addComponent(campaignCmb);
+        
+        final ComboBox queryCmb = new ComboBox("Query Title:");
+        queryCmb.setNewItemsAllowed(true);
+        queryCmb.setTextInputAllowed(false); //TODO: will be set to true
+        queryCmb.setNullSelectionAllowed(false);
+        queryCmb.setRequired(true);
+        queryCmb.setImmediate(true);
+        queryCmb.setScrollToSelectedItem(true);
+        //queryController.loadQueries(queryCmb);
+        
+        formLayout.addComponent(queryCmb);
+        
+        campaignCmb.addValueChangeListener(new ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				if(campaignCmb.getValue() != null && !"".equals(campaignCmb.getValue())){
+					queryCmb.removeAllItems();
+					queryController.loadQueries(queryCmb, (Integer)campaignCmb.getValue());
+					
+				}else{
+					queryCmb.removeAllItems();
+					queryCmb.select(queryCmb.getNullSelectionItemId());
+				}
+			}
+		});
+        
+        /*TextField queryTitle = new TextField("Query Title:");
+        queryTitle.setRequired(true);
+        formLayout.addComponent(queryTitle);*/
+        
+        HorizontalLayout keywordToolbar = new HorizontalLayout();
+        keywordToolbar.setWidth("100%");
+        keywordToolbar.setSpacing(true);
+        keywordToolbar.addStyleName("toolbar");
+        
+        final TextField includeKeywordField = new TextField("Include Keyword:");
+        includeKeywordField.setWidth("230px");
+        keywordToolbar.addComponent(includeKeywordField);
+        includeKeywordField.setImmediate(true);
+        formLayout.addComponent(keywordToolbar);
+        
+        final TextField excludeKeywordField = new TextField("Exclude Keyword:");
+        excludeKeywordField.setWidth("230px");
+        excludeKeywordField.setImmediate(true);
+        keywordToolbar.addComponent(excludeKeywordField);
+        formLayout.addComponent(keywordToolbar);
+        
+		HorizontalLayout listToolbar = new HorizontalLayout();
+		listToolbar.setWidth("100%");
+		listToolbar.setSpacing(true);
+		listToolbar.addStyleName("toolbar");
+        
+        final ListSelect includesList = new ListSelect();
+        
+        includesList.setNullSelectionAllowed(false);
+		includesList.setWidth("230px");
+		includesList.setImmediate(true);
+
+        includeKeywordField.addValueChangeListener(new ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				String keyword = includeKeywordField.getValue();
+				if(!"".equals(keyword) && keyword != null){
+					includesList.addItem(keyword);
+					includeKeywordField.setValue("");
+				}
+			}
+		});
+		
+//		final TextField keywordField = new TextField("Keyword:");
+//		keywordField.setWidth("360px");
+
+		
+		/*includesList.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				String value = (String)includesList.getValue();
+				if (value != null) {
+					keywordField.setValue(value);
+				}
+			}
+		});*/
+		
+		listToolbar.addComponent(includesList);
+        
+		final ListSelect excludesList = new ListSelect();
+		
+		excludesList.setNullSelectionAllowed(false);
+		excludesList.setWidth("230px");
+		excludesList.setImmediate(true);
+		
+		excludeKeywordField.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				String keyword = excludeKeywordField.getValue();
+				if(!"".equals(keyword) && keyword != null){
+					excludesList.addItem(keyword);
+					excludeKeywordField.setValue("");
+				}
+			}
+		});
+		
+		
+		queryCmb.addValueChangeListener(new ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				if(queryCmb.getValue() != null && !"".equals(queryCmb.getValue())){
+					
+					queryController.loadIncludingKeywords(queryCmb, includesList);
+					queryController.loadExcludingKeywords(queryCmb, excludesList);
+				}else{
+					includesList.removeAllItems();
+					excludesList.removeAllItems();
+				}
+			}
+		});
+		/*excludesList.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				String value = (String)excludesList.getValue();
+				if (value != null) {
+					keywordField.setValue(value);
+				}
+			}
+		});*/
+		
+		listToolbar.addComponent(excludesList);
+		
+        formLayout.addComponent(listToolbar);
+		
+        Button submitButton = new NativeButton("Submit");
+        submitButton.setDescription("Submit");
+        submitButton.addStyleName("default");
+		
+        submitButton.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				QueryController queryController = new QueryController(getUI());
+				Query query = (Query)queryCmb.getValue();
+				query.setIncludingKeywords(new ArrayList<String>((Collection<String>)includesList.getItemIds()));
+				query.setExcludingKeywords(new ArrayList<String>((Collection<String>)excludesList.getItemIds()));
+				
+				queryController.saveQuery(query);
+				
+			}
+		});
+        
+    	Button addInclude = new Button("Add Include");
+    	
+		/*addInclude.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				String keyword = keywordField.getValue();
+				if (keyword != null && keyword.length() > 0) {
+					includesList.addItem(keyword);
+				}
+			}
+		});*/
+    	
+    	Button addExclude = new Button("Add Exclude");
+        
+		/*addExclude.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				String keyword = keywordField.getValue();
+				if (keyword != null && keyword.length() > 0) {
+					excludesList.addItem(keyword);
+				}
+			}
+		});*/
+    	
+//    	formLayout.addComponent(addInclude);
+//    	formLayout.addComponent(addExclude);
+//        formLayout.addComponent(keywordField);
+        formLayout.addComponent(submitButton);
+
+        toolbar.addComponent(formLayout);
 	}
 
 }
