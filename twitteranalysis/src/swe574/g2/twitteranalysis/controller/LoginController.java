@@ -6,6 +6,7 @@ import swe574.g2.twitteranalysis.ApplicationUser;
 import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.view.LoginView;
 
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.UI;
 
 public class LoginController extends AbstractController {
@@ -41,7 +42,10 @@ public class LoginController extends AbstractController {
 				
 				// Navigate to main view
 		        // getNavigator().navigateTo(DashBoardView.NAME);
-				new CampaignController(getUI()).showCampaigns();
+//				new CampaignController(getUI()).showCampaigns();
+				
+                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("user", users[0]);
+
 			}
 		} 
 		catch (SQLException e) {
