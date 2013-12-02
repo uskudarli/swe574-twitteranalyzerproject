@@ -18,11 +18,11 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
-@Theme("twitteranalysis")
-public class TwitterAnalysisUI extends UI {
+//@Theme("twitteranalysis")
+public class TwitterAnalysisUI{ /*extends UI {
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = TwitterAnalysisUI.class)
+	@VaadinServletConfiguration(productionMode = false, ui = DashboardUI.class)
 	public static class Servlet extends VaadinServlet {
 	}
 
@@ -84,6 +84,6 @@ public class TwitterAnalysisUI extends UI {
                 
             }
         });
-	}
+	}*/
 
 }
