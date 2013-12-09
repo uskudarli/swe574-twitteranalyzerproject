@@ -1,6 +1,8 @@
 package swe574.g2.twitteranalysis.database;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -48,6 +50,12 @@ public class DatabaseConnector {
         }
         
         return connection;
+    }
+    
+    public synchronized void closeConnection(Connection connection) throws SQLException {
+    	if (connection != null) {
+    		connection.close();
+    	}
     }
 
     

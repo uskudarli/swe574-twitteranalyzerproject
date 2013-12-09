@@ -13,7 +13,7 @@ import swe574.g2.twitteranalysis.database.DatabaseConnector;
 public class CampaignDAO implements DataAccessObject<Campaign> {
 	
 	@Override
-	public boolean save(Campaign dataObject) throws SQLException {
+	public boolean save(Connection connection, Campaign dataObject) throws SQLException {
 		String query = "";
 		Object[] bindVariables = new Object[4];
 		int bindVariableCount = 0;
@@ -67,8 +67,14 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 			query = query.substring(0, query.length() - 1) + ") ";
 		}
 		System.out.println(query);
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
-		PreparedStatement s = connection.prepareStatement(query);
+		
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
 		
 		for (int i=0; i<bindVariableCount; ++i) {
 			if (bindVariables[i] instanceof String) {
@@ -80,13 +86,17 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 		}
 		
 		s.executeUpdate();
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return true;
 	}
 
 	@Override
-	public boolean remove(Campaign dataObject) throws SQLException {
+	public boolean remove(Connection connection, Campaign dataObject) throws SQLException {
 		String query = "delete from t_campaign where ";
 		Object[] bindVariables = new Object[4];
 		int bindVariableCount = 0;
@@ -112,9 +122,14 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 		}
 		
 		query = query.substring(0, query.length() - 4);
-				
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
-		PreparedStatement s = connection.prepareStatement(query);
+
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
 		
 		for (int i=0; i<bindVariableCount; ++i) {
 			if (bindVariables[i] instanceof String) {
@@ -126,13 +141,17 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 		}
 		
 		s.executeUpdate();
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return true;
 	}
 
 	@Override
-	public Campaign[] get(Campaign dataObject) throws SQLException {
+	public Campaign[] get(Connection connection, Campaign dataObject) throws SQLException {
 		String query = "select * from t_campaign where ";
 		Object[] bindVariables = new Object[4];
 		int bindVariableCount = 0;
@@ -158,9 +177,14 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 		}
 		
 		query = query.substring(0, query.length() - 4);
-				
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
-		PreparedStatement s = connection.prepareStatement(query);
+
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
 		
 		for (int i=0; i<bindVariableCount; ++i) {
 			if (bindVariables[i] instanceof String) {
@@ -188,7 +212,11 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 			campaigns[k] = campaignsCache[k];
 		}
 		
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return campaigns;
 	}
@@ -199,14 +227,50 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 	}
 
 	@Override
-	public boolean init() throws SQLException {
+	public boolean init(Connection connection) throws SQLException {
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
 		String query = "create table IF NOT EXISTS t_campaign (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), description text, applicationuser_id int(10), PRIMARY KEY (id)) ";
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
-		Statement s = connection.createStatement();
+		Statement s = availableConnection.createStatement();
 		s.executeUpdate(query);
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return true;
+	}
+
+	@Override
+	public boolean init() throws SQLException {
+		return init(null);
+	}
+
+	@Override
+	public boolean save(Campaign dataObject) throws SQLException {
+		return save(null, dataObject);
+	}
+
+	@Override
+	public boolean remove(Campaign dataObject) throws SQLException {
+		return remove(null, dataObject);
+	}
+
+	@Override
+	public Campaign[] get(Campaign dataObject) throws SQLException {
+		return get(null, dataObject);
+	}
+
+	@Override
+	public Campaign[] find(Connection connection, String query)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

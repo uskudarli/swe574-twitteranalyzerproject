@@ -1,5 +1,6 @@
 package swe574.g2.twitteranalysis.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import swe574.g2.twitteranalysis.Tweet;
@@ -35,6 +36,40 @@ public class TweetDAO implements DataAccessObject<Tweet> {
 	public boolean init() throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean init(Connection connection) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean save(Connection connection, Tweet dataObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(Connection connection, Tweet dataObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Tweet[] get(Connection connection, Tweet dataObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Tweet[] find(Connection connection, String query)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,6 @@
 package swe574.g2.twitteranalysis.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import swe574.g2.twitteranalysis.Hashtag;
@@ -35,6 +36,40 @@ public class HashtagDAO implements DataAccessObject<Hashtag> {
 	public boolean init() throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean init(Connection connection) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean save(Connection connection, Hashtag dataObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remove(Connection connection, Hashtag dataObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Hashtag[] get(Connection connection, Hashtag dataObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Hashtag[] find(Connection connection, String query)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
