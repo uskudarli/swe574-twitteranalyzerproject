@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+	  android:orientation="vertical"
+    android:background="@color/pure_white"
+    android:padding="@dimen/heavy_padding" >
+		
+    <!-- welcome title -->
+    <TextView 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/heavy_margin"
+      android:layout_marginBottom="@dimen/light_margin"
+      android:layout_gravity="center"
+      android:text="@string/welcome"
+      android:textColor="@color/twitter_blue"
+      android:textSize="@dimen/font_size_large" />
+    
+    <!-- application name title -->
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/heavy_margin"
+        android:layout_gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_large" />
+    
+    <!-- form email input -->
+    <EditText 
+        android:id="@+id/edit_email"
+        android:layout_width="@dimen/form_item_wide"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:layout_gravity="center"
+        android:textColor="@color/dark_gray"
+        android:inputType="textEmailAddress"
+        android:hint="@string/enter_email"
+        android:textSize="@dimen/font_size_regular" />
+    
+    <!-- form password input -->
+    <EditText 
+        android:id="@+id/edit_password"
+        android:layout_width="@dimen/form_item_wide"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:layout_gravity="center"
+        android:textColor="@color/dark_gray"
+        android:inputType="textPassword"
+        android:hint="@string/enter_password"
+        android:textSize="@dimen/font_size_regular" />
+    
+    <!-- login button -->
+    <Button 
+        android:id="@+id/button_login"
+        android:layout_width="@dimen/form_item_regular"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/heavy_margin"
+        android:layout_gravity="center"
+        android:padding="@dimen/heavy_padding"
+        android:gravity="center"
+        android:background="@color/twitter_dark_blue"
+        android:text="@string/button_login"
+        android:textColor="@color/pure_white"
+        android:textSize="@dimen/font_size_regular" />
+
+</LinearLayout>

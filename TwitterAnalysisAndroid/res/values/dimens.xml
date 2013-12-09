@@ -1,0 +1,16 @@
+<resources>
+
+    <dimen name="light_padding">4dp</dimen>
+    <dimen name="medium_padding">8dp</dimen>
+    <dimen name="heavy_padding">16dp</dimen>
+    <dimen name="light_margin">4dp</dimen>
+    <dimen name="medium_margin">8dp</dimen>
+    <dimen name="heavy_margin">16dp</dimen>
+    <dimen name="font_size_small">10sp</dimen>
+    <dimen name="font_size_regular">14sp</dimen>
+    <dimen name="font_size_large">20sp</dimen>
+    <dimen name="form_item_wide">256dp</dimen>
+    <dimen name="form_item_regular">128dp</dimen>
+    <dimen name="form_item_narrow">64dp</dimen>
+
+</resources>
