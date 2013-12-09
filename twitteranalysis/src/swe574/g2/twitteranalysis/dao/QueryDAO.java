@@ -17,22 +17,26 @@ import swe574.g2.twitteranalysis.database.DatabaseConnector;
 public class QueryDAO implements DataAccessObject<Query> {
 
 	@Override
-	public boolean save(Query dataObject) throws SQLException {
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
+	public boolean save(Connection connection, Query dataObject) throws SQLException {
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
 		
 		String query = "insert into t_query (campaign_id) values (?) ";
-		PreparedStatement ps = connection.prepareStatement(query);
+		PreparedStatement ps = availableConnection.prepareStatement(query);
 		int queryId = -1;
 		
 		if (dataObject != null && dataObject.getId() < 1) {
 			query = "insert into t_query (campaign_id) values (?) ";
-			ps = connection.prepareStatement(query);
+			ps = availableConnection.prepareStatement(query);
 			ps.setInt(1, dataObject.getCampaignId());
 			ps.executeUpdate();
 			ps.close();
 
 			query = "select max(id) from t_query ";
-			Statement s = connection.createStatement();
+			Statement s = availableConnection.createStatement();
 			ResultSet rs = s.executeQuery(query);
 			rs.next();
 			queryId = rs.getInt(1);
@@ -49,7 +53,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 		
 		try {
 			query = "delete from t_querykeyword where query_id = ? ";
-			ps = connection.prepareStatement(query);
+			ps = availableConnection.prepareStatement(query);
 			
 			try {
 				ps.setInt(1, queryId);
@@ -68,7 +72,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 		if (includingKeywords != null) {
 			for (String k : includingKeywords) {
 				try {
-					ps = connection.prepareStatement(query);
+					ps = availableConnection.prepareStatement(query);
 					ps.setString(1, k);
 					ps.setString(2, "including");
 					ps.setInt(3, queryId);
@@ -86,7 +90,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 		if (excludingKeywords != null) {
 			for (String k : excludingKeywords) {
 				try {
-					ps = connection.prepareStatement(query);
+					ps = availableConnection.prepareStatement(query);
 					ps.setString(1, k);
 					ps.setString(2, "excluding");
 					ps.setInt(3, queryId);
@@ -99,14 +103,17 @@ public class QueryDAO implements DataAccessObject<Query> {
 				}
 			}
 		}
-		
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return true;
 	}
 
 	@Override
-	public boolean remove(Query dataObject) throws SQLException {
+	public boolean remove(Connection connection, Query dataObject) throws SQLException {
 		String query = "delete from t_query where ";
 		Object[] bindVariables = new Object[4];
 		int bindVariableCount = 0;
@@ -120,8 +127,13 @@ public class QueryDAO implements DataAccessObject<Query> {
 			return false;
 		}
 				
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
-		PreparedStatement s = connection.prepareStatement(query);
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
 		
 		for (int i=0; i<bindVariableCount; ++i) {
 			if (bindVariables[i] instanceof String) {
@@ -133,18 +145,22 @@ public class QueryDAO implements DataAccessObject<Query> {
 		}
 		
 		s.executeUpdate();
-		connection.close();
+		
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return true;
 	}
 
 	@Override
-	public Query[] get(Query dataObject) throws SQLException {
+	public Query[] get(Connection connection, Query dataObject) throws SQLException {
 		String query = "select * from t_query where ";
 		Object[] bindVariables = new Object[3];
 		int bindVariableCount = 0;
 		if (dataObject.getId() > 0) {
-			query += "name = ? and ";
+			query += "id = ? and ";
 			bindVariables[bindVariableCount++] = dataObject.getId();
 		}
 		if (dataObject.getCampaignId() > 0) {
@@ -154,8 +170,13 @@ public class QueryDAO implements DataAccessObject<Query> {
 		
 		query = query.substring(0, query.length() - 4);
 						
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
-		PreparedStatement s = connection.prepareStatement(query);
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
 		
 		if (bindVariableCount == 0) {
 			return null;
@@ -183,7 +204,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 			List<String> excludingKeywords = new ArrayList<String>();
 			
 			String kQuery = "select * from t_querykeyword where query_id = ? ";
-			PreparedStatement ps2 = connection.prepareStatement(kQuery);
+			PreparedStatement ps2 = availableConnection.prepareStatement(kQuery);
 			ps2.setInt(1, q.getId());
 			ResultSet rs2 = ps2.executeQuery();
 			
@@ -207,7 +228,11 @@ public class QueryDAO implements DataAccessObject<Query> {
 		
 		rs.close();
 		s.close();
-		connection.close();
+		
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		Query[] queries = new Query[count];
 		for (int k=0;k<count;++k) {
@@ -223,50 +248,103 @@ public class QueryDAO implements DataAccessObject<Query> {
 	}
 
 	@Override
-	public boolean init() throws SQLException {
+	public boolean init(Connection connection) throws SQLException {
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
 		String query = "create table IF NOT EXISTS t_querykeyword (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), type varchar(512), query_id int(10), PRIMARY KEY (id), UNIQUE(name(100),type(10),query_id)) ";
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
 
-		Statement s = connection.createStatement();
+		Statement s = availableConnection.createStatement();
 		s.executeUpdate(query);
 		s.close();
 
 		query = "create table IF NOT EXISTS t_query (id int(10) NOT NULL AUTO_INCREMENT, campaign_id int(10), PRIMARY KEY (id)) ";
-		s = connection.createStatement();
+		s = availableConnection.createStatement();
 		s.executeUpdate(query);
 		s.close();
-		
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 		
 		return true;
 	}
 	
-	public void addKeyword(int queryId, String keyword, String type) throws SQLException {
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
+	public void addKeyword(Connection connection, int queryId, String keyword, String type) throws SQLException {
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		 
 
 		String query = "insert into t_querykeyword (name, type, query_id) values (?,?,?) ";
-		PreparedStatement ps = connection.prepareStatement(query);
+		PreparedStatement ps = availableConnection.prepareStatement(query);
 		ps.setString(1, keyword);
 		ps.setString(2, type);
 		ps.setInt(3, queryId);
 		ps.executeUpdate();
 		ps.close();
 
-		connection.close();
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 	}
 	
-	public void removeKeyword(int queryId, String keyword, String type) throws SQLException {
-		Connection connection = DatabaseConnector.getInstance().getConnection(); 
+	public void removeKeyword(Connection connection, int queryId, String keyword, String type) throws SQLException {
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		 
 
 		String query = "delete from t_querykeyword where name = ? and type = ? and query_id = ? ";
-		PreparedStatement ps = connection.prepareStatement(query);
+		PreparedStatement ps = availableConnection.prepareStatement(query);
 		ps.setString(1, keyword);
 		ps.setString(2, type);
 		ps.setInt(3, queryId);
 		ps.executeUpdate();
 		ps.close();
-		
-		connection.close();
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
 	}
+
+	@Override
+	public boolean init() throws SQLException {
+		return init(null);
+	}
+
+	@Override
+	public boolean save(Query dataObject) throws SQLException {
+		return save(null, dataObject);
+	}
+
+	@Override
+	public boolean remove(Query dataObject) throws SQLException {
+		return remove(null, dataObject);
+	}
+
+	@Override
+	public Query[] get(Query dataObject) throws SQLException {
+		return get(null, dataObject);
+	}
+
+	@Override
+	public Query[] find(Connection connection, String query)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }

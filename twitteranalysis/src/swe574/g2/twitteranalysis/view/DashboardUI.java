@@ -24,8 +24,6 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -73,6 +71,7 @@ public class DashboardUI extends UI {
 
     private Navigator nav;
     
+	@SuppressWarnings("serial")
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = DashboardUI.class)
 	public static class Servlet extends VaadinServlet {
@@ -105,7 +104,8 @@ public class DashboardUI extends UI {
         
     }
 
-    private void buildLoginView(boolean exit) {
+    @SuppressWarnings("serial")
+	private void buildLoginView(boolean exit) {
         if (exit) {
             root.removeAllComponents();
         }
@@ -156,7 +156,7 @@ public class DashboardUI extends UI {
         fields.addComponent(signin);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
-        final ShortcutListener enter = new ShortcutListener("Sign In",
+		final ShortcutListener enter = new ShortcutListener("Sign In",
                 KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
@@ -198,7 +198,8 @@ public class DashboardUI extends UI {
         loginLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
     }
 
-    private void buildMainView() {
+    @SuppressWarnings("serial")
+	private void buildMainView() {
     	views = new String[] {"query", "reports", "settings"};  
     	routes.put("/query", QueryView.class);
     	routes.put("/reports", ReportsView.class);

@@ -6,9 +6,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.UI;
 
-import swe574.g2.twitteranalysis.ApplicationUser;
 import swe574.g2.twitteranalysis.Campaign;
-import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.exception.CampaignException;
 import swe574.g2.twitteranalysis.view.DashBoardView;

@@ -77,6 +77,16 @@ public class Query{
 		}
 	}
 	
+	public String getQueryString() {
+		String queryString = "";
+		List<String> iKeywords = this.getIncludingKeywords();
+		for (String keyword : iKeywords) {
+			queryString += keyword + " ";
+		}
+		
+		return queryString;
+	}
+	
 	@Override
 	public String toString() {
 		return id + " :: " + super.toString();

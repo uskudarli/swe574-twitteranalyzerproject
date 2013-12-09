@@ -1,15 +1,12 @@
 package swe574.g2.twitteranalysis.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import swe574.g2.twitteranalysis.Campaign;
 import swe574.g2.twitteranalysis.Query;
-import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
 import swe574.g2.twitteranalysis.exception.QueryException;
-import swe574.g2.twitteranalysis.tclient.TwitterClient;
+import swe574.g2.twitteranalysis.exec.QueryExecuter;
 import swe574.g2.twitteranalysis.view.QueryView;
 
 import com.vaadin.ui.ComboBox;
@@ -102,8 +99,8 @@ public class QueryController extends AbstractController {
 	}
 	
 	public void runQuery(ComboBox queriesComboBox) {
-		TwitterClient tc = new TwitterClient();
-		tc.runQuery((Query)queriesComboBox.getValue());
+		QueryExecuter queryExecuter = new QueryExecuter();
+		queryExecuter.execute( ((Query)queriesComboBox.getValue()) );
 	}
 	
 	public void loadQueries(ComboBox queriesComboBox, int campaignId) {

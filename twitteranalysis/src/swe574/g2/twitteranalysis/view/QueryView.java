@@ -1,9 +1,5 @@
 package swe574.g2.twitteranalysis.view;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.controller.CampaignController;
 import swe574.g2.twitteranalysis.controller.QueryController;
 
@@ -190,27 +186,27 @@ public class QueryView extends VerticalLayout  implements View {
         
         formLayout.addComponent(campaignCmb);
         
-        final ComboBox queryCmb = new ComboBox("Query Title:");
-        queryCmb.setNewItemsAllowed(true);
-        queryCmb.setTextInputAllowed(false); //TODO: will be set to true
-        queryCmb.setNullSelectionAllowed(false);
-        queryCmb.setRequired(true);
-        queryCmb.setImmediate(true);
-        queryCmb.setScrollToSelectedItem(true);
+        final ComboBox queryCombobox = new ComboBox("Query Title:");
+        queryCombobox.setNewItemsAllowed(true);
+        queryCombobox.setTextInputAllowed(false); //TODO: will be set to true
+        queryCombobox.setNullSelectionAllowed(false);
+        queryCombobox.setRequired(true);
+        queryCombobox.setImmediate(true);
+        queryCombobox.setScrollToSelectedItem(true);
         //queryController.loadQueries(queryCmb);
         
-        formLayout.addComponent(queryCmb);
+        formLayout.addComponent(queryCombobox);
         
         campaignCmb.addValueChangeListener(new ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				if(campaignCmb.getValue() != null && !"".equals(campaignCmb.getValue())){
-					queryCmb.removeAllItems();
-					queryController.loadQueries(queryCmb, (Integer)campaignCmb.getValue());
+					queryCombobox.removeAllItems();
+					queryController.loadQueries(queryCombobox, (Integer)campaignCmb.getValue());
 					
 				}else{
-					queryCmb.removeAllItems();
-					queryCmb.select(queryCmb.getNullSelectionItemId());
+					queryCombobox.removeAllItems();
+					queryCombobox.select(queryCombobox.getNullSelectionItemId());
 				}
 			}
 		});
@@ -294,13 +290,13 @@ public class QueryView extends VerticalLayout  implements View {
 		});
 		
 		
-		queryCmb.addValueChangeListener(new ValueChangeListener() {
+		queryCombobox.addValueChangeListener(new ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if(queryCmb.getValue() != null && !"".equals(queryCmb.getValue())){
+				if(queryCombobox.getValue() != null && !"".equals(queryCombobox.getValue())){
 					
-					queryController.loadIncludingKeywords(queryCmb, includesList);
-					queryController.loadExcludingKeywords(queryCmb, excludesList);
+					queryController.loadIncludingKeywords(queryCombobox, includesList);
+					queryController.loadExcludingKeywords(queryCombobox, excludesList);
 				}else{
 					includesList.removeAllItems();
 					excludesList.removeAllItems();
@@ -331,18 +327,13 @@ public class QueryView extends VerticalLayout  implements View {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				QueryController queryController = new QueryController(getUI());
-				Query query = (Query)queryCmb.getValue();
-				query.setIncludingKeywords(new ArrayList<String>((Collection<String>)includesList.getItemIds()));
-				query.setExcludingKeywords(new ArrayList<String>((Collection<String>)excludesList.getItemIds()));
-				
-				queryController.saveQuery(query);
-				
+				queryController.runQuery(queryCombobox);
 			}
 		});
         
-    	Button addInclude = new Button("Add Include");
+    	/*Button addInclude = new Button("Add Include");
     	
-		/*addInclude.addClickListener(new ClickListener() {
+		addInclude.addClickListener(new ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -353,9 +344,9 @@ public class QueryView extends VerticalLayout  implements View {
 			}
 		});*/
     	
-    	Button addExclude = new Button("Add Exclude");
+    	/*Button addExclude = new Button("Add Exclude");
         
-		/*addExclude.addClickListener(new ClickListener() {
+		addExclude.addClickListener(new ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {

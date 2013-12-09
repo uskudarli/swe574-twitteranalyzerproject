@@ -2,10 +2,10 @@ package swe574.g2.twitteranalysis.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+@SuppressWarnings("serial")
 public class ReportsView extends VerticalLayout implements View{
 	
 	public void enter(ViewChangeEvent event){
