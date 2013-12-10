@@ -12,6 +12,8 @@ import swe574.g2.twitteranalysis.controller.LoginController;
 import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
+import swe574.g2.twitteranalysis.dao.TweetDAO;
+import swe574.g2.twitteranalysis.tclient.TwitterManager;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -24,6 +26,8 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -71,10 +75,10 @@ public class DashboardUI extends UI {
 
     private Navigator nav;
     
-	@SuppressWarnings("serial")
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = DashboardUI.class)
 	public static class Servlet extends VaadinServlet {
+		
 	}
 
     @Override
@@ -84,11 +88,13 @@ public class DashboardUI extends UI {
 			(new ApplicationUserDAO()).init();
 			(new CampaignDAO()).init();
 			(new QueryDAO()).init();
+			(new TweetDAO()).init();
 		} 
 		catch (SQLException e) {
 			System.err.println("database table control failed.");
+			e.printStackTrace();
 		}
-		 	
+		
         setLocale(Locale.US);
 
         setContent(root);
@@ -104,8 +110,7 @@ public class DashboardUI extends UI {
         
     }
 
-    @SuppressWarnings("serial")
-	private void buildLoginView(boolean exit) {
+    private void buildLoginView(boolean exit) {
         if (exit) {
             root.removeAllComponents();
         }
@@ -156,7 +161,7 @@ public class DashboardUI extends UI {
         fields.addComponent(signin);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
-		final ShortcutListener enter = new ShortcutListener("Sign In",
+        final ShortcutListener enter = new ShortcutListener("Sign In",
                 KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
@@ -198,8 +203,7 @@ public class DashboardUI extends UI {
         loginLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
     }
 
-    @SuppressWarnings("serial")
-	private void buildMainView() {
+    private void buildMainView() {
     	views = new String[] {"query", "reports", "settings"};  
     	routes.put("/query", QueryView.class);
     	routes.put("/reports", ReportsView.class);

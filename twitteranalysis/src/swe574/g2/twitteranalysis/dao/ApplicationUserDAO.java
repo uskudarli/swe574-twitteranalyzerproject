@@ -25,7 +25,7 @@ public class ApplicationUserDAO implements DataAccessObject<ApplicationUser> {
 			availableConnection = DatabaseConnector.getInstance().getConnection();
 		}
 		
-		String query = "create table IF NOT EXISTS t_applicationuser (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), email varchar(512), password varchar(512), PRIMARY KEY (id), UNIQUE(email)) ";
+		String query = "create table IF NOT EXISTS t_applicationuser (id int(10) NOT NULL AUTO_INCREMENT, name varchar(512), email varchar(512), password varchar(512), PRIMARY KEY (id), UNIQUE(email(100))) ";
 		Statement s = availableConnection.createStatement();
 		s.executeUpdate(query);
 		

@@ -8,13 +8,16 @@ import com.aliasi.classify.LMClassifier;
 import com.aliasi.util.AbstractExternalizable;
 
 public class SentimentClassifier {
-	String[] categories;
-	LMClassifier classifier;
+	
+	private static SentimentClassifier instance = new SentimentClassifier();
+	
+	private String[] categories;
+	private LMClassifier classifier;
 
-	public SentimentClassifier() {
+	private SentimentClassifier() {
 		try {
 			classifier = (LMClassifier) AbstractExternalizable
-					.readObject(new File("classifier.txt"));
+					.readObject(new File(getClass().getResource("classifier.txt").getPath()));
 			categories = classifier.categories();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -22,8 +25,12 @@ public class SentimentClassifier {
 			e.printStackTrace();
 		}
 	}
+	
+	public static SentimentClassifier getInstance() {
+		return instance;
+	}
 
-	public String classify(String text) {
+	public synchronized String classify(String text) {
 		ConditionalClassification classification = classifier.classify(text);
 		return classification.bestCategory();
 	}

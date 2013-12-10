@@ -41,10 +41,12 @@ public class ExecutableQuery extends Query implements Executable {
 	                List<Status> tweets = result.getTweets();
 	                for (Status fetchedTweet : tweets) {
 	                	try {
+	                		System.out.println("Save: " + fetchedTweet.getText());
 							dao.save(connection, new Tweet( fetchedTweet ));
 						} 
 	                	catch (SQLException e) {
 							// ignore exceptions
+	                		e.printStackTrace();
 						}
 	                }
 	            } while ((query = result.nextQuery()) != null);
