@@ -1,8 +1,13 @@
 package swe574.g2.twitteranalysis.tclient;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import swe574.g2.twitteranalysis.Tweet;
+import swe574.g2.twitteranalysis.dao.TweetDAO;
+import swe574.g2.twitteranalysis.database.DatabaseConnector;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -18,22 +23,20 @@ public class TwitterManager {
 	Twitter twitter;
 
 	public TwitterManager() {
-		cb = new ConfigurationBuilder();
-		cb.setOAuthConsumerKey("***");
-		cb.setOAuthConsumerSecret("***");
-		cb.setOAuthAccessToken("***");
-		cb.setOAuthAccessTokenSecret("***");
-		twitter = new TwitterFactory(cb.build()).getInstance();
-		sentClassifier = new SentimentClassifier();
+		twitter = new TwitterFactory().getInstance();
+		sentClassifier = SentimentClassifier.getInstance();
 	}
 
 	public void performQuery(String inQuery) throws InterruptedException,
 			IOException {
+		TweetDAO dao = new TweetDAO();
 		Query query = new Query(inQuery);
 		query.setCount(100);
 		try {
 			int count = 0;
 			QueryResult r;
+			Connection connection = DatabaseConnector.getInstance().getConnection();
+			connection.setAutoCommit(false);
 			do {
 				r = twitter.search(query);
 				ArrayList ts = (ArrayList) r.getTweets();
@@ -46,15 +49,25 @@ public class TwitterManager {
 					System.out.println("User: " + name);
 					String sent = sentClassifier.classify(t.getText());
 					System.out.println("Sentiment: " + sent);
+					try {
+						dao.save(connection, new Tweet( t ));
+					} catch (SQLException e) {
+						System.err.println(e.getMessage());
+					}
 				}
 			} while ((query = r.nextQuery()) != null && count < LIMIT);
+			connection.commit();
+			DatabaseConnector.getInstance().closeConnection(connection);
 		} catch (TwitterException te) {
 			System.out.println("Couldn't connect: " + te);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
 	public static void main(String args[]) throws InterruptedException, IOException{
 		TwitterManager twitterManager = new TwitterManager();
-		twitterManager.performQuery("adidas");
+		twitterManager.performQuery("mandela");
 	}
 }

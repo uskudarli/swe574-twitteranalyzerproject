@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
 <module>
-	<inherits name="com.vaadin.DefaultWidgetSet" />
-	<inherits name="com.vaadin.addon.calendar.gwt.CalendarWidgetset" />
-	<inherits name="com.vaadin.addon.charts.ChartsWithTimelineWidgetset" />
-	<inherits name="org.vaadin.cssinject.Cssinject_addonWidgetset" />
-	<!-- <inherits name="org.vaadin.artur.widgetsetoptimizer.WidgetSetOptimizerWidgetSet" 
-		/> -->
+	<!--<inherits name="com.vaadin.DefaultWidgetSet" />
+	
+	
+	
+	  -->
 
 	<set-configuration-property name="devModeRedirectEnabled"
 		value="true" />
@@ -20,10 +19,16 @@
 		webkit based browsers including Google Chrome. -->
 	<!-- <set-property name="user.agent" value="safari"/> -->
 
-	<!-- WidgetSetOptimizer -->
+	<!-- WidgetSetOptimizer 
 	<generate-with class="com.pues.OptimizedConnectorBundleLoaderFactory">
 		<when-type-assignable
 			class="com.vaadin.client.metadata.ConnectorBundleLoader" />
-	</generate-with>
+	</generate-with>-->
 
+    <inherits name="com.vaadin.addon.charts.Widgetset" />
+
+    	<!-- <inherits name="com.vaadin.addon.timeline.gwt.TimelineWidgetSet" />-->
+
+
+    <inherits name="swe574.g2.twitteranalysis.widgetsets.DashboardWidgetSet" />
 </module>

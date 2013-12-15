@@ -66,7 +66,7 @@ public class DatabaseController {
 				PreparedStatement ps = connection.prepareStatement("insert into t_mentions (username, tweet_id) values (?,?)");
 				//ps.setInt(1, tweet.getId());
 				ps.setString(1, mention.getUsername());
-				ps.setInt(2, tweet.getId());
+				ps.setLong(2, tweet.getId());
 				
 				ps.execute();
 				ps.close();
@@ -107,7 +107,7 @@ public class DatabaseController {
 				PreparedStatement ps = connection.prepareStatement("insert into t_hastag (value, tweet_id) values (?,?)");
 				//ps.setInt(1, tweet.getId());
 				ps.setString(1, hashtag.getValue());
-				ps.setInt(2, tweet.getId());
+				ps.setLong(2, tweet.getId());
 				
 				ps.execute();
 				ps.close();

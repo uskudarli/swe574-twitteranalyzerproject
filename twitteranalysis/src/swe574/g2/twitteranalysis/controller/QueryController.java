@@ -11,6 +11,7 @@ import swe574.g2.twitteranalysis.view.QueryView;
 
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ListSelect;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
 public class QueryController extends AbstractController {
@@ -100,7 +101,7 @@ public class QueryController extends AbstractController {
 	
 	public void runQuery(ComboBox queriesComboBox) {
 		QueryExecuter queryExecuter = new QueryExecuter();
-		queryExecuter.execute( ((Query)queriesComboBox.getValue()) );
+		queryExecuter.execute( this, ((Query)queriesComboBox.getValue()) );
 	}
 	
 	public void loadQueries(ComboBox queriesComboBox, int campaignId) {
@@ -151,5 +152,9 @@ public class QueryController extends AbstractController {
 				list.addItem(i);
 			}
 		}
+	}
+	
+	public void notifyQueryCompleted(Query query) {
+		Notification.show("Query completed!");
 	}
 }

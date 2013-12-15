@@ -1,9 +1,11 @@
 package swe574.g2.twitteranalysis;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import swe574.g2.twitteranalysis.tclient.SentimentClassifier;
 import twitter4j.HashtagEntity;
 import twitter4j.Status;
 import twitter4j.UserMentionEntity;
@@ -24,6 +26,9 @@ public class Tweet {
 	private TweetPlace tweetPlace;
 	private int retweetCount;
 	
+	private String sentiment;
+	private Timestamp tweetTime;
+	
 	public Tweet() {
 	}
 	
@@ -39,7 +44,9 @@ public class Tweet {
 		}
 		
 		this.extTweetId = twitter4jTweet.getId();
-		this.tweetPlace = new TweetPlace(this.extTweetId, twitter4jTweet.getPlace());
+		if (twitter4jTweet.getPlace() != null) {
+			this.tweetPlace = new TweetPlace(this.extTweetId, twitter4jTweet.getPlace());
+		}
 		this.retweetCount = twitter4jTweet.getRetweetCount();
 		this.content = twitter4jTweet.getText();
 		this.tweetOwner = new TweetOwner(twitter4jTweet.getUser());
@@ -49,6 +56,9 @@ public class Tweet {
 			MentionedUser mentionedUser = new MentionedUser(m);
 			this.mentionedUsers.add( mentionedUser );
 		}
+		
+		// sentiment analysis of tweet content
+		this.sentiment = SentimentClassifier.getInstance().classify(this.content);
 	}
 	
 	public int getId() {
@@ -128,6 +138,18 @@ public class Tweet {
 	}
 	public void setRetweetCount(int retweetCount) {
 		this.retweetCount = retweetCount;
+	}
+	public String getSentiment() {
+		return sentiment;
+	}
+	public void setSentiment(String sentiment) {
+		this.sentiment = sentiment;
+	}
+	public Timestamp getTweetTime() {
+		return tweetTime;
+	}
+	public void setTweetTime(Timestamp tweetTime) {
+		this.tweetTime = tweetTime;
 	}
 	
 }
