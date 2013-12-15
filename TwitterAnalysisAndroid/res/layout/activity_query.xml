@@ -115,8 +115,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_regular"
-            android:layout_margin="@dimen/medium_margin"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:background="@drawable/curved_borders" />
         
         <!-- exclude keywords -->
         <TextView 
@@ -164,8 +164,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_regular"
-            android:layout_margin="@dimen/medium_margin"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:background="@drawable/curved_borders" />
         
         <!--  submit query button -->
         <Button 
