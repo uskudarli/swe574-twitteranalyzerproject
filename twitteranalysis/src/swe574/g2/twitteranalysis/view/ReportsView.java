@@ -253,13 +253,8 @@ public class ReportsView extends VerticalLayout implements View {
 						stats = HighFreqTerms.sortByTotalTermFreq(indexReader,
 								HighFreqTerms.getHighFreqTerms(indexReader,
 										(int) termCount, "content"));
-						for (TermStats t : stats) {
-							System.out.println(t.term.text() + " : "
-									+ t.totalTermFreq);
-						}
 
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
