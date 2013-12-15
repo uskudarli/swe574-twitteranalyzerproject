@@ -1,11 +1,25 @@
 package swe574.g2.twitteranalysis.dao;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.Version;
+
 import swe574.g2.twitteranalysis.Tweet;
+import swe574.g2.twitteranalysis.analysis.SentimentAnalysis;
 import swe574.g2.twitteranalysis.database.DataAccessObject;
 import swe574.g2.twitteranalysis.database.DatabaseConnector;
 
@@ -93,6 +107,118 @@ public class TweetDAO implements DataAccessObject<Tweet> {
 		}
 		
 		return true;
+	}
+	
+	public SentimentAnalysis getSentimentAnalysis(String queryId, String campaignId) throws SQLException {
+		String query = "select sentiment, count(sentiment) cnt from t_tweet where ";
+		Object[] bindVariables = new Object[2];
+		int bindVariableCount = 0;
+		if (queryId != null) {
+			query += "query_id = ? and ";
+			bindVariables[bindVariableCount++] = queryId;
+		}
+		if (campaignId != null) {
+			query += "campaign_id = ? and ";
+			bindVariables[bindVariableCount++] = campaignId;
+		}
+		
+		/*if (bindVariableCount == 0) {
+			return null;
+		}*/
+		
+		query = query.substring(0, query.length() - 4);
+
+		query = query + " group by sentiment";
+		
+		Connection availableConnection = null;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
+		
+		for (int i=0; i<bindVariableCount; ++i) {
+			if (bindVariables[i] instanceof String) {
+				s.setString(i+1, (String)bindVariables[i]);
+			}
+			else {
+				s.setInt(i+1, (Integer)bindVariables[i]);
+			}
+		}
+		
+		ResultSet rs = s.executeQuery();
+
+		SentimentAnalysis sentiment = new SentimentAnalysis();
+		while (rs.next()) {
+			if("pos".equals(rs.getString("sentiment"))){
+				sentiment.setPositiveSentimentCount(rs.getInt("cnt"));
+			}
+			if("neg".equals(rs.getString("sentiment"))){
+				sentiment.setNegativeSentimentCount(rs.getInt("cnt"));
+			}
+			if("neu".equals(rs.getString("sentiment"))){
+				sentiment.setNeutralSentimentCount(rs.getInt("cnt"));
+			}
+		}
+		
+		DatabaseConnector.getInstance().closeConnection(availableConnection);
+		
+		return sentiment;
+	}
+	
+	public IndexWriter getLuceneDocument(String queryId, String campaignId, Directory dir) throws SQLException, CorruptIndexException, LockObtainFailedException, IOException {
+		String query = "select content, tweet_time, sentiment, retweet_count, favorite_count, ext_tweet_id, username, campaign_id, query_id from t_tweet where ";
+		Object[] bindVariables = new Object[2];
+		int bindVariableCount = 0;
+		if (queryId != null) {
+			query += "query_id = ? and ";
+			bindVariables[bindVariableCount++] = queryId;
+		}
+		if (campaignId != null) {
+			query += "campaign_id = ? and ";
+			bindVariables[bindVariableCount++] = campaignId;
+		}
+		
+		/*if (bindVariableCount == 0) {
+			return null;
+		}*/
+		
+		query = query.substring(0, query.length() - 4);
+
+		Connection availableConnection = null;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
+		
+		for (int i=0; i<bindVariableCount; ++i) {
+			if (bindVariables[i] instanceof String) {
+				s.setString(i+1, (String)bindVariables[i]);
+			}
+			else {
+				s.setInt(i+1, (Integer)bindVariables[i]);
+			}
+		}
+		
+		ResultSet rs = s.executeQuery();
+		
+		IndexWriter writer = new IndexWriter(dir, new IndexWriterConfig(Version.LUCENE_36, new WhitespaceAnalyzer(Version.LUCENE_36)));
+		Document doc = new Document();
+		StringBuilder builder = new StringBuilder();
+		while (rs.next()) {
+	        builder.append(rs.getString("content")).append(" ");
+		}
+		doc.add(new Field("content", builder.toString(), Field.Store.NO, Field.Index.ANALYZED, Field.TermVector.YES));
+		
+		writer.addDocument(doc);
+		writer.close();
+		
+		DatabaseConnector.getInstance().closeConnection(availableConnection);
+		
+		return writer;
 	}
 
 	@Override
