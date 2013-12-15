@@ -13,11 +13,11 @@ import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
 import swe574.g2.twitteranalysis.dao.TweetDAO;
-import swe574.g2.twitteranalysis.tclient.TwitterManager;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.Transferable;
@@ -26,8 +26,6 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -51,6 +49,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+@Widgetset("DashboardWidgetSet")
 @Theme("dashboard")
 @Title("Twitter Analyzer")
 public class DashboardUI extends UI {
