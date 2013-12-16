@@ -220,8 +220,8 @@ public class QueryActivity extends Activity implements OnClickListener {
     List<String> result = new ArrayList<String>(numItems);
     
     for(int i=0; i<numItems; ++i){
-      EditText keywordEdit = (EditText) includeKeywordsLayout.getChildAt(i).findViewById(R.id.txt_keyword);
-      result.set(i, keywordEdit.getText().toString().trim());
+      TextView keyword = (TextView) includeKeywordsLayout.getChildAt(i).findViewById(R.id.txt_keyword);
+      result.add(keyword.getText().toString().trim());
     }
     
     return result;
@@ -232,8 +232,8 @@ public class QueryActivity extends Activity implements OnClickListener {
     List<String> result = new ArrayList<String>(numItems);
     
     for(int i=0; i<numItems; ++i){
-      EditText keywordEdit = (EditText) excludeKeywordsLayout.getChildAt(i).findViewById(R.id.txt_keyword);
-      result.set(i, keywordEdit.getText().toString().trim());
+      TextView keyword = (TextView) excludeKeywordsLayout.getChildAt(i).findViewById(R.id.txt_keyword);
+      result.add(keyword.getText().toString().trim());
     }
     
     return result;
