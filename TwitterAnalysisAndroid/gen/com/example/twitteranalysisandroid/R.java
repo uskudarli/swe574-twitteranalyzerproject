@@ -40,32 +40,34 @@ public final class R {
         public static final int medium_padding=0x7f050001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int curved_borders=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
         public static final int button_add_exclude=0x7f090009;
         public static final int button_add_include=0x7f090006;
-        public static final int button_delete=0x7f090013;
+        public static final int button_delete=0x7f090014;
         public static final int button_login=0x7f090002;
         public static final int button_submit=0x7f09000b;
-        public static final int button_update=0x7f090011;
-        public static final int chk_email_notification=0x7f09000f;
-        public static final int chk_phone_notification=0x7f090010;
+        public static final int button_update=0x7f090012;
+        public static final int chk_email_notification=0x7f090010;
+        public static final int chk_phone_notification=0x7f090011;
         public static final int edit_email=0x7f090000;
         public static final int edit_password=0x7f090001;
-        public static final int et_email=0x7f09000e;
+        public static final int et_email=0x7f09000f;
         public static final int et_exclude_keyword=0x7f090008;
-        public static final int et_first_name=0x7f09000c;
+        public static final int et_first_name=0x7f09000d;
         public static final int et_include_keyword=0x7f090005;
-        public static final int et_last_name=0x7f09000d;
+        public static final int et_last_name=0x7f09000e;
         public static final int et_query_title=0x7f090004;
         public static final int list_exclude_keywords=0x7f09000a;
         public static final int list_include_keywords=0x7f090007;
-        public static final int menu_query=0x7f090014;
-        public static final int menu_reports=0x7f090015;
-        public static final int menu_settings=0x7f090016;
+        public static final int menu_query=0x7f090015;
+        public static final int menu_reports=0x7f090016;
+        public static final int menu_settings=0x7f090017;
+        public static final int pie_chart=0x7f09000c;
         public static final int spinner_campaign_name=0x7f090003;
-        public static final int txt_keyword=0x7f090012;
+        public static final int txt_keyword=0x7f090013;
     }
     public static final class layout {
         public static final int activity_login=0x7f030000;
@@ -87,6 +89,16 @@ public final class R {
         public static final int email_hint=0x7f060017;
         public static final int enter_email=0x7f060001;
         public static final int enter_password=0x7f060002;
+        public static final int err_check_credentials=0x7f060021;
+        public static final int err_email=0x7f060023;
+        public static final int err_email_address=0x7f06002b;
+        public static final int err_empty_keyword=0x7f06001b;
+        public static final int err_first_name=0x7f060029;
+        public static final int err_include_keywords=0x7f06001e;
+        public static final int err_last_name=0x7f06002a;
+        public static final int err_password=0x7f060024;
+        public static final int err_query_title=0x7f06001d;
+        public static final int err_select_campaign=0x7f06001c;
         public static final int first_name_hint=0x7f060015;
         public static final int last_name_hint=0x7f060016;
         public static final int menu_query=0x7f060004;
@@ -96,14 +108,27 @@ public final class R {
         public static final int query_include_keyword_hint=0x7f06000e;
         public static final int query_title_hint=0x7f06000a;
         public static final int txt_campaign_name=0x7f060008;
+        public static final int txt_changes_saved=0x7f06002c;
         public static final int txt_email=0x7f060014;
         public static final int txt_email_notifications=0x7f060018;
+        public static final int txt_error=0x7f060027;
         public static final int txt_exclude_keywords=0x7f06000d;
         public static final int txt_first_name=0x7f060012;
         public static final int txt_include_keywords=0x7f06000c;
+        public static final int txt_invalid_login=0x7f060020;
         public static final int txt_last_name=0x7f060013;
+        public static final int txt_loading=0x7f060022;
+        public static final int txt_negative=0x7f060030;
+        public static final int txt_neutral=0x7f060031;
+        public static final int txt_ok=0x7f06001f;
         public static final int txt_phone_notifications=0x7f060019;
+        public static final int txt_positive=0x7f06002f;
+        public static final int txt_query_submit_error=0x7f060028;
+        public static final int txt_query_submit_info=0x7f060026;
+        public static final int txt_query_submitted=0x7f060025;
         public static final int txt_query_title=0x7f060009;
+        public static final int txt_settings_update_error=0x7f06002e;
+        public static final int txt_user_settings_updated=0x7f06002d;
         public static final int welcome=0x7f060007;
     }
     public static final class style {
@@ -130,7 +155,6 @@ public final class R {
          */
         public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
     }

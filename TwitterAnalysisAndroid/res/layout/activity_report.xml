@@ -28,6 +28,14 @@
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_large" />
         
+        <com.example.twitteranalysisandroid.SquareLinearLayout 
+            android:id="@+id/pie_chart" 
+            android:orientation="horizontal"
+            android:layout_width="match_parent" 
+            android:layout_height="0dp"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_size_large" />
+        
     </LinearLayout>
     
 </ScrollView>

@@ -1,6 +1,7 @@
 package com.example.twitteranalysisandroid;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,11 +12,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SettingsActivity extends Activity implements OnClickListener {
-  public static final String USER_ID = "USER_ID";
   
-  private long userId;
   private EditText firstName, lastName, emailAddress;
   private CheckBox emailNotification, phoneNotification;
   private Button updateButton;
@@ -25,13 +25,8 @@ public class SettingsActivity extends Activity implements OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
     
-    // get the user id of the logged in user from the intent
-    if(getIntent().getExtras() != null){
-      userId = getIntent().getExtras().getLong(USER_ID, -1);
-    }
-    
     // if no logged in user found, then finish immediately
-    if(userId<=0){
+    if(User.getCurrentUser() == null){
       finish();
     }
     
@@ -41,6 +36,13 @@ public class SettingsActivity extends Activity implements OnClickListener {
     emailNotification = (CheckBox) findViewById(R.id.chk_email_notification);
     phoneNotification = (CheckBox) findViewById(R.id.chk_phone_notification);
     updateButton = (Button) findViewById(R.id.button_update);
+    
+    User user = User.getCurrentUser();
+    firstName.setText(user.getFirstName());
+    lastName.setText(user.getLastName());
+    emailAddress.setText(user.getEmail());
+    emailNotification.setChecked(user.isEmailNotificationsEnabled());
+    phoneNotification.setChecked(user.isphoneNotificationsEnabled());
     
     updateButton.setOnClickListener(this);
   }
@@ -60,14 +62,12 @@ public class SettingsActivity extends Activity implements OnClickListener {
     case R.id.menu_query:
       // start query activity
       Intent queryIntent = new Intent(this, QueryActivity.class);
-      queryIntent.putExtra(QueryActivity.USER_ID, userId);
       startActivity(queryIntent);
       finish();
       return true;
     case R.id.menu_reports:
       // start reports activity
       Intent reportsIntent = new Intent(this, ReportsActivity.class);
-      reportsIntent.putExtra(ReportsActivity.USER_ID, userId);
       startActivity(reportsIntent);
       finish();
       return true;
@@ -77,13 +77,6 @@ public class SettingsActivity extends Activity implements OnClickListener {
     default:
       return super.onOptionsItemSelected(item);
     }
-  }
-  
-  @Override
-  protected void onResume(){
-    super.onResume();
-    
-    // TODO: query the user settings and update the ui
   }
 
   @Override
@@ -102,11 +95,55 @@ public class SettingsActivity extends Activity implements OnClickListener {
   }
   
   private boolean isFormValid(){
-    // TODO: add form validation code and mark errors
-    return false;
+    if(firstName.getText().toString().trim().length()<1){
+      Toast.makeText(this, getString(R.string.err_first_name), Toast.LENGTH_SHORT).show();
+      return false;
+    }
+    
+    if(lastName.getText().toString().trim().length()<1){
+      Toast.makeText(this, getString(R.string.err_last_name), Toast.LENGTH_SHORT).show();
+      return false;
+    }
+    
+    if(emailAddress.getText().toString().trim().length()<1){
+      Toast.makeText(this, getString(R.string.err_email_address), Toast.LENGTH_SHORT).show();
+      return false;
+    }
+    
+    return true;
   }
   
   private void update(){
-    // TODO: read all the data and update to database
+    final ProgressDialog loadingDialog = new LoadingDialog(this);
+    loadingDialog.show();
+    
+    User user = User.getCurrentUser();
+    user.setFirstName(firstName.getText().toString().trim());
+    user.setLastName(lastName.getText().toString().trim());
+    user.setEmail(emailAddress.getText().toString().trim());
+    user.setEmailNotificationsEnabled(emailNotification.isChecked());
+    user.setphoneNotificationsEnabled(phoneNotification.isChecked());
+    
+    user.saveChanges(new Callback<User>(){
+      @Override
+      public void onSuccess(User pObject) {
+        new WarningDialogBuilder(SettingsActivity.this)
+        .setTitle(getString(R.string.txt_changes_saved))
+        .setMessage(getString(R.string.txt_user_settings_updated))
+        .show();
+      
+        loadingDialog.dismiss();
+      }
+
+      @Override
+      public void onError(Exception pEx) {
+        new WarningDialogBuilder(SettingsActivity.this)
+        .setTitle(getString(R.string.txt_error))
+        .setMessage(getString(R.string.txt_settings_update_error))
+        .show();
+      
+        loadingDialog.dismiss();
+      }
+    });
   }
 }

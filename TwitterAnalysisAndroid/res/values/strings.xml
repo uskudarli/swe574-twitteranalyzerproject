@@ -28,5 +28,28 @@
     <string name="txt_email_notifications">Send Email Notifications</string>
     <string name="txt_phone_notifications">Send Phone Notifications</string>
     <string name="button_update">Update</string>
-
+    <string name="err_empty_keyword">Keyword cannot be empty</string>
+    <string name="err_select_campaign">Please select a campaign</string>
+    <string name="err_query_title">Please enter a query title</string>
+    <string name="err_include_keywords">Please enter at least one include keyword</string>
+    <string name="txt_ok">OK</string>
+    <string name="txt_invalid_login">Invalid Login</string>
+    <string name="err_check_credentials">Please check your email and password</string>
+    <string name="txt_loading">Loading&#8230;</string>
+    <string name="err_email">Please enter a valid email address</string>
+    <string name="err_password">Please enter a valid password</string>
+    <string name="txt_query_submitted">Query Submitted</string>
+    <string name="txt_query_submit_info">Your query has been submitted and will be processed shortly</string>
+    <string name="txt_error">Error</string>
+    <string name="txt_query_submit_error">An error occurred while submitting the query, please try again</string>
+    <string name="err_first_name">Please enter your first name</string>
+    <string name="err_last_name">Please enter your last name</string>
+    <string name="err_email_address">Please enter your email address</string>
+    <string name="txt_changes_saved">Changes Saved</string>
+    <string name="txt_user_settings_updated">User settings have successfully been updated</string>
+    <string name="txt_settings_update_error">An error occurred while updating user settings, please try again</string>
+    <string name="txt_positive">Positive</string>
+    <string name="txt_negative">Negative</string>
+    <string name="txt_neutral">Neutral</string>
+    
 </resources>
