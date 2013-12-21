@@ -104,18 +104,18 @@ public class QueryController extends AbstractController {
 		queryExecuter.execute( this, ((Query)queriesComboBox.getValue()) );
 	}
 	
-	public void loadQueries(ComboBox queriesComboBox, int campaignId) {
+	public void loadQueries(ComboBox queriesComboBox, Object campaignId) {
 		System.out.println("LoadQueries");
 		Query dataObject  = new Query();
-//		Campaign campaign = new Campaign();
-//		campaign.setOwnerUserId((Integer)(getSession().getAttribute("user_id")));
-//		campaign.setName(String.valueOf( getSession().getAttribute("campaign_name") ));
+		
+		if(campaignId instanceof String)
+			return;
 		
 		try 
 		{
-//			Campaign[] campaigns = new CampaignDAO().get(campaign);
- //   		if (campaigns != null && campaigns.length > 0) {
-				dataObject.setCampaignId(campaignId);
+			int cId = (Integer)campaignId;
+				
+				dataObject.setCampaignId(cId);
 				
 				Query[] qs = new QueryDAO().get(dataObject);
 				for (Query q : qs) {
@@ -124,12 +124,11 @@ public class QueryController extends AbstractController {
 					queriesComboBox.setItemCaption(q, String.valueOf(q.getId()));
 					
 				}
-//			}			
 		} 
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public void loadIncludingKeywords(ComboBox queriesComboBox, ListSelect list) {
