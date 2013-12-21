@@ -1,5 +1,7 @@
 package swe574.g2.twitteranalysis.view;
 
+import swe574.g2.twitteranalysis.Campaign;
+import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.controller.CampaignController;
 import swe574.g2.twitteranalysis.controller.QueryController;
 
@@ -24,136 +26,8 @@ public class QueryView extends VerticalLayout  implements View {
 
 	public static final String NAME = "query";
 
-//	private Button removeInclude = new Button("Remove Include");
-	
-//	private Button addExclude = new Button("Add Exclude");
-//	private Button removeExclude = new Button("Remove Exclude");
-
 	public QueryView() {
-		/*queries.setImmediate(true);
-		queries.setWidth("380px");
-		queries.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				System.out.println("valueChanged");
-				QueryController queryController = new QueryController(getUI());
-				queryController.loadIncludingKeywords(queries, includesList);
-				queryController.loadExcludingKeywords(queries, excludesList);		
-			}
-		});
 		
-		includesList.setNullSelectionAllowed(false);
-		includesList.setWidth("230px");
-		includesList.setImmediate(true);
-		addInclude.setWidth("115px");
-		removeInclude.setWidth("115px");
-
-		includesList.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				String value = (String)includesList.getValue();
-				if (value != null) {
-					keywordField.setValue(value);
-				}
-			}
-		});
-		
-		excludesList.setNullSelectionAllowed(false);
-		excludesList.setWidth("230px");
-		excludesList.setImmediate(true);
-		removeExclude.setWidth("115px");
-		addExclude.setWidth("115px");
-
-		excludesList.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				String value = (String)excludesList.getValue();
-				if (value != null) {
-					keywordField.setValue(value);
-				}
-			}
-		});
-		runQuery.setWidth("80px");
-		runQuery.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				QueryController queryController = new QueryController(getUI());
-				queryController.runQuery(queries); 
-			}
-		});
-		
-		addInclude.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				String keyword = keywordField.getValue();
-				if (keyword != null && keyword.length() > 0) {
-					QueryController queryController = new QueryController(getUI());
-					queryController.addKeyword(queries, keyword, "including");
-					queryController.loadIncludingKeywords(queries, includesList);
-				}
-			}
-		});
-		
-		removeInclude.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-//				String keyword = keywordField.getValue();
-				String keyword = (String)includesList.getValue();
-				if (keyword != null && keyword.length() > 0) {
-					QueryController queryController = new QueryController(getUI());
-					queryController.removeKeyword(queries, keyword, "including");
-					queryController.loadIncludingKeywords(queries, includesList);
-				}
-			}
-		});
-		
-		addExclude.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				String keyword = keywordField.getValue();
-				if (keyword != null && keyword.length() > 0) {
-					QueryController queryController = new QueryController(getUI());
-					queryController.addKeyword(queries, keyword, "excluding");
-					queryController.loadExcludingKeywords(queries, excludesList);
-				}
-			}
-		});
-		
-		removeExclude.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				String keyword = keywordField.getValue();
-				if (keyword != null && keyword.length() > 0) {
-					QueryController queryController = new QueryController(getUI());
-					queryController.removeKeyword(queries, keyword, "excluding");
-					queryController.loadExcludingKeywords(queries, excludesList);
-				}
-			}
-		});
-
-		keywordLabel.setWidth("100px");
-		keywordField.setWidth("360px");
-
-		HorizontalLayout hLayout = new HorizontalLayout(includesList, excludesList);
-		HorizontalLayout hLayout2 = new HorizontalLayout(addInclude, removeInclude, addExclude, removeExclude);
-		HorizontalLayout hLayout3 = new HorizontalLayout(queries, runQuery);
-		HorizontalLayout hLayout4 = new HorizontalLayout(keywordLabel, keywordField);
-		
-		VerticalLayout vLayout = new VerticalLayout(hLayout3, hLayout, hLayout4, hLayout2);
-		vLayout.setComponentAlignment(hLayout, Alignment.MIDDLE_CENTER);
-		vLayout.setComponentAlignment(hLayout2, Alignment.MIDDLE_CENTER);
-		vLayout.setComponentAlignment(hLayout3, Alignment.MIDDLE_CENTER);
-		vLayout.setComponentAlignment(hLayout4, Alignment.MIDDLE_CENTER);
-		vLayout.setStyleName(Reindeer.LAYOUT_WHITE);
-		setCompositionRoot(vLayout);*/
 	}
 	
 	@Override
@@ -177,18 +51,19 @@ public class QueryView extends VerticalLayout  implements View {
         
         final ComboBox campaignCmb = new ComboBox("Campaign Name:");
         campaignCmb.setNewItemsAllowed(true);
-        campaignCmb.setTextInputAllowed(false); //TODO: will be set to true
+        campaignCmb.setTextInputAllowed(true);
         campaignCmb.setNullSelectionAllowed(false);
         campaignCmb.setRequired(true);
         campaignCmb.setImmediate(true);
         campaignCmb.setScrollToSelectedItem(true);
+        campaignCmb.sanitizeSelection();
         campaignController.loadUserCampaigns(campaignCmb);
         
         formLayout.addComponent(campaignCmb);
         
         final ComboBox queryCombobox = new ComboBox("Query Title:");
         queryCombobox.setNewItemsAllowed(true);
-        queryCombobox.setTextInputAllowed(false); //TODO: will be set to true
+        queryCombobox.setTextInputAllowed(true);
         queryCombobox.setNullSelectionAllowed(false);
         queryCombobox.setRequired(true);
         queryCombobox.setImmediate(true);
@@ -202,7 +77,7 @@ public class QueryView extends VerticalLayout  implements View {
 			public void valueChange(ValueChangeEvent event) {
 				if(campaignCmb.getValue() != null && !"".equals(campaignCmb.getValue())){
 					queryCombobox.removeAllItems();
-					queryController.loadQueries(queryCombobox, (Integer)campaignCmb.getValue());
+					queryController.loadQueries(queryCombobox, campaignCmb.getValue());
 					
 				}else{
 					queryCombobox.removeAllItems();
@@ -210,10 +85,6 @@ public class QueryView extends VerticalLayout  implements View {
 				}
 			}
 		});
-        
-        /*TextField queryTitle = new TextField("Query Title:");
-        queryTitle.setRequired(true);
-        formLayout.addComponent(queryTitle);*/
         
         HorizontalLayout keywordToolbar = new HorizontalLayout();
         keywordToolbar.setWidth("100%");
@@ -254,21 +125,6 @@ public class QueryView extends VerticalLayout  implements View {
 			}
 		});
 		
-//		final TextField keywordField = new TextField("Keyword:");
-//		keywordField.setWidth("360px");
-
-		
-		/*includesList.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				String value = (String)includesList.getValue();
-				if (value != null) {
-					keywordField.setValue(value);
-				}
-			}
-		});*/
-		
 		listToolbar.addComponent(includesList);
         
 		final ListSelect excludesList = new ListSelect();
@@ -293,7 +149,7 @@ public class QueryView extends VerticalLayout  implements View {
 		queryCombobox.addValueChangeListener(new ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if(queryCombobox.getValue() != null && !"".equals(queryCombobox.getValue())){
+				if(queryCombobox.getValue() != null && queryCombobox.getValue() instanceof Query){
 					
 					queryController.loadIncludingKeywords(queryCombobox, includesList);
 					queryController.loadExcludingKeywords(queryCombobox, excludesList);
@@ -303,16 +159,6 @@ public class QueryView extends VerticalLayout  implements View {
 				}
 			}
 		});
-		/*excludesList.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				String value = (String)excludesList.getValue();
-				if (value != null) {
-					keywordField.setValue(value);
-				}
-			}
-		});*/
 		
 		listToolbar.addComponent(excludesList);
 		
@@ -331,35 +177,6 @@ public class QueryView extends VerticalLayout  implements View {
 			}
 		});
         
-    	/*Button addInclude = new Button("Add Include");
-    	
-		addInclude.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				String keyword = keywordField.getValue();
-				if (keyword != null && keyword.length() > 0) {
-					includesList.addItem(keyword);
-				}
-			}
-		});*/
-    	
-    	/*Button addExclude = new Button("Add Exclude");
-        
-		addExclude.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				String keyword = keywordField.getValue();
-				if (keyword != null && keyword.length() > 0) {
-					excludesList.addItem(keyword);
-				}
-			}
-		});*/
-    	
-//    	formLayout.addComponent(addInclude);
-//    	formLayout.addComponent(addExclude);
-//        formLayout.addComponent(keywordField);
         formLayout.addComponent(submitButton);
 
         toolbar.addComponent(formLayout);
