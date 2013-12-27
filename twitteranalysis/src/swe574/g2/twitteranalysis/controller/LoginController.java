@@ -7,6 +7,7 @@ import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.view.LoginView;
 
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
 public class LoginController extends AbstractController {
@@ -23,37 +24,63 @@ public class LoginController extends AbstractController {
 		getNavigator().navigateTo(LoginView.NAME);
 	}
 	
-	public void signup(String email, String password, String confirmPassword) {
-		
-	}
-	
-	public boolean login(String email, String password) throws RuntimeException {
-		System.out.println("login");
+	public ApplicationUser signup(String email, String password, String confirmPassword) {
 		ApplicationUser queryUser = new ApplicationUser();
 		queryUser.setEmail(email);
+		queryUser.setHashedPassword(password);
+		boolean saveResult = false;
+		try
+		{
+			saveResult = new ApplicationUserDAO().save(queryUser);
+		}
+		catch (SQLException sqle) {
+		}
+		
+		if (saveResult) {
+			queryUser = checkUser(email, password);
+		}
+		
+		return queryUser;
+	}
+	
+	public ApplicationUser checkUser(String username, String password) throws RuntimeException {
+		ApplicationUser queryUser = new ApplicationUser();
+		queryUser.setEmail(username);
 		queryUser.setHashedPassword(password);
 		try 
 		{
 			ApplicationUser[] users = new ApplicationUserDAO().get(queryUser);
 			if (users != null && users.length > 0) {
-				getSession().setAttribute("user_email", users[0].getEmail());
-				getSession().setAttribute("user_id", users[0].getId());
-				getSession().setAttribute("user_name", users[0].getName());
-				getSession().setAttribute("user", users[0]);
-				
-				// Navigate to main view
-		        // getNavigator().navigateTo(DashBoardView.NAME);
-//				new CampaignController(getUI()).showCampaigns();
-				
-                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("user", users[0]);
-
+				return users[0];
 			}
 		} 
 		catch (SQLException e) {
-			return false;
 		}
 		
-		return true;
+		return null;
+	}
+	
+	public boolean login(String email, String password) throws RuntimeException {
+		ApplicationUser user = checkUser(email, password);
+		
+		if (user != null) {
+			VaadinSession session = getSession();
+			if (session == null) {
+				session = VaadinSession.getForSession(VaadinService.getCurrent(), VaadinService.getCurrentRequest().getWrappedSession());
+			}
+			
+			if (session != null) {
+				getSession().setAttribute("user_email", user.getEmail());
+				getSession().setAttribute("user_id", user.getId());
+				getSession().setAttribute("user_name", user.getName());
+				getSession().setAttribute("user", user);
+			}
+			
+			VaadinService.getCurrentRequest().getWrappedSession().setAttribute("user", user);
+			
+		    return true;
+		}
+		return false;
 	}
 	
 	public void logout() {

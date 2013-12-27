@@ -42,6 +42,22 @@ public class QueryController extends AbstractController {
 			throw new QueryException(e.getMessage());
 		}
 	}
+	public boolean addQuery(List<String> includingKeywords, List<String> excludingKeywords, int campaignId) {
+		Query query = new Query();
+		query.setIncludingKeywords(includingKeywords);
+		query.setExcludingKeywords(excludingKeywords);
+		query.setCampaignId(campaignId);
+		
+		QueryDAO dao = new QueryDAO();
+		boolean ret = false;
+		try {
+			ret = dao.save(query);
+		} 
+		catch (SQLException e) {
+		}
+		
+		return ret;
+	}
 	
 	public void removeQuery(ComboBox queriesComboBox, String keyword, String type) throws QueryException {
 		Query query = (Query)queriesComboBox.getValue();
@@ -129,6 +145,23 @@ public class QueryController extends AbstractController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public Query[] getQueries(int campaignId) {
+		Query dataObject  = new Query();
+		
+		try 
+		{
+			int cId = (Integer)campaignId;
+			dataObject.setCampaignId(cId);
+			
+			Query[] qs = new QueryDAO().get(dataObject);
+			return qs;
+		} 
+		catch (SQLException e) {
+		}
+		
+		return null;
 	}
 	
 	public void loadIncludingKeywords(ComboBox queriesComboBox, ListSelect list) {

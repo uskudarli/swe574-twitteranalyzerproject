@@ -2,6 +2,7 @@ package swe574.g2.twitteranalysis.mapi;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,18 +17,19 @@ import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.controller.CampaignController;
 import swe574.g2.twitteranalysis.controller.LoginController;
 import swe574.g2.twitteranalysis.controller.QueryController;
+import swe574.g2.twitteranalysis.exception.QueryException;
 
 /**
  * Servlet implementation class QueryServlet
  */
-@WebServlet("/v1.0/api/query/")
-public class QueryServlet extends HttpServlet {
+@WebServlet("/v1.0/api/query/add/")
+public class QueryAddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public QueryServlet() {
+    public QueryAddServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,6 +48,21 @@ public class QueryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String[] includes= request.getParameterValues("including");
+		String[] excludes = request.getParameterValues("excluding");
+		List<String> iKeys = new ArrayList<String>();
+		if (includes != null) {
+			for (String k : includes) {
+				iKeys.add(k);
+			}
+		}
+		List<String> eKeys = new ArrayList<String>();
+		if (excludes != null) {
+			for (String k : excludes) {
+				eKeys.add(k);
+			}
+		}
+		
 		String campaignId = request.getParameter("campaignId");
 		
 		LoginController loginController = new LoginController();
@@ -54,57 +71,69 @@ public class QueryServlet extends HttpServlet {
 		String json = "";
 		if (user != null) {
 			QueryController queryController = new QueryController();
-			Query[] queries = queryController.getQueries(Integer.valueOf(campaignId));
-			int index=0;
-			int index2=0;
-			int index3=0;
 			
-			json = "{" + 
-					"  \"queries\": [";
-			if (queries != null) {
-				for (Query q : queries) {
-					List<String> ikeys = q.getIncludingKeywords();
-					List<String> ekeys = q.getExcludingKeywords();
-					
-					if (index > 0) {
-						json += ",";
-					}
-					json += "{" +
-							"    \"queryId\": \"" + q.getId() + "\", " + 
-							"    \"including\": [";
-					
-					if (ikeys != null) {
-						for (String k : ikeys) {
-							if (index2 > 0) {
-								json += ",";
-							}
-							
-							json += "\"" + k + "\" ";
-							
-							++index2;
+			boolean result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId));
+			
+			if (result) {
+				Query[] queries = queryController.getQueries(Integer.valueOf(campaignId));
+				int index=0;
+				int index2=0;
+				int index3=0;
+				
+				json = "{" + 
+						"  \"queries\": [";
+				if (queries != null) {
+					for (Query q : queries) {
+						List<String> ikeys = q.getIncludingKeywords();
+						List<String> ekeys = q.getExcludingKeywords();
+						
+						if (index > 0) {
+							json += ",";
 						}
-					}
-					json += "], " + 
-							"    \"excluding\": [";
-					if (ekeys != null) {
-						for (String k : ekeys) {
-							if (index3 > 0) {
-								json += ",";
+						json += "{" +
+								"    \"queryId\": \"" + q.getId() + "\", " + 
+								"    \"including\": [";
+						
+						if (ikeys != null) {
+							for (String k : ikeys) {
+								if (index2 > 0) {
+									json += ",";
+								}
+								
+								json += "\"" + k + "\" ";
+								
+								++index2;
 							}
-							
-							json += "\"" + k + "\" ";
-							
-							++index3;
 						}
+						json += "], " + 
+								"    \"excluding\": [";
+						if (ekeys != null) {
+							for (String k : ekeys) {
+								if (index3 > 0) {
+									json += ",";
+								}
+								
+								json += "\"" + k + "\" ";
+								
+								++index3;
+							}
+						}
+						json += "] " + 
+								"}";
+						
+						++index;
 					}
-					json += "] " + 
-							"}";
-					
-					++index;
 				}
+				
+				json += "] }";
+			}	
+			else {
+				json = "{" +
+						"  \"error\": true, " + 
+						"  \"message\": \"unknown_error\" " + 
+						"}";
 			}
 			
-			json += "] }";
 		}
 		else {
 			json = "{" +

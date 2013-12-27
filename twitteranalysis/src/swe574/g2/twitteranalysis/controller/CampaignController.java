@@ -22,7 +22,7 @@ public class CampaignController extends AbstractController {
 		super(ui);
 	}
 	
-    public void addCampaign(String campaignName) throws CampaignException {
+	public void addCampaign(String campaignName) throws CampaignException {
     	Campaign campaign = new Campaign();
 		campaign.setName(campaignName);
 		campaign.setOwnerUserId((Integer)getSession().getAttribute("user_id"));
@@ -38,6 +38,25 @@ public class CampaignController extends AbstractController {
 		}
 	}
 	
+	public boolean addCampaign(String campaignName, String campaignDescription, int userId) {
+    	Campaign campaign = new Campaign();
+		campaign.setName(campaignName);
+		campaign.setDescription(campaignDescription);
+		campaign.setOwnerUserId(userId);
+		CampaignDAO dao = new CampaignDAO();
+		
+		boolean ret = false;
+		try {
+			ret = dao.save(campaign);
+		} 
+		catch (MySQLIntegrityConstraintViolationException e) {
+		}
+		catch (SQLException e) {
+		}
+		
+		return ret;
+	}
+	
     public void removeCampaign(String campaignName) throws CampaignException {
     	Campaign campaign = new Campaign();
 		campaign.setName(campaignName);
@@ -50,6 +69,21 @@ public class CampaignController extends AbstractController {
 			throw new CampaignException(e.getMessage());
 		}
 	}
+    
+    public Campaign[] getCampaigns(int userId) {
+    	try 
+    	{
+    		Campaign queryCampaign = new Campaign();
+    		queryCampaign.setOwnerUserId(userId);
+    		Campaign[] campaigns = new CampaignDAO().get(queryCampaign);
+    		return campaigns;	
+    	} 
+    	catch (SQLException e) {
+    
+    	}
+    	
+    	return null;
+    }
     
     public void loadUserCampaigns(ComboBox campaignsComboBox) {
 //    	String username = String.valueOf(getSession().getAttribute("user_email"));
