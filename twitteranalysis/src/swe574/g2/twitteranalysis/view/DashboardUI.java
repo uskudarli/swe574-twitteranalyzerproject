@@ -275,11 +275,17 @@ public class DashboardUI extends UI {
                         });
                     }
                 });
-                // Content
-                addComponent(content);
+                
+                //VerticalLayout vLayout = new VerticalLayout();
+                //vLayout.setSizeFull();
+                //vLayout.addComponent(content);
                 content.setSizeFull();
+                addComponent(content);
                 content.addStyleName("view-content");
+                
+                //addComponent(vLayout);
                 setExpandRatio(content, 1);
+                
             }
 
         });
