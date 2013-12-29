@@ -25,6 +25,7 @@ public class QueryExecuter {
 		            connection.commit();
 		            dbInstance.closeConnection(connection);
 		        } catch (SQLException e) {
+		        	e.printStackTrace();
 		        	// TODO: log exceptions
 				}
 			 	finally {

@@ -38,6 +38,24 @@ public class CampaignController extends AbstractController {
 		}
 	}
 	
+	public Campaign addCampaignAndGet(String campaignName) throws CampaignException {
+    	Campaign campaign = new Campaign();
+		campaign.setName(campaignName);
+		campaign.setOwnerUserId((Integer)getSession().getAttribute("user_id"));
+		CampaignDAO dao = new CampaignDAO();
+		try {
+			return dao.saveAndReturn(null, campaign);
+		} 
+		catch (MySQLIntegrityConstraintViolationException e) {
+			throw new CampaignException("Campaign Already exists!");
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return campaign;
+	}
+	
 	public boolean addCampaign(String campaignName, String campaignDescription, int userId) {
     	Campaign campaign = new Campaign();
 		campaign.setName(campaignName);

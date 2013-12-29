@@ -1,9 +1,14 @@
 package swe574.g2.twitteranalysis.view;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import swe574.g2.twitteranalysis.Campaign;
 import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.controller.CampaignController;
 import swe574.g2.twitteranalysis.controller.QueryController;
+import swe574.g2.twitteranalysis.exception.CampaignException;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -172,14 +177,38 @@ public class QueryView extends VerticalLayout  implements View {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				QueryController queryController = new QueryController(getUI());
-				queryController.runQuery(queryCombobox);
+				
+				//TODO first insert query, then run it.
+				CampaignController campaignController = new CampaignController(getUI());
+				Campaign c = null;
+				try {
+					c = campaignController.addCampaignAndGet(campaignCmb.getValue().toString());
+				} catch (CampaignException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(c != null){
+					QueryController queryController = new QueryController(getUI());
+					Query q = queryController.addQuery(getItems(includesList), getItems(excludesList), c.getId()) ;
+	
+					queryController.runQuery(q);
+				}
 			}
 		});
         
         formLayout.addComponent(submitButton);
 
         toolbar.addComponent(formLayout);
+	}
+	
+	private List<String> getItems(ListSelect listSelect){
+		
+		List<String> allItems = new ArrayList<String>();
+		
+		allItems = (List<String>)(List<?>)Arrays.asList(listSelect.getItemIds().toArray());
+		
+		return allItems;
 	}
 
 }

@@ -1,7 +1,6 @@
 package swe574.g2.twitteranalysis.exec;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import swe574.g2.twitteranalysis.Query;
@@ -10,7 +9,6 @@ import swe574.g2.twitteranalysis.dao.TweetDAO;
 import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
 public class ExecutableQuery extends Query implements Executable {
@@ -29,8 +27,10 @@ public class ExecutableQuery extends Query implements Executable {
 	@Override
 	public void execute(Connection connection) {
 		System.out.println("Query[" + this.getId() + "] starts running...");
-		
+		//TODO send e-mail after analysis has been completed.
         try {
+    		LuceneProcessor processor = new LuceneProcessor(connection, this.getCampaignId(), this.getId(), this.getExcludingKeywords(), this.getIncludingKeywords());
+    		
         	Twitter twitter = new TwitterFactory().getInstance();
         	for (Query pq : this.processedQueries) {
         		twitter4j.Query query = new twitter4j.Query( pq.getQueryString() );
@@ -42,16 +42,22 @@ public class ExecutableQuery extends Query implements Executable {
 	                for (Status fetchedTweet : tweets) {
 	                	try {
 	                		System.out.println("Save: " + fetchedTweet.getText());
-							dao.save(connection, new Tweet( fetchedTweet ));
+	                		Tweet t = new Tweet(fetchedTweet);
+							dao.save(connection, t);
+							processor.buildIndex(t);
 						} 
-	                	catch (SQLException e) {
+	                	catch (Exception e) {
 							// ignore exceptions
 	                		e.printStackTrace();
 						}
 	                }
 	            } while ((query = result.nextQuery()) != null);
         	}
-        } catch (TwitterException te) {
+        	
+        	processor.finalizeProcess();
+        	
+        } catch (Exception te) {
+        	te.printStackTrace();
         	// TODO: log exceptions
         }
 

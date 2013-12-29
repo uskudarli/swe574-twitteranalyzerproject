@@ -49,6 +49,7 @@ public class ReportsView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		VerticalLayout toolbar = new VerticalLayout();
 		toolbar.setWidth("100%");
+		toolbar.setHeight("100%");
 		toolbar.setSpacing(true);
 		toolbar.setMargin(true);
 		toolbar.addStyleName("toolbar");
