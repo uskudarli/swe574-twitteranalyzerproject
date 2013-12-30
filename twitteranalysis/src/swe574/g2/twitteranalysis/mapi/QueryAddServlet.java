@@ -72,7 +72,9 @@ public class QueryAddServlet extends HttpServlet {
 		if (user != null) {
 			QueryController queryController = new QueryController();
 			
-			boolean result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId));
+			//boolean result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId));
+			
+			boolean result = true;
 			
 			if (result) {
 				Query[] queries = queryController.getQueries(Integer.valueOf(campaignId));
