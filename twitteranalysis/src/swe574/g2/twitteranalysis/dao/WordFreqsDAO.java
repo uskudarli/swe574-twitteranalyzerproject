@@ -114,7 +114,7 @@ public class WordFreqsDAO implements DataAccessObject<WordFreqs>{
 	@Override
 	public WordFreqs[] get(WordFreqs dataObject) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		return get(null, dataObject);
 	}
 
 	@Override
@@ -142,6 +142,7 @@ public class WordFreqsDAO implements DataAccessObject<WordFreqs>{
 		}
 		
 		query = query.substring(0, query.length() - 4);
+		query = query + " order by frequency desc";
 
 		Connection availableConnection = connection;
 		
