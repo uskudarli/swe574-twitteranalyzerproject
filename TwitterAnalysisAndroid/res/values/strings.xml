@@ -9,6 +9,7 @@
     <string name="menu_reports">Reports</string>
     <string name="menu_settings">Settings</string>
     <string name="welcome">Welcome</string>
+    <string name="txt_campaign">Campaign:</string>
     <string name="txt_campaign_name">Campaign Name:</string>
     <string name="txt_query_title">Query Title:</string>
     <string name="query_title_hint">Enter a title for your query</string>
@@ -40,6 +41,8 @@
     <string name="err_password">Please enter a valid password</string>
     <string name="txt_query_submitted">Query Submitted</string>
     <string name="txt_query_submit_info">Your query has been submitted and will be processed shortly</string>
+    <string name="txt_campaign_submitted">Campaign Submitted</string>
+    <string name="txt_campaign_submit_info">Your campaign has been submitted successfully</string>
     <string name="txt_error">Error</string>
     <string name="txt_query_submit_error">An error occurred while submitting the query, please try again</string>
     <string name="err_first_name">Please enter your first name</string>
@@ -51,5 +54,10 @@
     <string name="txt_positive">Positive</string>
     <string name="txt_negative">Negative</string>
     <string name="txt_neutral">Neutral</string>
-    
+    <string name="txt_new">New</string>
+    <string name="txt_campaign_description">Campaign Description:</string>
+    <string name="campaign_name_hint">Enter a campaign name</string>
+    <string name="err_campaign_name">Please enter a campaign name</string>
+    <string name="err_campaign_description">Please enter a campaign description</string>
+    <string name="campaign_description_hint">Enter a short description for your campaign</string>
 </resources>

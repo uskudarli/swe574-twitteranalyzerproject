@@ -28,11 +28,11 @@
 		        android:textColor="@color/light_gray"
 		        android:textSize="@dimen/font_size_large" />
 
-		    <!-- campaign name drop down list -->    
+		    <!-- campaign drop down list -->    
         <TextView 
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="@string/txt_campaign_name"
+		        android:text="@string/txt_campaign"
 		        android:textColor="@color/light_gray"
 		        android:textSize="@dimen/font_size_regular"
             android:layout_marginTop="@dimen/medium_margin"
@@ -46,8 +46,52 @@
             android:textSize="@dimen/font_size_regular"
             android:layout_marginTop="@dimen/light_margin"
             android:layout_marginBottom="@dimen/medium_margin" />
+		    
+		    <!-- new campaign name -->
+		    <TextView
+		        android:id="@+id/campaign_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_campaign_name"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:visibility="gone" />
+		    
+		    <EditText
+            android:id="@+id/et_campaign_name"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:hint="@string/campaign_name_hint"
+            android:layout_marginTop="@dimen/light_margin"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:visibility="gone" />
+		    
+		    <!-- campaign description -->
+		    <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_campaign_description"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_marginBottom="@dimen/light_margin" />
+		    
+		    <EditText
+            android:id="@+id/et_campaign_description"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:lines="5"
+            android:hint="@string/campaign_description_hint"
+            android:layout_marginTop="@dimen/light_margin"
+            android:layout_marginBottom="@dimen/medium_margin" />
         
-		    <!-- query title input -->
+		    <!-- query number -->
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,13 +101,12 @@
             android:layout_marginTop="@dimen/medium_margin"
             android:layout_marginBottom="@dimen/light_margin" />
         
-        <EditText
-            android:id="@+id/et_query_title"
+        <Spinner
+            android:id="@+id/spinner_query_number"
             android:layout_width="@dimen/form_item_wide"
             android:layout_height="wrap_content"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_regular"
-            android:hint="@string/query_title_hint"
             android:layout_marginTop="@dimen/light_margin"
             android:layout_marginBottom="@dimen/medium_margin" />
         

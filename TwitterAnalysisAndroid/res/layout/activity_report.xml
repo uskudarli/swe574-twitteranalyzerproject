@@ -28,7 +28,7 @@
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_large" />
         
-        <com.example.twitteranalysisandroid.SquareLinearLayout 
+        <com.example.uiwidget.SquareLinearLayout 
             android:id="@+id/pie_chart" 
             android:orientation="horizontal"
             android:layout_width="match_parent" 
