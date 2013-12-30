@@ -29,10 +29,13 @@ public class Tweet {
 	private String sentiment;
 	private Timestamp tweetTime;
 	
+	private int campaignId;
+	private int queryId;
+	
 	public Tweet() {
 	}
 	
-	public Tweet(Status twitter4jTweet) {
+	public Tweet(Status twitter4jTweet, int campaignId, int queryId) {
 		this.createdAt = twitter4jTweet.getCreatedAt();
 		this.favoriteCount = twitter4jTweet.getFavoriteCount();
 		this.tweetLocation = new TweetLocation(twitter4jTweet.getGeoLocation());
@@ -59,6 +62,9 @@ public class Tweet {
 		
 		// sentiment analysis of tweet content
 		this.sentiment = SentimentClassifier.getInstance().classify(this.content);
+		this.campaignId = campaignId;
+		this.queryId = queryId;
+		
 	}
 	
 	public int getId() {
@@ -151,5 +157,22 @@ public class Tweet {
 	public void setTweetTime(Timestamp tweetTime) {
 		this.tweetTime = tweetTime;
 	}
+
+	public int getCampaignId() {
+		return campaignId;
+	}
+
+	public void setCampaignId(int campaignId) {
+		this.campaignId = campaignId;
+	}
+
+	public int getQueryId() {
+		return queryId;
+	}
+
+	public void setQueryId(int queryId) {
+		this.queryId = queryId;
+	}
+	
 	
 }
