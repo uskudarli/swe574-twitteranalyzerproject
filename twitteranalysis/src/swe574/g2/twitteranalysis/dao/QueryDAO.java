@@ -111,6 +111,109 @@ public class QueryDAO implements DataAccessObject<Query> {
 		
 		return true;
 	}
+	
+	public Query saveAndGet(Connection connection, Query dataObject) throws SQLException {
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		String query = "insert into t_query (campaign_id) values (?) ";
+		PreparedStatement ps = availableConnection.prepareStatement(query);
+		int queryId = -1;
+		
+		if (dataObject != null && dataObject.getId() < 1) {
+			query = "insert into t_query (campaign_id) values (?) ";
+			ps = availableConnection.prepareStatement(query);
+			ps.setInt(1, dataObject.getCampaignId());
+			//queryId = ps.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			rs.next();
+			queryId = rs.getInt(1);
+			dataObject.setId(queryId);
+			//ps.executeUpdate();
+			ps.close();
+
+			/*query = "select max(id) from t_query ";
+			Statement s = availableConnection.createStatement();
+			ResultSet rs = s.executeQuery(query);
+			rs.next();
+			queryId = rs.getInt(1);*/
+
+			//rs.close();
+			//s.close();
+		}
+		else {
+			queryId = dataObject.getId();
+		}
+		
+		
+		List<String> includingKeywords = dataObject.getIncludingKeywords();
+		List<String> excludingKeywords = dataObject.getExcludingKeywords();
+		
+		try {
+			query = "delete from t_querykeyword where query_id = ? ";
+			ps = availableConnection.prepareStatement(query);
+			
+			try {
+				ps.setInt(1, queryId);
+				ps.executeUpdate();
+			} catch (Exception e) {
+				// do nothing
+			}
+			finally {
+				ps.close();
+			}
+		} catch (SQLException e1) {
+			// do nothing
+		}
+		
+		query = "insert into t_querykeyword (name, type, query_id) values (?,?,?) ";
+		if (includingKeywords != null) {
+			for (String k : includingKeywords) {
+				try {
+					ps = availableConnection.prepareStatement(query);
+					ps.setString(1, k);
+					ps.setString(2, "including");
+					ps.setInt(3, queryId);
+					ps.executeUpdate();
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					// do nothing
+				}
+				finally {
+					ps.close();
+				}
+				
+			}
+		}
+		
+		if (excludingKeywords != null) {
+			for (String k : excludingKeywords) {
+				try {
+					ps = availableConnection.prepareStatement(query);
+					ps.setString(1, k);
+					ps.setString(2, "excluding");
+					ps.setInt(3, queryId);
+					ps.executeUpdate();
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					// do nothing
+				}
+				finally {
+					ps.close();
+				}
+			}
+		}
+
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
+		
+		return dataObject;
+	}
 
 	@Override
 	public boolean remove(Connection connection, Query dataObject) throws SQLException {

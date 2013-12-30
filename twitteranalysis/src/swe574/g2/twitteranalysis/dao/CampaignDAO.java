@@ -95,6 +95,93 @@ public class CampaignDAO implements DataAccessObject<Campaign> {
 		return true;
 	}
 
+	public Campaign saveAndReturn(Connection connection, Campaign dataObject) throws SQLException{
+		String query = "";
+		Object[] bindVariables = new Object[4];
+		int bindVariableCount = 0;
+		
+		if (dataObject.getId() > 0) {
+		
+		    query = "update t_campaign set ";
+			if (dataObject.getName() != null) {
+				query += "name = ?,";
+				bindVariables[bindVariableCount++] = dataObject.getName();
+			}
+			if (dataObject.getDescription() != null) {
+				query += "description = ?,";
+				bindVariables[bindVariableCount++] = dataObject.getDescription();
+			}
+			if (dataObject.getOwnerUserId() > 0) {
+				query += "applicationuser_id = ?,";
+				bindVariables[bindVariableCount++] = dataObject.getOwnerUserId();
+			}
+			
+			if (bindVariableCount == 0) {
+				return dataObject;
+			}
+			
+			query = query.substring(0, query.length() - 1) + " where id = ? ";
+			bindVariables[bindVariableCount++] = dataObject.getId();
+		}
+		else {
+			query = "insert into t_campaign (";
+			if (dataObject.getName() != null) {
+				query += "name,";
+				bindVariables[bindVariableCount++] = dataObject.getName();
+			}
+			if (dataObject.getDescription() != null) {
+				query += "description,";
+				bindVariables[bindVariableCount++] = dataObject.getDescription();
+			}
+			if (dataObject.getOwnerUserId() > 0) {
+				query += "applicationuser_id,";
+				bindVariables[bindVariableCount++] = dataObject.getOwnerUserId();
+			}
+			
+			if (bindVariableCount == 0) {
+				return dataObject;
+			}
+			
+			query = query.substring(0, query.length() - 1) + ") values (";
+			for (int i=0; i<bindVariableCount; ++i) {
+				query += "?,";
+			}
+			query = query.substring(0, query.length() - 1) + ") ";
+		}
+		System.out.println(query);
+		
+		Connection availableConnection = connection;
+		
+		if (availableConnection == null) {
+			availableConnection = DatabaseConnector.getInstance().getConnection();
+		}
+		
+		
+		PreparedStatement s = availableConnection.prepareStatement(query);
+		
+		for (int i=0; i<bindVariableCount; ++i) {
+			if (bindVariables[i] instanceof String) {
+				s.setString(i+1, (String)bindVariables[i]);
+			}
+			else {
+				s.setInt(i+1, (Integer)bindVariables[i]);
+			}
+		}
+		
+		s.executeUpdate();
+		ResultSet rs = s.getGeneratedKeys();
+		rs.next();
+		dataObject.setId(rs.getInt(1));
+		
+		// do not close connection that isn't opened by yourself
+		if (connection == null) {
+			DatabaseConnector.getInstance().closeConnection(availableConnection);
+		}
+		
+		return dataObject;
+
+	}
+	
 	@Override
 	public boolean remove(Connection connection, Campaign dataObject) throws SQLException {
 		String query = "delete from t_campaign where ";

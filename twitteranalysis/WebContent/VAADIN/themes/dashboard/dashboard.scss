@@ -46,7 +46,7 @@
 	
 
 	.v-view {
-		overflow: hidden;
+		overflow: auto;
 	}
 	
 	&.v-app {
@@ -462,7 +462,7 @@
 	}
 	
 	.view-content {
-		overflow: visible;
+		overflow: auto;
 	}
 	
 	.main-view {

@@ -182,7 +182,7 @@ public class DashboardUI extends UI {
                         loginPanel.removeComponent(loginPanel.getComponent(2));
                     }
                     Label error = new Label(
-                            "Wrong username.<span>Hint: try 'bkara' for admin view, '2012719081' for student view <br> or 'ucaglayan' for instructor view with no password.</span>",
+                            "Wrong username.<span>Hint: try \"bkara\" for admin view, '2012719081' for student view <br> or \"uskudarli\" for instructor view with no password.</span>",
                             ContentMode.HTML);
                     error.addStyleName("error");
                     error.setSizeUndefined();
@@ -275,11 +275,17 @@ public class DashboardUI extends UI {
                         });
                     }
                 });
-                // Content
-                addComponent(content);
+                
+                //VerticalLayout vLayout = new VerticalLayout();
+                //vLayout.setSizeFull();
+                //vLayout.addComponent(content);
                 content.setSizeFull();
+                addComponent(content);
                 content.addStyleName("view-content");
+                
+                //addComponent(vLayout);
                 setExpandRatio(content, 1);
+                
             }
 
         });

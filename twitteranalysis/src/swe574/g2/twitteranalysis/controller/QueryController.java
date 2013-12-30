@@ -42,6 +42,23 @@ public class QueryController extends AbstractController {
 			throw new QueryException(e.getMessage());
 		}
 	}
+	public Query addQuery(List<String> includingKeywords, List<String> excludingKeywords, int campaignId) {
+		Query query = new Query();
+		query.setIncludingKeywords(includingKeywords);
+		query.setExcludingKeywords(excludingKeywords);
+		query.setCampaignId(campaignId);
+		
+		QueryDAO dao = new QueryDAO();
+		boolean ret = false;
+		try {
+			query = dao.saveAndGet(null, query);
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return query;
+	}
 	
 	public void removeQuery(ComboBox queriesComboBox, String keyword, String type) throws QueryException {
 		Query query = (Query)queriesComboBox.getValue();
@@ -99,23 +116,23 @@ public class QueryController extends AbstractController {
 		}
 	}
 	
-	public void runQuery(ComboBox queriesComboBox) {
+	public void runQuery(Query query) {
 		QueryExecuter queryExecuter = new QueryExecuter();
-		queryExecuter.execute( this, ((Query)queriesComboBox.getValue()) );
+		queryExecuter.execute( this, query);
 	}
 	
-	public void loadQueries(ComboBox queriesComboBox, int campaignId) {
+	public void loadQueries(ComboBox queriesComboBox, Object campaignId) {
 		System.out.println("LoadQueries");
 		Query dataObject  = new Query();
-//		Campaign campaign = new Campaign();
-//		campaign.setOwnerUserId((Integer)(getSession().getAttribute("user_id")));
-//		campaign.setName(String.valueOf( getSession().getAttribute("campaign_name") ));
+		
+		if(campaignId instanceof String)
+			return;
 		
 		try 
 		{
-//			Campaign[] campaigns = new CampaignDAO().get(campaign);
- //   		if (campaigns != null && campaigns.length > 0) {
-				dataObject.setCampaignId(campaignId);
+			int cId = (Integer)campaignId;
+				
+				dataObject.setCampaignId(cId);
 				
 				Query[] qs = new QueryDAO().get(dataObject);
 				for (Query q : qs) {
@@ -124,12 +141,28 @@ public class QueryController extends AbstractController {
 					queriesComboBox.setItemCaption(q, String.valueOf(q.getId()));
 					
 				}
-//			}			
 		} 
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public Query[] getQueries(int campaignId) {
+		Query dataObject  = new Query();
+		
+		try 
+		{
+			int cId = (Integer)campaignId;
+			dataObject.setCampaignId(cId);
+			
+			Query[] qs = new QueryDAO().get(dataObject);
+			return qs;
+		} 
+		catch (SQLException e) {
+		}
+		
+		return null;
 	}
 	
 	public void loadIncludingKeywords(ComboBox queriesComboBox, ListSelect list) {

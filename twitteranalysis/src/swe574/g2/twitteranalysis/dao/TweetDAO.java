@@ -96,8 +96,8 @@ public class TweetDAO implements DataAccessObject<Tweet> {
 		ps.setInt(5, dataObject.getFavoriteCount());
 		ps.setLong(6, dataObject.getExtTweetId());
 		ps.setString(7, dataObject.getTweetOwner().getUsername());
-		ps.setNull(8, java.sql.Types.INTEGER);//dataObject.getCampaign().getId());
-		ps.setNull(9, java.sql.Types.INTEGER);//dataObject.getQuery().getId());
+		ps.setInt(8, dataObject.getCampaignId());//dataObject.getCampaign().getId());
+		ps.setInt(9, dataObject.getQueryId());//dataObject.getQuery().getId());
 		ps.executeUpdate();
 		ps.close();
 
