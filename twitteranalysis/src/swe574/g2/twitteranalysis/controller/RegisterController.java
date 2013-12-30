@@ -25,7 +25,9 @@ public class RegisterController extends AbstractController {
 		String password = passwordField.getValue();
 		String confirm = confirmField.getValue();
 		
-		if (password == null|| confirm == null || password.equals(confirm) == false ) {
+		if (username == null || !isValidEmailAddress(username)) {
+			throw new RegistrationException(RegistrationException.NOT_VALID_USER_NAME);
+		} else if (password == null || confirm == null || password.equals(confirm) == false ) {
 			throw new RegistrationException(RegistrationException.DIFFERENT_PASSWORDS);
 		}
 		
@@ -46,6 +48,11 @@ public class RegisterController extends AbstractController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private boolean isValidEmailAddress(String email) {
+		String emailRegEx = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+		return email.matches(emailRegEx);
 	}
 	
 	public void showRegisterView() {

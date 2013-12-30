@@ -33,7 +33,7 @@ public class Campaign implements Comparable<Campaign> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (obj == null || this.name == null || !(obj instanceof Campaign)) {
 			return false;
 		}
 		
@@ -42,7 +42,7 @@ public class Campaign implements Comparable<Campaign> {
 	
 	@Override
 	public int compareTo(Campaign o) {
-		if (o == null)
+		if (o == null || this.name == null)
 			return -1;
 		
 		return this.name.compareTo(o.name);

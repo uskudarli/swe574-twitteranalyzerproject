@@ -50,6 +50,15 @@ public class Hashtag {
 	public void setEnd(int end) {
 		this.end = end;
 	}
+
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof Hashtag) || this.value == null) {
+			return false;
+		}
+		
+		return (this.start == ((Hashtag)obj).getStart() && this.end == ((Hashtag)obj).getEnd() && this.value.equals(((Hashtag)obj).getValue()));
+	}
 	
 }
