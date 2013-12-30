@@ -42,7 +42,7 @@ public class ExecutableQuery extends Query implements Executable {
 	                for (Status fetchedTweet : tweets) {
 	                	try {
 	                		System.out.println("Save: " + fetchedTweet.getText());
-	                		Tweet t = new Tweet(fetchedTweet);
+	                		Tweet t = new Tweet(fetchedTweet, this.getCampaignId(), this.getId());
 							dao.save(connection, t);
 							processor.buildIndex(t);
 						} 
@@ -55,6 +55,7 @@ public class ExecutableQuery extends Query implements Executable {
         	}
         	
         	processor.finalizeProcess();
+        	System.out.println("Query finished");
         	
         } catch (Exception te) {
         	te.printStackTrace();
