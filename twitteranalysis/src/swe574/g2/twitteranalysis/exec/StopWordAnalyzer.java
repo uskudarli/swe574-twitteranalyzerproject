@@ -31,16 +31,18 @@ public class StopWordAnalyzer extends Analyzer{
 		  
 	    StopwordDAO stopwordDao = new StopwordDAO();
 	    String[] stopwords = stopwordDao.getStopwords(conn);
+	    List<String> stopwordsList = new ArrayList<String>(Arrays.asList(stopwords));
+	    
 	    if(excluding != null && excluding.size() > 0){
-	    	List<String> stopwordsList = new ArrayList<String>(Arrays.asList(stopwords));
-	    	excluding.addAll(including);
 	    	stopwordsList.addAll(excluding);
-	    	
-	    	stopwords = new String[stopwordsList.size()];
-	    	stopwordsList.toArray(stopwords);
-	    	
+	    }
+	    if(including != null && including.size() > 0){
+	    	stopwordsList.addAll(including);
 	    }
 	    
+	    stopwords = new String[stopwordsList.size()];
+    	stopwordsList.toArray(stopwords);
+    	
 	    
 	    this.stopset = StopFilter.makeStopSet(Version.LUCENE_36, stopwords, true);
 	  }
@@ -52,15 +54,5 @@ public class StopWordAnalyzer extends Analyzer{
 	        new LowerCaseFilter(Version.LUCENE_36,
 	          new StandardFilter(Version.LUCENE_36,
 	            new StandardTokenizer(Version.LUCENE_36, reader))), stopset));
-	  }
-	  
-	  private String[] filterComments(String[] input) {
-	    List<String> stopwords = new ArrayList<String>();
-	    for (String stopword : input) {
-	      if (! stopword.startsWith("#")) {
-	        stopwords.add(stopword);
-	      }
-	    }
-	    return stopwords.toArray(new String[0]);
 	  }
 }
