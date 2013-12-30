@@ -31,7 +31,7 @@ public class LuceneProcessor {
 
 	private Directory ramdir;
 
-	private Document doc;
+	private Document posDoc, negDoc, neuDoc, allDoc;
 
 	private IndexWriter writer;
 	
@@ -44,7 +44,10 @@ public class LuceneProcessor {
 		this.ramdir = new RAMDirectory();
 		this.writer = new IndexWriter(ramdir, new IndexWriterConfig(
 				Version.LUCENE_36, new StopWordAnalyzer(connection, excluding, including)));
-		this.doc = new Document();
+		this.posDoc = new Document();
+		this.negDoc = new Document();
+		this.neuDoc = new Document();
+		this.allDoc = new Document();
 		
 		this.queryId = queryId;
 		
@@ -54,22 +57,31 @@ public class LuceneProcessor {
 	public void buildIndex(Tweet tweet) throws Exception {
 		Field field;
 
+		
+		
 		if ("pos".equals(tweet.getSentiment())) {
 			field = new Field("pos_content", tweet.getContent(),
 					Field.Store.NO, Field.Index.ANALYZED, Field.TermVector.YES);
+			posDoc.add(field);
 		} else if ("neg".equals(tweet.getSentiment())) {
 			field = new Field("neg_content", tweet.getContent(),
 					Field.Store.NO, Field.Index.ANALYZED, Field.TermVector.YES);
+			negDoc.add(field);
 		} else {
 			field = new Field("neu_content", tweet.getContent(),
 					Field.Store.NO, Field.Index.ANALYZED, Field.TermVector.YES);
+			neuDoc.add(field);
 		}
 
-		doc.add(field);
-		doc.add(new Field("all_content", tweet.getContent(), Field.Store.NO,
-				Field.Index.ANALYZED, Field.TermVector.YES));
+		field = new Field("all_content", tweet.getContent(),
+				Field.Store.NO, Field.Index.ANALYZED, Field.TermVector.YES);
+		
+		allDoc.add(field);
 
-		writer.addDocument(doc);
+		writer.addDocument(posDoc);
+		writer.addDocument(negDoc);
+		writer.addDocument(neuDoc);
+		writer.addDocument(allDoc);
 	}
 
 	public void finalizeProcess() throws IOException {
