@@ -93,13 +93,13 @@ public class ReportsView extends VerticalLayout implements View {
 		plotOptions.setDataLabels(dataLabels);
 		conf.setPlotOptions(plotOptions);
 
-		conf.setSeries(getBrowserMarketShareSeries());
+		conf.setSeries(getSentimentData());
 
 		chart.drawChart();
 		return chart;
 	}
 
-	private DataSeries getBrowserMarketShareSeries() {
+	private DataSeries getSentimentData() {
 		TweetDAO tweetDao = new TweetDAO();
 		SentimentAnalysis sentiment = null;
 		try {
