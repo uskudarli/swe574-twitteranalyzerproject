@@ -49,11 +49,11 @@ public class TwitterManager {
 					System.out.println("User: " + name);
 					String sent = sentClassifier.classify(t.getText());
 					System.out.println("Sentiment: " + sent);
-					try {
+					/*try {
 						dao.save(connection, new Tweet( t ));
 					} catch (SQLException e) {
 						System.err.println(e.getMessage());
-					}
+					}*/
 				}
 			} while ((query = r.nextQuery()) != null && count < LIMIT);
 			connection.commit();
