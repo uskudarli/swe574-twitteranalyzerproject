@@ -18,11 +18,13 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -172,7 +174,7 @@ public class QueryView extends VerticalLayout  implements View {
         Button submitButton = new NativeButton("Submit");
         submitButton.setDescription("Submit");
         submitButton.addStyleName("default");
-		
+
         submitButton.addClickListener(new ClickListener() {
 			
 			@Override
@@ -194,6 +196,9 @@ public class QueryView extends VerticalLayout  implements View {
 	
 					queryController.runQuery(q);
 				}
+				
+				
+				Notification.show("Your query has been submitted.\nYou will be notified via e-mail when the report is ready.", Notification.Type.WARNING_MESSAGE);
 			}
 		});
         
