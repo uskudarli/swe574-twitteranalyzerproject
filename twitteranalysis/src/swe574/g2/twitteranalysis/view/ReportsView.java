@@ -1,8 +1,12 @@
 package swe574.g2.twitteranalysis.view;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
@@ -15,7 +19,6 @@ import org.apache.lucene.misc.TermStats;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 
-import swe574.g2.twitteranalysis.Campaign;
 import swe574.g2.twitteranalysis.Query;
 import swe574.g2.twitteranalysis.WordFreqs;
 import swe574.g2.twitteranalysis.analysis.SentimentAnalysis;
@@ -23,7 +26,6 @@ import swe574.g2.twitteranalysis.controller.CampaignController;
 import swe574.g2.twitteranalysis.controller.QueryController;
 import swe574.g2.twitteranalysis.dao.TweetDAO;
 import swe574.g2.twitteranalysis.dao.WordFreqsDAO;
-import swe574.g2.twitteranalysis.exception.CampaignException;
 
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.ChartType;
@@ -49,14 +51,14 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
 public class ReportsView extends VerticalLayout implements View {
@@ -124,6 +126,7 @@ public class ReportsView extends VerticalLayout implements View {
 			public void buttonClick(ClickEvent event) {
 				if(queryCombobox.getValue() != null){
 					try{
+						toolbar.removeAllComponents();
 						Query q = (Query)queryCombobox.getValue();
 						addReports(q.getId(), q.getCampaignId());
 					}catch(Exception e){
@@ -199,7 +202,7 @@ public class ReportsView extends VerticalLayout implements View {
 
 	protected Component getPieChart(String queryId, String campaignId) {
 		Chart chart = new Chart(ChartType.PIE);
-
+		
 		Configuration conf = chart.getConfiguration();
 
 		conf.setTitle("Tweet Sentiments");
@@ -245,22 +248,28 @@ public class ReportsView extends VerticalLayout implements View {
 			}
 		}
 
-		DecimalFormat decim = new DecimalFormat("0.00");
-		pos = Double.parseDouble(decim.format(pos));
-		neg = Double.parseDouble(decim.format(neg));
-		neu = 1 - pos - neg;
-
-		DataSeriesItem positive = new DataSeriesItem("Positive", pos);
+		
+		BigDecimal p =new BigDecimal(pos);
+		p = p.round(new MathContext(2, RoundingMode.HALF_UP));;
+		
+		BigDecimal n = new BigDecimal(neg);
+		n = n.round(new MathContext(2, RoundingMode.HALF_UP));;
+		
+		BigDecimal neutr=BigDecimal.ONE.subtract(p).subtract(n);
+		neutr = neutr.round(new MathContext(2, RoundingMode.HALF_UP));;
+		
+		
+		DataSeriesItem positive = new DataSeriesItem("Positive", p);
 		positive.setColor(createRadialGradient(new SolidColor(255, 255, 0),
 				new SolidColor(128, 128, 0)));
 		positive.setSelected(true);
 		positive.setSliced(true);
 
-		DataSeriesItem negative = new DataSeriesItem("Negative", neg);
+		DataSeriesItem negative = new DataSeriesItem("Negative", n);
 		negative.setColor(createRadialGradient(new SolidColor(255, 128, 0),
 				new SolidColor(128, 64, 0)));
 
-		DataSeriesItem neutral = new DataSeriesItem("Neutral", neu);
+		DataSeriesItem neutral = new DataSeriesItem("Neutral", neutr);
 		neutral.setColor(createRadialGradient(new SolidColor(0, 128, 0),
 				new SolidColor(0, 64, 0)));
 
