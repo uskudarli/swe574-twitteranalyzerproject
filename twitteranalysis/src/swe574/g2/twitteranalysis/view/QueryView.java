@@ -183,16 +183,23 @@ public class QueryView extends VerticalLayout  implements View {
 				//TODO first insert query, then run it.
 				CampaignController campaignController = new CampaignController(getUI());
 				Campaign c = null;
-				try {
-					c = campaignController.addCampaignAndGet(campaignCmb.getValue().toString());
-				} catch (CampaignException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(campaignCmb.getValue() instanceof String){
+					try {
+						c = campaignController.addCampaignAndGet(campaignCmb.getValue().toString());
+					} catch (CampaignException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				
+				else{
+					if(campaignCmb.getValue() != null){
+						c = new Campaign();
+						c.setId(Integer.valueOf(campaignCmb.getValue().toString()));
+					}
+				}
 				if(c != null){
 					QueryController queryController = new QueryController(getUI());
-					Query q = queryController.addQuery(getItems(includesList), getItems(excludesList), c.getId()) ;
+					Query q = queryController.addQuery(getItems(includesList), getItems(excludesList), c.getId(), queryCombobox.getValue().toString()) ;
 	
 					queryController.runQuery(q);
 				}
