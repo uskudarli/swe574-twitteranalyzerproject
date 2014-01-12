@@ -1,68 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-	  android:orientation="vertical"
-    android:background="@color/pure_white"
-    android:padding="@dimen/heavy_padding" >
-		
-    <!-- welcome title -->
-    <TextView 
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/heavy_margin"
-      android:layout_marginBottom="@dimen/light_margin"
-      android:layout_gravity="center"
-      android:text="@string/welcome"
-      android:textColor="@color/twitter_blue"
-      android:textSize="@dimen/font_size_large" />
+    android:layout_height="match_parent" >
     
-    <!-- application name title -->
-    <TextView 
+    <!-- Menu View, initially behind content view -->
+    <LinearLayout
+        android:id="@+id/menu_layout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_height="match_parent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/heavy_margin"
-        android:layout_gravity="center"
-        android:text="@string/app_name"
-        android:textColor="@color/light_gray"
-        android:textSize="@dimen/font_size_large" />
+        android:orientation="vertical"
+        android:background="@color/tinted_white" >
+        
+        <!-- add menu buttons here -->
+        <TextView 
+            android:id="@+id/menu_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:text="@string/menu_login"
+            android:textColor="@color/twitter_dark_blue"
+            android:textSize="@dimen/font_size_large" />
+        
+        <TextView 
+            android:id="@+id/menu_registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:text="@string/menu_registration"
+            android:textColor="@color/twitter_dark_blue"
+            android:textSize="@dimen/font_size_large" />
+        
+    </LinearLayout>
     
-    <!-- form email input -->
-    <EditText 
-        android:id="@+id/edit_email"
-        android:layout_width="@dimen/form_item_wide"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/medium_margin"
-        android:layout_gravity="center"
-        android:textColor="@color/dark_gray"
-        android:inputType="textEmailAddress"
-        android:hint="@string/enter_email"
-        android:textSize="@dimen/font_size_regular" />
+    <!-- Content View, a title and a view pager for content -->
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" 
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical" >
+        
+        <!-- app name title, doubles as toggle menu button -->
+        <TextView 
+            android:id="@+id/toggle_menu_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:text="@string/app_name"
+            android:textColor="@color/twitter_blue"
+            android:textSize="@dimen/font_size_large"
+            android:background="@color/tinted_white" />
+        
+        <!-- any actual content goes in the pager dynamically -->
+		    <android.support.v4.view.ViewPager
+		        android:id="@+id/view_pager"
+				    android:layout_width="match_parent"
+				    android:layout_height="0dp"
+				    android:layout_weight="1" />
     
-    <!-- form password input -->
-    <EditText 
-        android:id="@+id/edit_password"
-        android:layout_width="@dimen/form_item_wide"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/medium_margin"
-        android:layout_gravity="center"
-        android:textColor="@color/dark_gray"
-        android:inputType="textPassword"
-        android:hint="@string/enter_password"
-        android:textSize="@dimen/font_size_regular" />
+    </LinearLayout>
     
-    <!-- login button -->
-    <Button 
-        android:id="@+id/button_login"
-        android:layout_width="@dimen/form_item_regular"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/heavy_margin"
-        android:layout_gravity="center"
-        android:padding="@dimen/heavy_padding"
-        android:gravity="center"
-        android:background="@color/twitter_dark_blue"
-        android:text="@string/button_login"
-        android:textColor="@color/pure_white"
-        android:textSize="@dimen/font_size_regular" />
-
-</LinearLayout>
+</RelativeLayout>

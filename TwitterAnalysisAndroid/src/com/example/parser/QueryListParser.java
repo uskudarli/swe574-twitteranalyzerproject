@@ -33,9 +33,6 @@ public class QueryListParser extends JSONArrayParser<Query> {
     try {
       queryList = queryObject.getJSONArray(QUERIES);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
       return null;
     }
     
@@ -51,9 +48,6 @@ public class QueryListParser extends JSONArrayParser<Query> {
         }
         result.add(query);
       } catch(JSONException e){
-        if(DEBUG){
-          e.printStackTrace();
-        }
         return null;
       }
     }

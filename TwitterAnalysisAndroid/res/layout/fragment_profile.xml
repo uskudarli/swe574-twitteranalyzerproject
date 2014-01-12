@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pure_white" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="vertical"
+        android:padding="@dimen/heavy_padding" >
+        
+        <!-- page title -->
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:text="@string/txt_profile"
+            android:textColor="@color/twitter_blue"
+            android:textSize="@dimen/font_size_large" />
+
+        <!-- first name input -->
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_name"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_marginBottom="@dimen/light_margin" />
+          
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:hint="@string/first_name_hint"
+            android:layout_marginTop="@dimen/light_margin"
+            android:layout_marginBottom="@dimen/medium_margin" />
+        
+        <!-- email input -->
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_email"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_marginBottom="@dimen/light_margin" />
+          
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email_hint"
+            android:layout_marginTop="@dimen/light_margin"
+            android:layout_marginBottom="@dimen/medium_margin" />
+        
+        <!-- email notifications checkbox -->
+        <!-- <CheckBox
+            android:id="@+id/chk_email_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:text="@string/txt_email_notifications" /> -->
+        
+        <!-- phone notifications checkbox -->
+        <!-- <CheckBox
+            android:id="@+id/chk_phone_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular"
+            android:text="@string/txt_phone_notifications" /> -->
+        
+        <!-- update button -->
+        <Button 
+            android:id="@+id/button_update"
+            android:layout_width="@dimen/form_item_regular"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/heavy_margin"
+            android:layout_gravity="center"
+            android:padding="@dimen/heavy_padding"
+            android:gravity="center"
+            android:background="@color/twitter_dark_blue"
+            android:text="@string/button_update"
+            android:textColor="@color/pure_white"
+            android:textSize="@dimen/font_size_regular" />
+    
+    </LinearLayout>
+    
+</ScrollView>

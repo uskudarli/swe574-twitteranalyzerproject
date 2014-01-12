@@ -4,7 +4,11 @@
     <string name="app_name">Twitter Analyzer</string>
     <string name="enter_email">Enter you email</string>
     <string name="enter_password">Enter your password</string>
+    <string name="confirm_password">Re-enter your password</string>
     <string name="button_login">Login</string>
+    <string name="button_register">Register</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_registration">Register</string>
     <string name="menu_query">Submit Query</string>
     <string name="menu_reports">Reports</string>
     <string name="menu_settings">Settings</string>
@@ -36,9 +40,11 @@
     <string name="txt_ok">OK</string>
     <string name="txt_invalid_login">Invalid Login</string>
     <string name="err_check_credentials">Please check your email and password</string>
+    <string name="err_dublicate_email">Email address already taken</string>
     <string name="txt_loading">Loading&#8230;</string>
     <string name="err_email">Please enter a valid email address</string>
     <string name="err_password">Please enter a valid password</string>
+    <string name="err_confirm_password">Passwords do not match</string>
     <string name="txt_query_submitted">Query Submitted</string>
     <string name="txt_query_submit_info">Your query has been submitted and will be processed shortly</string>
     <string name="txt_campaign_submitted">Campaign Submitted</string>
@@ -60,4 +66,19 @@
     <string name="err_campaign_name">Please enter a campaign name</string>
     <string name="err_campaign_description">Please enter a campaign description</string>
     <string name="campaign_description_hint">Enter a short description for your campaign</string>
+    <string name="txt_login">Login</string>
+    <string name="txt_register">Register</string>
+    <string name="menu_view_report">View Report</string>
+    <string name="menu_view_query">View Query</string>
+    <string name="menu_add_query">New Query</string>
+    <string name="menu_add_campaign">New Campaign</string>
+    <string name="menu_profile">Profile</string>
+    <string name="txt_profile">Profile</string>
+    <string name="txt_name">Full Name</string>
+    <string name="err_name">Please enter your name</string>
+    <string name="err_could_not_save">Could not be saved</string>
+    <string name="txt_reports">Reports</string>
+    <string name="txt_queries">Queries</string>
+    <string name="txt_add_query">Add Query</string>
+    <string name="txt_add_campaign">Add Campaign</string>
 </resources>

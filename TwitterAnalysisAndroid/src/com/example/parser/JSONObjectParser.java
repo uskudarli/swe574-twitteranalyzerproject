@@ -16,7 +16,6 @@ public abstract class JSONObjectParser<T extends SimpleEntity> extends JSONParse
     try {
       result = new JSONObject(getJSONString());
     } catch(JSONException e){
-      e.printStackTrace();
     }
     
     return result;

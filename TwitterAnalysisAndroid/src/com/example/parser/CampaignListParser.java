@@ -33,9 +33,6 @@ public class CampaignListParser extends JSONArrayParser<Campaign> {
     try {
       campaignList = campaignsObject.getJSONArray(CAMPAIGNS);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
       return null;
     }
     
@@ -51,9 +48,6 @@ public class CampaignListParser extends JSONArrayParser<Campaign> {
         }
         result.add(camp);
       } catch(JSONException e){
-        if(DEBUG){
-          e.printStackTrace();
-        }
         return null;
       }
     }

@@ -10,8 +10,6 @@ import com.example.parameter.AddQueryParameter;
 import com.example.parameter.GetQueryParameter;
 import com.example.parser.ErrorParser;
 import com.example.parser.QueryListParser;
-import com.example.webservicecallback.FindCallback;
-import com.example.webservicecallback.SaveCallback;
 
 public class QueryService extends WebServiceCaller {
   private static final String ACTION_GET = "query/";
@@ -28,7 +26,8 @@ public class QueryService extends WebServiceCaller {
     param.setCampaignId(pCampaignId);
     
     setServiceURL(ACTION_GET);
-    setInputParams(param.createQueryString());
+    setMode(MODE_GET);
+    setInputParams(param);
     
     callAsync(new WebServiceCallback() {
       @Override
@@ -63,7 +62,8 @@ public class QueryService extends WebServiceCaller {
     param.setExcluding(pQuery.getExcluding());
     
     setServiceURL(ACTION_ADD);
-    setInputParams(param.createQueryString());
+    setMode(MODE_PUT);
+    setInputParams(param);
     
     callAsync(new WebServiceCallback() {
       @Override

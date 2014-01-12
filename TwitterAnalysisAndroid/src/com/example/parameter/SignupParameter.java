@@ -7,6 +7,12 @@ public class SignupParameter extends AuthorizationParameter {
     super();
   }
   
+  @Override
+  public void setPassword(String pPassword){
+    super.setPassword(pPassword);
+    setConfirmPassword(pPassword);
+  }
+  
   public void setConfirmPassword(String pPassword){
     put(PASSWORD_CONFIRM, pPassword);
   }

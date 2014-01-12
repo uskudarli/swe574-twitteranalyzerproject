@@ -37,9 +37,6 @@ public class Query extends SimpleEntity {
       try {
         result.add(includings.getString(i));
       } catch(JSONException e){
-        if(DEBUG){
-          e.printStackTrace();
-        }
         return null;
       }
     }
@@ -68,9 +65,6 @@ public class Query extends SimpleEntity {
       try {
         result.add(excludings.getString(i));
       } catch(JSONException e){
-        if(DEBUG){
-          e.printStackTrace();
-        }
         return null;
       }
     }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical"
+    android:background="@color/pure_white"
+    android:padding="@dimen/heavy_padding" >
+    
+    <!-- welcome title -->
+    <TextView 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/heavy_margin"
+      android:layout_marginBottom="@dimen/light_margin"
+      android:layout_gravity="center"
+      android:text="@string/welcome"
+      android:textColor="@color/twitter_blue"
+      android:textSize="@dimen/font_size_large" />
+    
+    <!-- register title -->
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/heavy_margin"
+        android:layout_gravity="center"
+        android:text="@string/txt_register"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_large" />
+    
+    <!-- form email input -->
+    <EditText 
+        android:id="@+id/edit_email_registration"
+        android:layout_width="@dimen/form_item_wide"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:layout_gravity="center"
+        android:textColor="@color/dark_gray"
+        android:inputType="textEmailAddress"
+        android:hint="@string/enter_email"
+        android:textSize="@dimen/font_size_regular" />
+    
+    <!-- form password input -->
+    <EditText 
+        android:id="@+id/edit_password_registration"
+        android:layout_width="@dimen/form_item_wide"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:layout_gravity="center"
+        android:textColor="@color/dark_gray"
+        android:inputType="textPassword"
+        android:hint="@string/enter_password"
+        android:textSize="@dimen/font_size_regular" />
+    
+    <!-- form password confirmation input -->
+    <EditText 
+        android:id="@+id/edit_confirm_password_registration"
+        android:layout_width="@dimen/form_item_wide"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:layout_gravity="center"
+        android:textColor="@color/dark_gray"
+        android:inputType="textPassword"
+        android:hint="@string/confirm_password"
+        android:textSize="@dimen/font_size_regular" />
+    
+    <!-- register button -->
+    <Button 
+        android:id="@+id/button_register"
+        android:layout_width="@dimen/form_item_regular"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/heavy_margin"
+        android:layout_gravity="center"
+        android:padding="@dimen/heavy_padding"
+        android:gravity="center"
+        android:background="@color/twitter_dark_blue"
+        android:text="@string/button_register"
+        android:textColor="@color/pure_white"
+        android:textSize="@dimen/font_size_regular" />
+
+</LinearLayout>

@@ -4,39 +4,39 @@ import static com.example.helper.Constants.DEBUG;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 
-public class SimpleParameter {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class SimpleParameter extends JSONObject {
   private static final char PARAMETER_DELIMITER = '&';
   private static final char PARAMETER_EQUALS_CHAR = '=';
   
-  private Map<String, String> parameters;
-  
-  public SimpleParameter(){
-    parameters = new HashMap<String, String>();
-  }
-  
   protected void put(String pKey, String pValue){
-    parameters.put(pKey, pValue);
+    try {
+      super.put(pKey, pValue);
+    } catch(JSONException e){
+    }
   }
 
-  public String createQueryString() {
+  public String toUrlEncodedString() {
     StringBuilder parametersAsQueryString = new StringBuilder();
-    if (parameters != null) {
-      boolean firstParameter = true;
-
-      for (String parameterName : parameters.keySet()) {
-        if (!firstParameter) {
-          parametersAsQueryString.append(PARAMETER_DELIMITER);
-        }
-
-        parametersAsQueryString.append(urlEncode(parameterName));
-        parametersAsQueryString.append(PARAMETER_EQUALS_CHAR);
-        parametersAsQueryString.append(urlEncode(parameters.get(parameterName)));
-
-        firstParameter = false;
+    
+    Iterator<?> key = keys();
+    boolean firstParameter = true;
+    while(key.hasNext()) {
+      String keyString = (String) key.next();
+      
+      if (!firstParameter) {
+        parametersAsQueryString.append(PARAMETER_DELIMITER);
       }
+
+      parametersAsQueryString.append(urlEncode(keyString));
+      parametersAsQueryString.append(PARAMETER_EQUALS_CHAR);
+      parametersAsQueryString.append(urlEncode(opt(keyString).toString()));
+
+      firstParameter = false;
     }
     return parametersAsQueryString.toString();
   }

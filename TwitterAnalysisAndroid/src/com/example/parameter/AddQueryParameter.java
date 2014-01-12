@@ -2,6 +2,9 @@ package com.example.parameter;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 public class AddQueryParameter extends AuthorizationParameter {
 
   private static final String CAMPAIGN_ID = "campaignId";
@@ -16,33 +19,40 @@ public class AddQueryParameter extends AuthorizationParameter {
     if(pIncluding == null || pIncluding.size()<1){
       return;
     }
-    put(INCLUDING, toJSArray(pIncluding));
+    
+    try {
+      put(INCLUDING, new JSONArray(pIncluding));
+    } catch (JSONException e) {
+    }
   }
   
   public void setExcluding(List<String> pExcluding){
     if(pExcluding == null || pExcluding.size()<1){
       return;
     }
-    put(EXCLUDING, toJSArray(pExcluding));
-  }
-  
-  private static String toJSArray(List<String> pList){
-    StringBuilder builder = new StringBuilder();
-    
-    builder.append("[");
-    boolean isFirst = true;
-    for(String word : pList){
-      if(isFirst){
-        builder.append(word);
-        isFirst = false;
-        continue;
-      }
-      
-      builder.append("," + word);
+    try {
+      put(EXCLUDING, new JSONArray(pExcluding));
+    } catch (JSONException e) {
     }
-    
-    builder.append("]");
-    
-    return builder.toString();
   }
+//  
+//  private static String toJSArray(List<String> pList){
+//    StringBuilder builder = new StringBuilder();
+//    
+//    builder.append("[");
+//    boolean isFirst = true;
+//    for(String word : pList){
+//      if(isFirst){
+//        builder.append(word);
+//        isFirst = false;
+//        continue;
+//      }
+//      
+//      builder.append("," + word);
+//    }
+//    
+//    builder.append("]");
+//    
+//    return builder.toString();
+//  }
 }
