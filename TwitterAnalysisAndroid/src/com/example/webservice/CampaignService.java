@@ -12,7 +12,7 @@ import com.example.parser.ErrorParser;
 
 public class CampaignService extends WebServiceCaller {
   private static final String ACTION_GET = "campaign/";
-  private static final String ACTION_ADD = "campaign/add";
+  private static final String ACTION_ADD = "campaign/add/";
 
   public CampaignService(){
     super();
@@ -60,7 +60,7 @@ public class CampaignService extends WebServiceCaller {
     param.setDescription(pCampaign.getDescription());
     
     setServiceURL(ACTION_ADD);
-    setMode(MODE_PUT);
+    setMode(MODE_GET);
     setInputParams(param);
     
     callAsync(new WebServiceCallback() {

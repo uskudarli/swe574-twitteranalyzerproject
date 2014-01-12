@@ -87,7 +87,7 @@ public abstract class WebServiceCaller {
     
     // set the request method
     if(mode.equals(MODE_GET)){
-      connection.setRequestMethod("GET");
+      connection.setRequestMethod("POST");
     } else {
       connection.setRequestMethod("PUT");
     }

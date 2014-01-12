@@ -13,7 +13,7 @@ import com.example.parser.QueryListParser;
 
 public class QueryService extends WebServiceCaller {
   private static final String ACTION_GET = "query/";
-  private static final String ACTION_ADD = "query/add";
+  private static final String ACTION_ADD = "query/add/";
   
   public QueryService(){
     super();

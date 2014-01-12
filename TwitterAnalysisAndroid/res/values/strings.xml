@@ -81,4 +81,5 @@
     <string name="txt_queries">Queries</string>
     <string name="txt_add_query">Add Query</string>
     <string name="txt_add_campaign">Add Campaign</string>
+    <string name="button_create">Create</string>
 </resources>

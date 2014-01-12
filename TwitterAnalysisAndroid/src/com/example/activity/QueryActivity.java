@@ -456,7 +456,7 @@ public class QueryActivity extends Activity implements OnClickListener {
     final ProgressDialog loadingDialog = new LoadingDialog(this);
     loadingDialog.show();
     
-    new CampaignService().add(newCampaign, new SaveCallback<Campaign>(){
+    newCampaign.saveChanges(new SaveCallback<Campaign>(){
       @Override
       public void onError(TAError pError) {
         new WarningDialogBuilder(QueryActivity.this)

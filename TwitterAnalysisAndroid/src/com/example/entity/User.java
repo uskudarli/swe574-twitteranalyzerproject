@@ -94,7 +94,19 @@ public class User extends SimpleEntity {
   }
   
   public void changePassword(final String pNewPassword, final SaveCallback<User> pCallback){
-    new UserService().update(this, pNewPassword, pCallback);
+    new UserService().update(this, pNewPassword, new SaveCallback<User>(){
+      @Override
+      public void onError(TAError pError) {
+        pCallback.onError(pError);
+      }
+
+      @Override
+      public void onSave(User pObject) {
+        User.this.setPassword(pNewPassword);
+        User.this.setDirty(false);
+        pCallback.onSave(User.this);
+      }
+    });
   }
   
   public void saveChanges(final SaveCallback<User> pCallback){
@@ -103,6 +115,17 @@ public class User extends SimpleEntity {
       return;
     }
     
-    new UserService().update(this, null, pCallback);
+    new UserService().update(this, null, new SaveCallback<User>(){
+      @Override
+      public void onError(TAError pError) {
+        pCallback.onError(pError);
+      }
+
+      @Override
+      public void onSave(User pObject) {
+        User.this.setDirty(false);
+        pCallback.onSave(User.this);
+      }
+    });
   }
 }
