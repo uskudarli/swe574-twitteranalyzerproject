@@ -15,6 +15,12 @@ public class ExecutableQuery extends Query implements Executable {
 
 	private Query[] processedQueries;
 	
+	private static final int MAX_QUERY_LIMIT = 20;
+	
+	private static final long SLEEP_TIME = 15*60*1000l;
+	
+	private volatile boolean running = true;
+	
 	public ExecutableQuery(Query query, Processor processor) {
 		this.setId(query.getId());
 		this.setCampaignId(query.getCampaignId());
@@ -28,40 +34,48 @@ public class ExecutableQuery extends Query implements Executable {
 	public void execute(Connection connection) {
 		System.out.println("Query[" + this.getId() + "] starts running...");
 		//TODO send e-mail after analysis has been completed.
-        try {
-    		LuceneProcessor processor = new LuceneProcessor(connection, this.getCampaignId(), this.getId(), this.getExcludingKeywords(), this.getIncludingKeywords());
-    		
-        	Twitter twitter = new TwitterFactory().getInstance();
-        	for (Query pq : this.processedQueries) {
-        		twitter4j.Query query = new twitter4j.Query( pq.getQueryString() );
-	            QueryResult result;
-	            TweetDAO dao = new TweetDAO();
-	            do {
-	                result = twitter.search(query);
-	                List<Status> tweets = result.getTweets();
-	                for (Status fetchedTweet : tweets) {
-	                	try {
-	                		System.out.println("Save: " + fetchedTweet.getText());
-	                		Tweet t = new Tweet(fetchedTweet, this.getCampaignId(), this.getId());
-							dao.save(connection, t);
-							processor.buildIndex(t);
-						} 
-	                	catch (Exception e) {
-							// ignore exceptions
-	                		e.printStackTrace();
-						}
-	                }
-	            } while ((query = result.nextQuery()) != null);
-        	}
-        	
-        	processor.finalizeProcess();
-        	System.out.println("Query finished");
-        	
-        } catch (Exception te) {
-        	te.printStackTrace();
-        	// TODO: log exceptions
-        }
-
+		int queryCount = 0;
+		while(running){
+	        try {
+	    		LuceneProcessor processor = new LuceneProcessor(connection, this.getCampaignId(), this.getId(), this.getExcludingKeywords(), this.getIncludingKeywords());
+	    		
+	        	Twitter twitter = new TwitterFactory().getInstance();
+	        	for (Query pq : this.processedQueries) {
+	        		if(queryCount == MAX_QUERY_LIMIT){
+	        			running = false;
+	        			break;
+	        		}
+	        		twitter4j.Query query = new twitter4j.Query( pq.getQueryString() );
+	        		queryCount++;
+	        		query.setLang("en");
+		            QueryResult result;
+		            TweetDAO dao = new TweetDAO();
+		            do {
+		                result = twitter.search(query);
+		                List<Status> tweets = result.getTweets();
+		                for (Status fetchedTweet : tweets) {
+		                	try {
+		                		System.out.println("Save: " + fetchedTweet.getText());
+		                		Tweet t = new Tweet(fetchedTweet, this.getCampaignId(), this.getId());
+								dao.save(connection, t);
+								processor.buildIndex(t);
+							} 
+		                	catch (Exception e) {
+								// ignore exceptions
+		                		e.printStackTrace();
+							}
+		                }
+		            } while ((query = result.nextQuery()) != null);
+	        	}
+	        	
+	        	processor.finalizeProcess();
+	        	System.out.println("Query finished");
+	        	
+	        } catch (Exception te) {
+	        	te.printStackTrace();
+	        	// TODO: log exceptions
+	        }
+		}
 		
 	}
 
