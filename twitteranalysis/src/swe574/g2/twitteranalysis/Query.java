@@ -8,6 +8,7 @@ public class Query{
 	private List<String> includingKeywords;
 	private List<String> excludingKeywords;
 	private int campaignId;
+	private String queryTitle;
 	
 	public int getId() {
 		return id;
@@ -96,4 +97,12 @@ public class Query{
 	public boolean equals(Object obj) {
 		return obj != null && obj instanceof Query && this.id == ((Query)obj).getId();
 	}
+	public String getQueryTitle() {
+		return queryTitle;
+	}
+	public void setQueryTitle(String queryTitle) {
+		this.queryTitle = queryTitle;
+	}
+	
+	
 }
