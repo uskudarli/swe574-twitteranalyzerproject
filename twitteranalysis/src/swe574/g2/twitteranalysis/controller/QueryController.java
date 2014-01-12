@@ -42,11 +42,12 @@ public class QueryController extends AbstractController {
 			throw new QueryException(e.getMessage());
 		}
 	}
-	public Query addQuery(List<String> includingKeywords, List<String> excludingKeywords, int campaignId) {
+	public Query addQuery(List<String> includingKeywords, List<String> excludingKeywords, int campaignId, String queryTitle) {
 		Query query = new Query();
 		query.setIncludingKeywords(includingKeywords);
 		query.setExcludingKeywords(excludingKeywords);
 		query.setCampaignId(campaignId);
+		query.setQueryTitle(queryTitle);
 		
 		QueryDAO dao = new QueryDAO();
 		boolean ret = false;
@@ -138,7 +139,7 @@ public class QueryController extends AbstractController {
 				for (Query q : qs) {
 					
 					queriesComboBox.addItem(q);
-					queriesComboBox.setItemCaption(q, String.valueOf(q.getId()));
+					queriesComboBox.setItemCaption(q, String.valueOf(q.getQueryTitle()));
 					
 				}
 		} 
