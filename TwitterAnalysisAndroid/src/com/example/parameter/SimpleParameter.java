@@ -10,8 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SimpleParameter extends JSONObject {
-  private static final char PARAMETER_DELIMITER = '&';
-  private static final char PARAMETER_EQUALS_CHAR = '=';
+  protected static final char PARAMETER_DELIMITER = '&';
+  protected static final char PARAMETER_EQUALS_CHAR = '=';
   
   protected void put(String pKey, String pValue){
     try {

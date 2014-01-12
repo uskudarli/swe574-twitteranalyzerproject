@@ -78,12 +78,14 @@ public class LoginActivity extends MenuActivity {
       @Override
       public void onClick(View v) {
         mViewPager.setCurrentItem(LOGIN_INDEX);
+        closeMenu();
       }
     });
     mMenuRegistrationButton.setOnClickListener(new OnClickListener() { 
       @Override
       public void onClick(View v) {
         mViewPager.setCurrentItem(REGISTRATION_INDEX);
+        closeMenu();
       }
     });
   }

@@ -64,7 +64,7 @@ public class MenuActivity extends FragmentActivity {
    * Checks if the menu is open
    * @return whether or not menu is open
    */
-  private boolean isMenuOpen(){
+  protected boolean isMenuOpen(){
     // check if an open animator exists
     return menuAnimators != null;
   }
@@ -72,7 +72,7 @@ public class MenuActivity extends FragmentActivity {
   /***
    * Toggles menu
    */
-  private void toggleMenu(){
+  protected void toggleMenu(){
     // if menu is open then close it, otherwise open it
     if(isMenuOpen()){
       closeMenu();
@@ -84,7 +84,7 @@ public class MenuActivity extends FragmentActivity {
   /***
    * Animate the main content view to the right so that menu becomes visible
    */
-  private void openMenu(){
+  protected void openMenu(){
     // check if already open
     if(isMenuOpen()){
       return;
@@ -110,7 +110,7 @@ public class MenuActivity extends FragmentActivity {
   /***
    * Moves the content view back to left to cover and hide the menu
    */
-  private void closeMenu(){
+  protected void closeMenu(){
     // check if already closed
     if(!isMenuOpen()){
       return;

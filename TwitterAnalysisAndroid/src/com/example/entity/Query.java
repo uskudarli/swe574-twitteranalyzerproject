@@ -1,7 +1,5 @@
 package com.example.entity;
 
-import static com.example.helper.Constants.DEBUG;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,11 +7,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.webservice.QueryService;
+import com.example.webservice.SaveCallback;
+
 public class Query extends SimpleEntity {
 
   private static final String ID = "queryId";
   private static final String INCLUDING = "including";
   private static final String EXCLUDING = "excluding";
+  
+  private Campaign campaign;
   
   public Query(){
   }
@@ -24,6 +27,10 @@ public class Query extends SimpleEntity {
 
   public long getId() {
     return getLong(ID);
+  }
+  
+  private void setId(long pId){
+    put(ID, pId);
   }
   
   public List<String> getIncluding(){
@@ -81,5 +88,39 @@ public class Query extends SimpleEntity {
     
     setArray(EXCLUDING, excludings);
     
+  }
+  
+  public Campaign getCampaign(){
+    return campaign;
+  }
+  
+  public void setCampaign(Campaign campaign){
+    this.campaign = campaign;
+  }
+  
+  public void saveChanges(final SaveCallback<Query> callback){
+    if(!isDirty()){
+      callback.onSave(this);
+      return;
+    }
+    
+    if(getId()<1){
+      // if there is no id then it's a new object
+      new QueryService().add(getCampaign(), this, new SaveCallback<Query>(){
+        @Override
+        public void onError(TAError pError) {
+          callback.onError(pError);
+        }
+
+        @Override
+        public void onSave(Query pObject) {
+          Query.this.setId(pObject.getId());
+          Query.this.setDirty(false);
+          callback.onSave(Query.this);
+        }
+        
+      });
+    }
+    // TODO: otherwise update the campaign (currently not supported)
   }
 }

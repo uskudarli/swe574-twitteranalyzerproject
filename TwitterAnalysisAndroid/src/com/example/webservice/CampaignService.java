@@ -24,7 +24,6 @@ public class CampaignService extends WebServiceCaller {
     param.setPassword(AuthenticationKeeper.getInstance().getPassword());
     
     setServiceURL(ACTION_GET);
-    setMode(MODE_GET);
     setInputParams(param);
     
     callAsync(new WebServiceCallback() {
@@ -60,7 +59,6 @@ public class CampaignService extends WebServiceCaller {
     param.setDescription(pCampaign.getDescription());
     
     setServiceURL(ACTION_ADD);
-    setMode(MODE_GET);
     setInputParams(param);
     
     callAsync(new WebServiceCallback() {

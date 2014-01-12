@@ -26,7 +26,6 @@ public class QueryService extends WebServiceCaller {
     param.setCampaignId(pCampaignId);
     
     setServiceURL(ACTION_GET);
-    setMode(MODE_GET);
     setInputParams(param);
     
     callAsync(new WebServiceCallback() {
@@ -58,11 +57,11 @@ public class QueryService extends WebServiceCaller {
     AddQueryParameter param = new AddQueryParameter();
     param.setUsername(AuthenticationKeeper.getInstance().getUsername());
     param.setPassword(AuthenticationKeeper.getInstance().getPassword());
+    param.setCampaignId(Long.toString(pCampaign.getId()));
     param.setIncluding(pQuery.getIncluding());
     param.setExcluding(pQuery.getExcluding());
     
     setServiceURL(ACTION_ADD);
-    setMode(MODE_PUT);
     setInputParams(param);
     
     callAsync(new WebServiceCallback() {

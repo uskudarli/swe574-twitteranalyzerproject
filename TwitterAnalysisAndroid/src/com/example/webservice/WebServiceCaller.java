@@ -23,14 +23,9 @@ public abstract class WebServiceCaller {
   // base url of the web service
   private static final String baseUrl = "http://swe.cmpe.boun.edu.tr:8180/twitteranalysis/v1.0/api/";
   
-  // the service has two modes
-  public static final String MODE_GET = "GET";
-  public static final String MODE_PUT = "PUT";
-  
   // parameters for calling different services
   private String serviceURL;
   private SimpleParameter inputParams;
-  private String mode = MODE_GET; // default mode is GET
   
   public WebServiceCaller(){
   }
@@ -52,10 +47,6 @@ public abstract class WebServiceCaller {
     inputParams = pInputParams;
   }
   
-  protected void setMode(String pMode){
-    mode = pMode;
-  }
-  
   /***
    * Calls the given web service in a background thread
    * @param pCallback
@@ -75,39 +66,30 @@ public abstract class WebServiceCaller {
   protected String call() throws MalformedURLException, IOException {
     URL connectionURL;
     
-    if(mode.equals(MODE_GET)){
-      // if mode is get then write the parameters into the url
-      connectionURL = new URL(baseUrl + serviceURL + "?" + inputParams.toUrlEncodedString());
-    } else {
-      // otherwise we will be writing input so just call the url
-      connectionURL = new URL(baseUrl + serviceURL);
+    // write the parameters into the url
+    connectionURL = new URL(baseUrl + serviceURL + "?" + inputParams.toUrlEncodedString());
+    if(DEBUG){
+      Log.d(TAG, baseUrl+serviceURL);
+      Log.d(TAG, inputParams.toUrlEncodedString());
     }
     // get the connection
     HttpURLConnection connection =  (HttpURLConnection) connectionURL.openConnection();
     
     // set the request method
-    if(mode.equals(MODE_GET)){
-      connection.setRequestMethod("POST");
-    } else {
-      connection.setRequestMethod("PUT");
-    }
+    connection.setRequestMethod("POST");
     // this is a json web service
     connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-//    connection.setRequestProperty("Content-Type", "x-www-form-urlencoded; charset=utf-8");
     
-    // if mode is put then we will be inputting a data stream
-    if(mode.equals(MODE_PUT)){
-      // enable writing the stream
-      connection.setDoOutput(true);
-      // get a utf-8 writer
-      BufferedWriter outputWriter = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
-      // write the parameters json string
-      outputWriter.write(inputParams.toString());
-      // make sure everything is written
-      outputWriter.flush();
-      // release the resource
-      outputWriter.close();
-    }
+//    // enable writing the stream
+//    connection.setDoOutput(true);
+//    // get a utf-8 writer
+//    BufferedWriter outputWriter = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "utf-8"));
+//    // write the parameters json string
+//    outputWriter.write(inputParams.toUrlEncodedString());
+//    // make sure everything is written
+//    outputWriter.flush();
+//    // release the resource
+//    outputWriter.close();
     
     // read the output from the server
     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
@@ -121,12 +103,6 @@ public abstract class WebServiceCaller {
     
     // if debugging log all service call details
     if(DEBUG){
-      Log.d(TAG, baseUrl+serviceURL);
-      if(mode.equals(MODE_GET)){
-        Log.d(TAG, inputParams.toUrlEncodedString());
-      } else {
-        Log.d(TAG, inputParams.toString());
-      }
       Log.d(TAG, builder.toString());
     }
     
@@ -163,7 +139,6 @@ public abstract class WebServiceCaller {
         if(DEBUG){
           Log.d(TAG, e.getMessage());
         }
-        // just try again and it probably won't happen
         return doInBackground(params);
       }
       

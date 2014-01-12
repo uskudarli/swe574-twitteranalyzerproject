@@ -37,7 +37,6 @@ public class UserService extends WebServiceCaller {
     
     // prepare the fields required by super
     setServiceURL(ACTION_LOGIN);
-    setMode(MODE_GET);
     setInputParams(param);
     
     // call in background
@@ -90,7 +89,6 @@ public class UserService extends WebServiceCaller {
     
     // prepare the fields required by super
     setServiceURL(ACTION_SIGNUP);
-    setMode(MODE_GET);
     setInputParams(param);
     
     // call in background
@@ -148,7 +146,6 @@ public class UserService extends WebServiceCaller {
     
     // prepare the fields required by super
     setServiceURL(ACTION_UPDATE);
-    setMode(MODE_GET);
     setInputParams(param);
     
     // call in background

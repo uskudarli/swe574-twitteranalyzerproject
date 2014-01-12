@@ -1,33 +1,19 @@
 package com.example.activity;
 
-import java.util.List;
-
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
-import com.example.entity.Campaign;
-import com.example.entity.TAError;
 import com.example.entity.User;
 import com.example.fragment.AddCampaignFragment;
 import com.example.fragment.AddQueryFragment;
 import com.example.fragment.ProfileFragment;
 import com.example.fragment.ViewQueryFragment;
 import com.example.fragment.ViewReportFragment;
-import com.example.helper.LoadingDialog;
-import com.example.helper.WarningDialogBuilder;
 import com.example.twitteranalysisandroid.R;
-import com.example.webservice.CampaignService;
-import com.example.webservice.FindCallback;
 
 public class MainActivity extends MenuActivity {
 
@@ -73,25 +59,7 @@ public class MainActivity extends MenuActivity {
 		mMenuAddQuery = findViewById(R.id.menu_add_query);
 		mMenuAddCampaign = findViewById(R.id.menu_add_campaign);
 		mMenuProfile = findViewById(R.id.menu_profile);
-/*
-		//View view001 = inflater.inflate(R.layout.bottom_right_view,container,false);
-		// Add Query Fragment
-	    campaignNameSpinner = (Spinner) mMenuAddQuery.findViewById(R.id.spinner_campaign_name_fragment);
-		Log.i("Tag", "campaignNameSpinner = " + (campaignNameSpinner != null));
-		// Add Query Fragment
-	    campaignNameSpinner = (Spinner) mMenuAddQuery.findViewById(R.id.spinner_campaign_name);
-		Log.i("Tag", "campaignNameSpinner = " + (campaignNameSpinner != null));
-		// Add Query Fragment
-	    campaignNameSpinner = (Spinner) mMenuAddQuery.findViewById(R.id.spinner_campaign_name_new);
-		Log.i("Tag", "campaignNameSpinner = " + (campaignNameSpinner != null));
-		// Add Query Fragment
-	    Object o = findViewById(R.id.spinner_campaign_name_fragment);
-		Log.i("Tag", "campaignNameSpinner = " + (o != null));
-	    o = findViewById(R.id.spinner_campaign_name);
-		Log.i("Tag", "campaignNameSpinner = " + (o != null));
-	    o = findViewById(R.id.spinner_campaign_name_new);
-		Log.i("Tag", "campaignNameSpinner = " + (o != null));
-*/
+
 		// setup the view pager
 		mViewPager.setAdapter(new FragmentPagerAdapter(
 				getSupportFragmentManager()) {
@@ -144,30 +112,35 @@ public class MainActivity extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				mViewPager.setCurrentItem(VIEW_REPORT_INDEX);
+        closeMenu();
 			}
 		});
 		mMenuViewQuery.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mViewPager.setCurrentItem(VIEW_QUERY_INDEX);
+        closeMenu();
 			}
 		});
 		mMenuAddQuery.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mViewPager.setCurrentItem(ADD_QUERY_INDEX);
+        closeMenu();
 			}
 		});
 		mMenuAddCampaign.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mViewPager.setCurrentItem(ADD_CAMPAIGN_INDEX);
+        closeMenu();
 			}
 		});
 		mMenuProfile.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mViewPager.setCurrentItem(PROFILE_INDEX);
+        closeMenu();
 			}
 		});
 	}
