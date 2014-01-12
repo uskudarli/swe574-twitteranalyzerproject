@@ -124,9 +124,10 @@ public class QueryDAO implements DataAccessObject<Query> {
 		int queryId = -1;
 		
 		if (dataObject != null && dataObject.getId() < 1) {
-			query = "insert into t_query (campaign_id) values (?) ";
+			query = "insert into t_query (campaign_id, query_title) values (?, ?) ";
 			ps = availableConnection.prepareStatement(query);
 			ps.setInt(1, dataObject.getCampaignId());
+			ps.setString(2, dataObject.getQueryTitle());
 			//queryId = ps.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			
 			ps.executeUpdate();
@@ -302,6 +303,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 			Query q = new Query();
 			q.setId( rs.getInt("id") );
 			q.setCampaignId( rs.getInt("campaign_id") );
+			q.setQueryTitle(rs.getString("query_title"));
 			
 			List<String> includingKeywords = new ArrayList<String>();
 			List<String> excludingKeywords = new ArrayList<String>();
