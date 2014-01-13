@@ -20,12 +20,13 @@ public class RegisterController extends AbstractController {
 		super(ui);
 	}
 	
-	public void register(TextField usernameField, PasswordField passwordField, PasswordField confirmField) throws RegistrationException {
+	public void register(TextField usernameField, TextField emailField, PasswordField passwordField, PasswordField confirmField) throws RegistrationException {
 		String username = usernameField.getValue();
+		String email = emailField.getValue();
 		String password = passwordField.getValue();
 		String confirm = confirmField.getValue();
 		
-		if (username == null || !isValidEmailAddress(username)) {
+		if (email == null || !isValidEmailAddress(email)) {
 			throw new RegistrationException(RegistrationException.NOT_VALID_USER_NAME);
 		} else if (password == null || confirm == null || password.equals(confirm) == false ) {
 			throw new RegistrationException(RegistrationException.DIFFERENT_PASSWORDS);
@@ -33,7 +34,7 @@ public class RegisterController extends AbstractController {
 		
 		ApplicationUser user = new ApplicationUser();
 		user.setName(username);
-		user.setEmail(username);
+		user.setEmail(email);
 		user.setHashedPassword(password);
 		
 		ApplicationUserDAO dao = new ApplicationUserDAO();

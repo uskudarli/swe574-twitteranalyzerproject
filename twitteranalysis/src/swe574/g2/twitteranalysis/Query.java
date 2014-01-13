@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Query{
 	private int id;
-	private String queryTitle;
 	private String active;
 	private List<String> includingKeywords;
 	private List<String> excludingKeywords;
 	private int campaignId;
+	private String queryTitle;
 	
 	public int getId() {
 		return id;
@@ -115,4 +115,6 @@ public class Query{
 	public boolean equals(Object obj) {
 		return obj != null && obj instanceof Query && this.id == ((Query)obj).getId();
 	}
+	
+	
 }

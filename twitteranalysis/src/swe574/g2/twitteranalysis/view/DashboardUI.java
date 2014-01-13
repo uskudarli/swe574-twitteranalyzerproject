@@ -9,10 +9,12 @@ import javax.servlet.annotation.WebServlet;
 
 import swe574.g2.twitteranalysis.ApplicationUser;
 import swe574.g2.twitteranalysis.controller.LoginController;
+import swe574.g2.twitteranalysis.controller.RegisterController;
 import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
 import swe574.g2.twitteranalysis.dao.TweetDAO;
+import swe574.g2.twitteranalysis.exception.RegistrationException;
 import swe574.g2.twitteranalysis.exec.QueryExecuterService;
 
 import com.vaadin.annotations.Theme;
@@ -41,9 +43,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
@@ -53,7 +58,7 @@ import com.vaadin.ui.VerticalLayout;
 @Widgetset("DashboardWidgetSet")
 @Theme("dashboard")
 @Title("Twitter Analyzer")
-public class DashboardUI extends UI {
+public class DashboardUI extends UI{
     private static final long serialVersionUID = 1L;
 
     CssLayout root = new CssLayout();
@@ -108,12 +113,13 @@ public class DashboardUI extends UI {
         root.addComponent(bg);
 
         buildLoginView(false);
-        
     }
 
     private void buildLoginView(boolean exit) {
         if (exit) {
             root.removeAllComponents();
+            removeStyleName("main-view");
+
         }
 
         addStyleName("login");
@@ -184,7 +190,7 @@ public class DashboardUI extends UI {
                         loginPanel.removeComponent(loginPanel.getComponent(2));
                     }
                     Label error = new Label(
-                            "Wrong username.<span>Hint: try \"bkara\" for admin view, '2012719081' for student view <br> or \"uskudarli\" for instructor view with no password.</span>",
+                            "Invalid username or password!",
                             ContentMode.HTML);
                     error.addStyleName("error");
                     error.setSizeUndefined();
@@ -195,10 +201,21 @@ public class DashboardUI extends UI {
                 }
             }
         });
+        
+
 
         signin.addShortcutListener(enter);
 
         loginPanel.addComponent(fields);
+        
+        Button signup = new Button("Not a member?Signup!");
+        signup.setStyleName("link"); 
+        loginPanel.addComponent(signup);
+        signup.addClickListener(new ClickListener() {
+            public void buttonClick(ClickEvent event) {
+            	buildRegisterView();
+            }
+       });
 
         loginLayout.addComponent(loginPanel);
         loginLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
@@ -353,6 +370,92 @@ public class DashboardUI extends UI {
         }
 
     }
+    
+	private void buildRegisterView(){
+
+		final TextField username;
+		final TextField email;
+		final PasswordField password;
+		final PasswordField confirmPassword;
+		final Button registerButton;
+		
+        removeStyleName("login");
+        root.removeComponent(loginLayout);
+        addStyleName("main-view");
+
+		VerticalLayout verticalLayout = new VerticalLayout();
+		
+        final Panel signupPanel = new Panel("Sign Up!");
+        verticalLayout.addComponent(signupPanel);
+		
+/*		Label header = new Label("Sign Up!");
+		header.addStyleName("h1");
+		verticalLayout.addComponent(header);*/
+        
+        verticalLayout.setSizeFull();
+        verticalLayout.addStyleName("main-view");
+        verticalLayout.setComponentAlignment(signupPanel, Alignment.TOP_CENTER);
+        root.addComponent(verticalLayout);
+        
+        signupPanel.setWidth(null);
+		
+		FormLayout formLayout = new FormLayout();
+		
+		username = new TextField("Username: ");
+		formLayout.addComponent(username);
+		
+		email = new TextField("Email Address:");
+		formLayout.addComponent(email);
+		
+		password = new PasswordField("Password: ");
+		formLayout.addComponent(password);
+		
+		confirmPassword =  new PasswordField("Confirm Password: ");
+		formLayout.addComponent(confirmPassword);
+		
+		registerButton = new Button("Sign up");
+		registerButton.addStyleName("default");
+		formLayout.addComponent(registerButton);
+
+		registerButton.addClickListener(new ClickListener() {
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				RegisterController controller = new RegisterController(getUI());
+				try {
+					controller.register(username, email, password, confirmPassword);
+					Notification n = new Notification("Registered Successfully", Notification.Type.WARNING_MESSAGE);
+					n.show(Page.getCurrent());
+					
+					buildLoginView(true);
+					
+					//new LoginController(getUI()).showLoginPage();
+				} 
+				catch (RegistrationException e) {
+
+					switch (e.getType()) {
+					case RegistrationException.DIFFERENT_PASSWORDS:
+						System.err.println(e.getMessage());
+						break;
+
+					case RegistrationException.EXISTING_USER:
+						System.err.println(e.getMessage());
+						break;
+
+					default:
+					}
+					e.printStackTrace();
+
+				}
+			}
+		});
+
+        /*final CssLayout loginPanel = new CssLayout();
+        loginPanel.addStyleName("login-panel");*/
+
+		signupPanel.setContent(formLayout);
+
+	}
 
     private Transferable items;
 

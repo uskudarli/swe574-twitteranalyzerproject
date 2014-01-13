@@ -72,7 +72,7 @@ public class QueryAddServlet extends HttpServlet {
 		if (user != null) {
 			QueryController queryController = new QueryController();
 			
-			Query result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId));
+			Query result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId), null);
 			
 			if (result != null && result.getId() > 0) {
 				Query[] queries = queryController.getQueries(Integer.valueOf(campaignId));
