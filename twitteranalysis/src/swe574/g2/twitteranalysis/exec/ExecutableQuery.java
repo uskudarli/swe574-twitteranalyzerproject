@@ -34,6 +34,8 @@ public class ExecutableQuery extends Query implements Executable {
         	Twitter twitter = new TwitterFactory().getInstance();
         	for (Query pq : this.processedQueries) {
         		twitter4j.Query query = new twitter4j.Query( pq.getQueryString() );
+        		query.setLang("en");
+        		query.setCount(200);
 	            QueryResult result;
 	            TweetDAO dao = new TweetDAO();
 	            do {

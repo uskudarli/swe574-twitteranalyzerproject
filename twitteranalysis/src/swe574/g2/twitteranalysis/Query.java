@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Query{
 	private int id;
+	private String queryTitle;
+	private String active;
 	private List<String> includingKeywords;
 	private List<String> excludingKeywords;
 	private int campaignId;
@@ -34,6 +36,21 @@ public class Query{
 		this.campaignId = campaignId;
 	}
 	
+	
+	public String getQueryTitle() {
+		return queryTitle;
+	}
+	public void setQueryTitle(String queryTitle) {
+		this.queryTitle = queryTitle;
+	}
+
+	
+	public String getActive() {
+		return active;
+	}
+	public void setActive(String active) {
+		this.active = active;
+	}
 	public Tweet[] getTweets(int sIndex, int count) {
 		return null;
 	}
@@ -80,8 +97,10 @@ public class Query{
 	public String getQueryString() {
 		String queryString = "";
 		List<String> iKeywords = this.getIncludingKeywords();
-		for (String keyword : iKeywords) {
-			queryString += keyword + " ";
+		if (iKeywords != null) {
+			for (String keyword : iKeywords) {
+				queryString += keyword + " ";
+			}
 		}
 		
 		return queryString;

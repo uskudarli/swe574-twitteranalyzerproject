@@ -24,14 +24,19 @@ public class QueryDAO implements DataAccessObject<Query> {
 			availableConnection = DatabaseConnector.getInstance().getConnection();
 		}
 		
-		String query = "insert into t_query (campaign_id) values (?) ";
+		String query = "insert into t_query (campaign_id, query_title, active) values (?,?,?) ";
 		PreparedStatement ps = availableConnection.prepareStatement(query);
 		int queryId = -1;
+
+		Object[] bindVariables = new Object[4];
+		int bindVariableCount = 0;
 		
 		if (dataObject != null && dataObject.getId() < 1) {
-			query = "insert into t_query (campaign_id) values (?) ";
+			query =  "insert into t_query (campaign_id, query_title, active) values (?,?,?) ";
 			ps = availableConnection.prepareStatement(query);
 			ps.setInt(1, dataObject.getCampaignId());
+			ps.setString(2, dataObject.getQueryTitle());
+			ps.setString(3, dataObject.getActive());
 			ps.executeUpdate();
 			ps.close();
 
@@ -45,8 +50,33 @@ public class QueryDAO implements DataAccessObject<Query> {
 		}
 		else {
 			queryId = dataObject.getId();
+			
+			query = "update t_query set ";
+			if (dataObject.getQueryTitle() != null) {
+				query += "query_title = ?,";
+				bindVariables[bindVariableCount++] = dataObject.getQueryTitle();
+			}
+			if (dataObject.getActive() != null) {
+				query += "active = ?,";
+				bindVariables[bindVariableCount++] = dataObject.getActive();
+			}
+			
+			query = query.substring(0, query.length() - 1) + " where id = ? ";
+			bindVariables[bindVariableCount++] = dataObject.getId();
+			
+			PreparedStatement s = availableConnection.prepareStatement(query);
+			
+			for (int i=0; i<bindVariableCount; ++i) {
+				if (bindVariables[i] instanceof String) {
+					s.setString(i+1, (String)bindVariables[i]);
+				}
+				else {
+					s.setInt(i+1, (Integer)bindVariables[i]);
+				}
+			}
+			
+			s.executeUpdate();
 		}
-		
 		
 		List<String> includingKeywords = dataObject.getIncludingKeywords();
 		List<String> excludingKeywords = dataObject.getExcludingKeywords();
@@ -119,14 +149,16 @@ public class QueryDAO implements DataAccessObject<Query> {
 			availableConnection = DatabaseConnector.getInstance().getConnection();
 		}
 		
-		String query = "insert into t_query (campaign_id) values (?) ";
+		String query = "insert into t_query (campaign_id, query_title, active) values (?,?,?) ";
 		PreparedStatement ps = availableConnection.prepareStatement(query);
 		int queryId = -1;
 		
 		if (dataObject != null && dataObject.getId() < 1) {
-			query = "insert into t_query (campaign_id) values (?) ";
+			query = "insert into t_query (campaign_id, query_title, active) values (?,?,?) ";
 			ps = availableConnection.prepareStatement(query);
 			ps.setInt(1, dataObject.getCampaignId());
+			ps.setString(2, dataObject.getQueryTitle());
+			ps.setString(3, dataObject.getActive());
 			//queryId = ps.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			
 			ps.executeUpdate();
@@ -270,6 +302,10 @@ public class QueryDAO implements DataAccessObject<Query> {
 			query += "campaign_id = ? and ";
 			bindVariables[bindVariableCount++] = dataObject.getCampaignId();
 		}
+		if (dataObject.getActive() != null) {
+			query += "active = ? and ";
+			bindVariables[bindVariableCount++] = dataObject.getActive();
+		}
 		
 		query = query.substring(0, query.length() - 4);
 						
@@ -302,6 +338,8 @@ public class QueryDAO implements DataAccessObject<Query> {
 			Query q = new Query();
 			q.setId( rs.getInt("id") );
 			q.setCampaignId( rs.getInt("campaign_id") );
+			q.setQueryTitle(rs.getString("query_title"));
+			q.setActive(rs.getString("active"));
 			
 			List<String> includingKeywords = new ArrayList<String>();
 			List<String> excludingKeywords = new ArrayList<String>();
@@ -364,7 +402,7 @@ public class QueryDAO implements DataAccessObject<Query> {
 		s.executeUpdate(query);
 		s.close();
 
-		query = "create table IF NOT EXISTS t_query (id int(10) NOT NULL AUTO_INCREMENT, campaign_id int(10), PRIMARY KEY (id)) ";
+		query = "create table IF NOT EXISTS t_query (id int(10) NOT NULL AUTO_INCREMENT, campaign_id int(10), query_title varchar(512), active varchar(4), PRIMARY KEY (id)) ";
 		s = availableConnection.createStatement();
 		s.executeUpdate(query);
 		s.close();
