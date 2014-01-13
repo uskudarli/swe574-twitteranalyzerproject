@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pure_white" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/heavy_padding" >
+
+        <!-- page title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:text="@string/txt_add_query"
+            android:textColor="@color/twitter_blue"
+            android:textSize="@dimen/font_size_large" />
+
+        <!-- campaign drop down list -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/txt_campaign"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <Spinner
+            android:id="@+id/spinner_campaign_name"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/light_margin"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <!-- query number dropdown -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/txt_query_title"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <Spinner
+            android:id="@+id/spinner_query_number"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/light_margin"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <!-- include keywords -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/txt_include_keywords"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/light_margin"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/et_include_keyword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:layout_marginTop="@dimen/light_margin"
+                android:layout_weight="1"
+                android:hint="@string/query_include_keyword_hint"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/font_size_regular" />
+
+            <Button
+                android:id="@+id/button_add_include"
+                android:layout_width="@dimen/form_item_narrow"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/medium_margin"
+                android:background="@color/twitter_blue"
+                android:onClick="addToIncludedKeywords"
+                android:padding="@dimen/medium_padding"
+                android:text="@string/button_add"
+                android:textColor="@color/pure_white"
+                android:textSize="@dimen/font_size_regular" />
+        </LinearLayout>
+
+        <!-- list view for included keywords -->
+        <LinearLayout
+            android:id="@+id/list_include_keywords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/curved_borders"
+            android:orientation="vertical"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <!-- exclude keywords -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/txt_exclude_keywords"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/light_margin"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/et_exclude_keyword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/query_exclude_keyword_hint"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/font_size_regular" />
+
+            <Button
+                android:id="@+id/button_add_exclude"
+                android:layout_width="@dimen/form_item_narrow"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/medium_margin"
+                android:background="@color/twitter_blue"
+                android:onClick="addToExcludedKeywords"
+                android:padding="@dimen/medium_padding"
+                android:text="@string/button_add"
+                android:textColor="@color/pure_white"
+                android:textSize="@dimen/font_size_regular" />
+        </LinearLayout>
+
+        <!-- list view for excluded keywords -->
+        <LinearLayout
+            android:id="@+id/list_exclude_keywords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/curved_borders"
+            android:orientation="vertical"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <!-- submit query button -->
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="@dimen/form_item_regular"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/heavy_margin"
+            android:background="@color/twitter_dark_blue"
+            android:padding="@dimen/heavy_padding"
+            android:text="@string/button_submit_query"
+            android:textColor="@color/pure_white"
+            android:textSize="@dimen/font_size_regular"
+            android:onClick="addQuery" />
+    </LinearLayout>
+
+</ScrollView>

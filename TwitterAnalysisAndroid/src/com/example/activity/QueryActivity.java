@@ -5,12 +5,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -32,13 +28,13 @@ import com.example.helper.LoadingDialog;
 import com.example.helper.WarningDialogBuilder;
 import com.example.twitteranalysisandroid.R;
 import com.example.webservice.CampaignService;
+import com.example.webservice.FindCallback;
 import com.example.webservice.QueryService;
-import com.example.webservicecallback.FindCallback;
-import com.example.webservicecallback.SaveCallback;
+import com.example.webservice.SaveCallback;
 
 public class QueryActivity extends Activity implements OnClickListener {
   
-  private static final String TAG = "QueryActivity";
+  static final String TAG = "QueryActivity";
   
   private Spinner campaignNameSpinner, queryNumberSpinner;
   private TextView campaignNameTitle;
@@ -125,38 +121,6 @@ public class QueryActivity extends Activity implements OnClickListener {
     });
     
     setupCampaignNames();
-  }
-  
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu items for use in the action bar
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.menu, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-  
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle presses on the action bar items
-    switch (item.getItemId()) {
-    case R.id.menu_query:
-      // this is the current activity so return
-      return true;
-    case R.id.menu_reports:
-      // start reports activity
-      Intent reportsIntent = new Intent(this, ReportsActivity.class);
-      startActivity(reportsIntent);
-      finish();
-      return true;
-    case R.id.menu_settings:
-      // start settings activity
-      Intent settingsIntent = new Intent(this, SettingsActivity.class);
-      startActivity(settingsIntent);
-      finish();
-      return true;
-    default:
-      return super.onOptionsItemSelected(item);
-    }
   }
 
   @Override
@@ -492,7 +456,7 @@ public class QueryActivity extends Activity implements OnClickListener {
     final ProgressDialog loadingDialog = new LoadingDialog(this);
     loadingDialog.show();
     
-    new CampaignService().add(newCampaign, new SaveCallback<Campaign>(){
+    newCampaign.saveChanges(new SaveCallback<Campaign>(){
       @Override
       public void onError(TAError pError) {
         new WarningDialogBuilder(QueryActivity.this)

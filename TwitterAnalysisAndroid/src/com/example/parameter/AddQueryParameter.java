@@ -8,40 +8,41 @@ public class AddQueryParameter extends AuthorizationParameter {
   private static final String INCLUDING = "including";
   private static final String EXCLUDING = "excluding";
   
+  private List<String> including;
+  private List<String> excluding;
+  
   public void setCampaignId(String pCampaignId){
     put(CAMPAIGN_ID, pCampaignId);
   }
   
   public void setIncluding(List<String> pIncluding){
-    if(pIncluding == null || pIncluding.size()<1){
-      return;
-    }
-    put(INCLUDING, toJSArray(pIncluding));
+    including = pIncluding;
   }
   
   public void setExcluding(List<String> pExcluding){
-    if(pExcluding == null || pExcluding.size()<1){
-      return;
-    }
-    put(EXCLUDING, toJSArray(pExcluding));
+    excluding = pExcluding;
   }
   
-  private static String toJSArray(List<String> pList){
-    StringBuilder builder = new StringBuilder();
+  @Override
+  public String toUrlEncodedString() {
+    String baseString = super.toUrlEncodedString();
     
-    builder.append("[");
-    boolean isFirst = true;
-    for(String word : pList){
-      if(isFirst){
-        builder.append(word);
-        isFirst = false;
-        continue;
-      }
-      
-      builder.append("," + word);
+    StringBuilder builder = new StringBuilder();
+    builder.append(baseString);
+    
+    for(String include : including){
+      builder.append(PARAMETER_DELIMITER);
+      builder.append(INCLUDING);
+      builder.append(PARAMETER_EQUALS_CHAR);
+      builder.append(include);
     }
     
-    builder.append("]");
+    for(String exclude : excluding){
+      builder.append(PARAMETER_DELIMITER);
+      builder.append(EXCLUDING);
+      builder.append(PARAMETER_EQUALS_CHAR);
+      builder.append(exclude);
+    }
     
     return builder.toString();
   }

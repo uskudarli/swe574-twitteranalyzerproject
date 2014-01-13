@@ -10,12 +10,10 @@ import com.example.parameter.AddQueryParameter;
 import com.example.parameter.GetQueryParameter;
 import com.example.parser.ErrorParser;
 import com.example.parser.QueryListParser;
-import com.example.webservicecallback.FindCallback;
-import com.example.webservicecallback.SaveCallback;
 
 public class QueryService extends WebServiceCaller {
   private static final String ACTION_GET = "query/";
-  private static final String ACTION_ADD = "query/add";
+  private static final String ACTION_ADD = "query/add/";
   
   public QueryService(){
     super();
@@ -28,7 +26,7 @@ public class QueryService extends WebServiceCaller {
     param.setCampaignId(pCampaignId);
     
     setServiceURL(ACTION_GET);
-    setInputParams(param.createQueryString());
+    setInputParams(param);
     
     callAsync(new WebServiceCallback() {
       @Override
@@ -59,11 +57,12 @@ public class QueryService extends WebServiceCaller {
     AddQueryParameter param = new AddQueryParameter();
     param.setUsername(AuthenticationKeeper.getInstance().getUsername());
     param.setPassword(AuthenticationKeeper.getInstance().getPassword());
+    param.setCampaignId(Long.toString(pCampaign.getId()));
     param.setIncluding(pQuery.getIncluding());
     param.setExcluding(pQuery.getExcluding());
     
     setServiceURL(ACTION_ADD);
-    setInputParams(param.createQueryString());
+    setInputParams(param);
     
     callAsync(new WebServiceCallback() {
       @Override
@@ -94,6 +93,7 @@ public class QueryService extends WebServiceCaller {
           return;
         }
         
+        pCampaign.addQuery(savedQuery);
         pCallback.onSave(savedQuery);
       }
       

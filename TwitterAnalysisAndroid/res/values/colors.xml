@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="pure_white">#ffffff</color>
+    <color name="pure_black">#000000</color>
+    <color name="tinted_white">#dddddd</color>
     <color name="light_gray">#979699</color>
     <color name="dark_gray">#6c737a</color>
     <color name="error_red">#aa0000</color>

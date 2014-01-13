@@ -19,7 +19,6 @@ public abstract class JSONArrayParser<T extends SimpleEntity> extends JSONParser
     try {
       result = new JSONObject(getJSONString());
     } catch(JSONException e){
-      e.printStackTrace();
     }
     
     return result;
@@ -30,7 +29,6 @@ public abstract class JSONArrayParser<T extends SimpleEntity> extends JSONParser
     try {
       result = new JSONArray(getJSONString());
     } catch(JSONException e){
-      e.printStackTrace();
     }
     
     return result;

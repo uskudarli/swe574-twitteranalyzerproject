@@ -24,9 +24,6 @@ public class UserParser extends JSONObjectParser<User>{
     try {
       userObject = object.getJSONObject(USER);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     if(userObject == null){

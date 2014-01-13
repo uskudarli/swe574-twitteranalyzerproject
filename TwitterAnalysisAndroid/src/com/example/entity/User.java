@@ -2,19 +2,27 @@ package com.example.entity;
 
 import org.json.JSONObject;
 
+import com.example.webservice.LoginCallback;
+import com.example.webservice.SaveCallback;
+import com.example.webservice.SignupCallback;
 import com.example.webservice.UserService;
-import com.example.webservicecallback.LoginCallback;
-import com.example.webservicecallback.SaveCallback;
-import com.example.webservicecallback.SignupCallback;
 
 public class User extends SimpleEntity {
   private static final String ID = "userId";
+
+  private static final String USERNAME = "username";
+  private static final String PASSWORD = "password";
   private static final String NAME = "name";
   
   private static User currentUser;
   
   public User(){
     super();
+  }
+  
+  public User(String username, String password){
+    setUserName(username);
+    setPassword(password);
   }
   
   public User(JSONObject pObject){
@@ -32,15 +40,36 @@ public class User extends SimpleEntity {
   public void setName(String pName){
     put(NAME, pName);
   }
+  
+  public String getUserName(){
+    return getString(USERNAME);
+  }
+  
+  public void setUserName(String pUserName){
+    put(USERNAME, pUserName);
+  }
+  
+  private String getPassword(){
+    return getString(PASSWORD);
+  }
+  
+  public boolean checkPassword(String password){
+    return getPassword().equals(password);
+  }
+  
+  private void setPassword(String pPassword){
+    put(PASSWORD, pPassword);
+  }
 
   public static User getCurrentUser(){
     return currentUser;
   }
   
-  public static void login(final String pUsername, final String pPassword, final LoginCallback pCallback){
-    new UserService().login(pUsername, pPassword, new LoginCallback(){
+  public void login(final LoginCallback pCallback){
+    new UserService().login(getUserName(), getPassword(), new LoginCallback(){
       @Override
       public void onError(TAError pError) {
+        currentUser = null;
         pCallback.onError(pError);
       }
 
@@ -52,10 +81,11 @@ public class User extends SimpleEntity {
     });
   }
   
-  public static void signup(final String pUsername, final String pPassword, final SignupCallback pCallback){
-    new UserService().signup(pUsername, pPassword, new SignupCallback(){
+  public void signup(final SignupCallback pCallback){
+    new UserService().signup(getUserName(), getPassword(), new SignupCallback(){
       @Override
       public void onError(TAError pError) {
+        currentUser = null;
         pCallback.onError(pError);
       }
 
@@ -68,7 +98,19 @@ public class User extends SimpleEntity {
   }
   
   public void changePassword(final String pNewPassword, final SaveCallback<User> pCallback){
-    new UserService().update(this, pNewPassword, pCallback);
+    new UserService().update(this, pNewPassword, new SaveCallback<User>(){
+      @Override
+      public void onError(TAError pError) {
+        pCallback.onError(pError);
+      }
+
+      @Override
+      public void onSave(User pObject) {
+        User.this.setPassword(pNewPassword);
+        User.this.setDirty(false);
+        pCallback.onSave(User.this);
+      }
+    });
   }
   
   public void saveChanges(final SaveCallback<User> pCallback){
@@ -77,6 +119,17 @@ public class User extends SimpleEntity {
       return;
     }
     
-    new UserService().update(this, null, pCallback);
+    new UserService().update(this, null, new SaveCallback<User>(){
+      @Override
+      public void onError(TAError pError) {
+        pCallback.onError(pError);
+      }
+
+      @Override
+      public void onSave(User pObject) {
+        User.this.setDirty(false);
+        pCallback.onSave(User.this);
+      }
+    });
   }
 }

@@ -118,8 +118,16 @@ public class QueryController extends AbstractController {
 	}
 	
 	public void runQuery(Query query) {
-		QueryExecuter queryExecuter = new QueryExecuter();
-		queryExecuter.execute( this, query);
+//		QueryExecuter queryExecuter = new QueryExecuter();
+//		queryExecuter.execute( this, query);
+		query.setActive("Y");
+		try {
+			new QueryDAO().save(query);
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadQueries(ComboBox queriesComboBox, Object campaignId) {

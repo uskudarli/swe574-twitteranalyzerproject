@@ -12,9 +12,9 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="@dimen/light_padding"
-        android:textColor="@color/pure_white"
+        android:textColor="@color/dark_gray"
         android:textSize="@dimen/font_size_regular"
-        android:background="@color/light_gray" />
+        android:background="@color/tinted_white" />
     
     <Button
         android:id="@+id/button_delete" 

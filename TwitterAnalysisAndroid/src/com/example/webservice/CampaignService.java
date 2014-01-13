@@ -9,24 +9,31 @@ import com.example.parameter.AddCampaignParameter;
 import com.example.parameter.AuthorizationParameter;
 import com.example.parser.CampaignListParser;
 import com.example.parser.ErrorParser;
-import com.example.webservicecallback.FindCallback;
-import com.example.webservicecallback.SaveCallback;
 
 public class CampaignService extends WebServiceCaller {
   private static final String ACTION_GET = "campaign/";
-  private static final String ACTION_ADD = "campaign/add";
+  private static final String ACTION_ADD = "campaign/add/";
+  
+  List<Campaign> cachedCampaigns;
 
   public CampaignService(){
     super();
   }
   
   public void get(final FindCallback<Campaign> pCallback){
+    // if we have previously retrieved the list then just return that
+    if(cachedCampaigns != null){
+      pCallback.onFind(cachedCampaigns);
+      return;
+    }
+    
+    // lazy load the campaigns
     AuthorizationParameter param = new AuthorizationParameter();
     param.setUsername(AuthenticationKeeper.getInstance().getUsername());
     param.setPassword(AuthenticationKeeper.getInstance().getPassword());
     
     setServiceURL(ACTION_GET);
-    setInputParams(param.createQueryString());
+    setInputParams(param);
     
     callAsync(new WebServiceCallback() {
       @Override
@@ -43,7 +50,9 @@ public class CampaignService extends WebServiceCaller {
           return;
         }
         
-        pCallback.onFind(campaigns);
+        // cache the campaigns
+        cachedCampaigns = campaigns;
+        pCallback.onFind(cachedCampaigns);
       }
       
       @Override
@@ -61,7 +70,7 @@ public class CampaignService extends WebServiceCaller {
     param.setDescription(pCampaign.getDescription());
     
     setServiceURL(ACTION_ADD);
-    setInputParams(param.createQueryString());
+    setInputParams(param);
     
     callAsync(new WebServiceCallback() {
       @Override
@@ -89,6 +98,11 @@ public class CampaignService extends WebServiceCaller {
         if(savedCampaign == null){
           pCallback.onError(new TAError("Something went wrong"));
           return;
+        }
+        
+        // if we have cache loaded then add this campaign to it
+        if(cachedCampaigns != null){
+          cachedCampaigns.add(savedCampaign);
         }
         
         pCallback.onSave(savedCampaign);

@@ -1,7 +1,5 @@
 package com.example.entity;
 
-import static com.example.helper.Constants.DEBUG;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +22,6 @@ public class SimpleEntity {
     try {
       result = object.getString(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -38,9 +33,6 @@ public class SimpleEntity {
     try {
       result = object.getInt(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -52,9 +44,6 @@ public class SimpleEntity {
     try {
       result = object.getLong(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -66,9 +55,6 @@ public class SimpleEntity {
     try {
       result = object.getDouble(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -80,9 +66,6 @@ public class SimpleEntity {
     try {
       result = object.getBoolean(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -94,9 +77,6 @@ public class SimpleEntity {
     try {
       result = object.getJSONObject(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -108,9 +88,6 @@ public class SimpleEntity {
     try {
       result = object.getJSONArray(pKey);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
     
     return result;
@@ -128,9 +105,6 @@ public class SimpleEntity {
     try {
       object. put(pKey, pValue);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
@@ -144,9 +118,6 @@ public class SimpleEntity {
     try {
       object. put(pKey, pValue);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
@@ -160,9 +131,6 @@ public class SimpleEntity {
     try {
       object. put(pKey, pValue);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
@@ -176,9 +144,6 @@ public class SimpleEntity {
     try {
       object. put(pKey, pValue);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
@@ -192,9 +157,6 @@ public class SimpleEntity {
     try {
       object. put(pKey, pValue);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
@@ -202,9 +164,6 @@ public class SimpleEntity {
     try {
       object.put(pKey, pObject);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
@@ -212,9 +171,6 @@ public class SimpleEntity {
     try {
       object.put(pKey, pArray);
     } catch(JSONException e){
-      if(DEBUG){
-        e.printStackTrace();
-      }
     }
   }
   
