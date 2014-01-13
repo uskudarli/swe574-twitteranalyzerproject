@@ -1,6 +1,13 @@
 package com.example.fragment;
 
 import static com.example.helper.Constants.NOVALIDATION;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.entity.Campaign;
 import com.example.entity.TAError;
@@ -9,19 +16,9 @@ import com.example.twitteranalysisandroid.R;
 import com.example.webservice.CampaignService;
 import com.example.webservice.SaveCallback;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
 public class AddCampaignFragment extends Fragment {
 
 	private EditText campaignNameEditText, campaignDescriptionEditText;
-	private Button campaignAddButton;
 
 	private static AddCampaignFragment instance = null;
 
@@ -47,8 +44,8 @@ public class AddCampaignFragment extends Fragment {
 		campaignDescriptionEditText = (EditText) view
 				.findViewById(R.id.et_campaign_description);
 
-		campaignAddButton = (Button) view
-				.findViewById(R.id.button_add_campaign);
+//		campaignAddButton = (Button) view
+//				.findViewById(R.id.button_add_campaign);
 
 		return view;
 	}

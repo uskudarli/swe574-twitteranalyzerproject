@@ -1,7 +1,5 @@
 package com.example.parser;
 
-import static com.example.helper.Constants.DEBUG;
-
 import java.util.LinkedList;
 import java.util.List;
 

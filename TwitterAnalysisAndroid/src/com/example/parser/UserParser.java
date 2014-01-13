@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.entity.User;
-import static com.example.helper.Constants.DEBUG;
 
 public class UserParser extends JSONObjectParser<User>{
   public static final String USER = "user";
