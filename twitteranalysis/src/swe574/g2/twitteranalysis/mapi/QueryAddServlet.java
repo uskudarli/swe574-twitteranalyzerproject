@@ -72,20 +72,18 @@ public class QueryAddServlet extends HttpServlet {
 		if (user != null) {
 			QueryController queryController = new QueryController();
 			
-			//boolean result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId));
+			Query result = queryController.addQuery(iKeys, eKeys, Integer.valueOf(campaignId));
 			
-			boolean result = true;
-			
-			if (result) {
+			if (result != null && result.getId() > 0) {
 				Query[] queries = queryController.getQueries(Integer.valueOf(campaignId));
 				int index=0;
-				int index2=0;
-				int index3=0;
 				
 				json = "{" + 
 						"  \"queries\": [";
 				if (queries != null) {
 					for (Query q : queries) {
+						int index2=0;
+						int index3=0;
 						List<String> ikeys = q.getIncludingKeywords();
 						List<String> ekeys = q.getExcludingKeywords();
 						

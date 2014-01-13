@@ -50,7 +50,7 @@ public class CampaignAddServlet extends HttpServlet {
 		ApplicationUser user = loginController.checkUser(username, password);
 		
 		String json = "";
-		if (user != null) {
+		if (user != null && campaignName != null) {
 			CampaignController campaignController = new CampaignController();
 			boolean result = campaignController.addCampaign(campaignName, campaignDescription, user.getId());
 			
@@ -79,10 +79,19 @@ public class CampaignAddServlet extends HttpServlet {
 			json += "] }";
 		}
 		else {
-			json = "{" +
-					"  \"error\": true, " + 
-					"  \"message\": \"authentication_failure\" " + 
-					"}";
+			if (user == null) {
+				json = "{" +
+						"  \"error\": true, " + 
+						"  \"message\": \"authentication_failure\" " + 
+						"}";
+			}
+			else 
+			{
+				json = "{" +
+						"  \"error\": true, " + 
+						"  \"message\": \"define a name for campaign\" " + 
+						"}";
+			}
 		}
 		
 		response.setContentType("application/json");

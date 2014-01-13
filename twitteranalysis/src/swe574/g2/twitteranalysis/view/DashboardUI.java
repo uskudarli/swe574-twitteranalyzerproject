@@ -13,6 +13,7 @@ import swe574.g2.twitteranalysis.dao.ApplicationUserDAO;
 import swe574.g2.twitteranalysis.dao.CampaignDAO;
 import swe574.g2.twitteranalysis.dao.QueryDAO;
 import swe574.g2.twitteranalysis.dao.TweetDAO;
+import swe574.g2.twitteranalysis.exec.QueryExecuterService;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -88,8 +89,9 @@ public class DashboardUI extends UI {
 			(new CampaignDAO()).init();
 			(new QueryDAO()).init();
 			(new TweetDAO()).init();
+			Class.forName("swe574.g2.twitteranalysis.exec.QueryExecuterService");
 		} 
-		catch (SQLException e) {
+		catch (Exception e) {
 			System.err.println("database table control failed.");
 			e.printStackTrace();
 		}

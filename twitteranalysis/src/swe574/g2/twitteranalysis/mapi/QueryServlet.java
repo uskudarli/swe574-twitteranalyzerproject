@@ -56,13 +56,13 @@ public class QueryServlet extends HttpServlet {
 			QueryController queryController = new QueryController();
 			Query[] queries = queryController.getQueries(Integer.valueOf(campaignId));
 			int index=0;
-			int index2=0;
-			int index3=0;
 			
 			json = "{" + 
 					"  \"queries\": [";
 			if (queries != null) {
 				for (Query q : queries) {
+					int index2=0;
+					int index3=0;
 					List<String> ikeys = q.getIncludingKeywords();
 					List<String> ekeys = q.getExcludingKeywords();
 					
