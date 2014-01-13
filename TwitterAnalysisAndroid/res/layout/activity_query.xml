@@ -38,14 +38,14 @@
             android:layout_marginTop="@dimen/medium_margin"
             android:layout_marginBottom="@dimen/light_margin" />
         
-		    <Spinner
-		        android:id="@+id/spinner_campaign_name"
-		        android:layout_width="@dimen/form_item_wide"
-		        android:layout_height="wrap_content"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_regular"
-            android:layout_marginTop="@dimen/light_margin"
-            android:layout_marginBottom="@dimen/medium_margin" />
+<!-- 		    <Spinner -->
+<!-- 		        android:id="@+id/spinner_campaign_name" -->
+<!-- 		        android:layout_width="@dimen/form_item_wide" -->
+<!-- 		        android:layout_height="wrap_content" -->
+<!--             android:textColor="@color/light_gray" -->
+<!--             android:textSize="@dimen/font_size_regular" -->
+<!--             android:layout_marginTop="@dimen/light_margin" -->
+<!--             android:layout_marginBottom="@dimen/medium_margin" /> -->
 		    
 		    <!-- new campaign name -->
 		    <TextView

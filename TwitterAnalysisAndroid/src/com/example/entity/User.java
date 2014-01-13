@@ -53,6 +53,10 @@ public class User extends SimpleEntity {
     return getString(PASSWORD);
   }
   
+  public boolean checkPassword(String password){
+    return getPassword().equals(password);
+  }
+  
   private void setPassword(String pPassword){
     put(PASSWORD, pPassword);
   }

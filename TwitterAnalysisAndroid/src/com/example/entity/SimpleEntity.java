@@ -1,7 +1,5 @@
 package com.example.entity;
 
-import static com.example.helper.Constants.DEBUG;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -59,6 +59,15 @@
             android:textColor="@color/twitter_dark_blue"
             android:textSize="@dimen/font_size_large" />
         
+        <TextView 
+            android:id="@+id/menu_change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding"
+            android:text="@string/menu_change_password"
+            android:textColor="@color/twitter_dark_blue"
+            android:textSize="@dimen/font_size_large" />
+        
     </LinearLayout>
     
     <!-- Content View, a title and a view pager for content -->

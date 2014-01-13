@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import com.example.entity.User;
 import com.example.fragment.AddCampaignFragment;
 import com.example.fragment.AddQueryFragment;
+import com.example.fragment.ChangePasswordFragment;
 import com.example.fragment.ProfileFragment;
 import com.example.fragment.ViewQueryFragment;
 import com.example.fragment.ViewReportFragment;
@@ -22,12 +23,14 @@ public class MainActivity extends MenuActivity {
 	private static final int ADD_QUERY_INDEX = 2;
 	private static final int ADD_CAMPAIGN_INDEX = 3;
 	private static final int PROFILE_INDEX = 4;
+	private static final int CHANGE_PASSWORD_INDEX = 5;
 
 	private View mMenuViewReport;
 	private View mMenuViewQuery;
 	private View mMenuAddQuery;
 	private View mMenuAddCampaign;
 	private View mMenuProfile;
+	private View mMenuChangePassword;
 
 	private AddCampaignFragment addCampaignFragment;
 	private AddQueryFragment addQueryFragment;
@@ -59,6 +62,7 @@ public class MainActivity extends MenuActivity {
 		mMenuAddQuery = findViewById(R.id.menu_add_query);
 		mMenuAddCampaign = findViewById(R.id.menu_add_campaign);
 		mMenuProfile = findViewById(R.id.menu_profile);
+		mMenuChangePassword = findViewById(R.id.menu_change_password);
 
 		// setup the view pager
 		mViewPager.setAdapter(new FragmentPagerAdapter(
@@ -67,24 +71,20 @@ public class MainActivity extends MenuActivity {
 			public Fragment getItem(int arg0) {
 				switch (arg0) {
 				case VIEW_REPORT_INDEX:
-					// first page is the login page
 					return new ViewReportFragment();
 				case VIEW_QUERY_INDEX:
-					// second page is the registration page
 					return new ViewQueryFragment();
 				case ADD_QUERY_INDEX:
-					// first page is the login page
 					addQueryFragment = AddQueryFragment.getInstance();
 					return addQueryFragment;
 				case ADD_CAMPAIGN_INDEX:
-					// second page is the registration page
 					addCampaignFragment = AddCampaignFragment.getInstance();
 					return addCampaignFragment;
 				case PROFILE_INDEX:
-					// second page is the registration page
 					return new ProfileFragment();
+				case CHANGE_PASSWORD_INDEX:
+				  return new ChangePasswordFragment();
 				default:
-					// make report the default page
 					return new ViewReportFragment();
 				}
 			}
@@ -93,7 +93,7 @@ public class MainActivity extends MenuActivity {
 			public int getCount() {
 				// four pages in the pager
 				// can't find a way to make this dynamic
-				return 5;
+				return 6;
 			}
 		});
 
@@ -143,6 +143,13 @@ public class MainActivity extends MenuActivity {
         closeMenu();
 			}
 		});
+		mMenuChangePassword.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mViewPager.setCurrentItem(CHANGE_PASSWORD_INDEX);
+        closeMenu();
+      }
+    });
 	}
 
 	@Override

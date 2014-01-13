@@ -68,8 +68,6 @@ public class ViewReportFragment extends Fragment {
     // get references to some view objects
     pieChartPlaceholder = (LinearLayout) view.findViewById(R.id.pie_chart);
     
-    showReport();
-    
     return view;
   }
   
@@ -79,14 +77,15 @@ public class ViewReportFragment extends Fragment {
     
     if (mChartView == null) {
       mChartView = ChartFactory.getPieChartView(getActivity(), mSeries, mRenderer);
-      pieChartPlaceholder.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT,
-          LayoutParams.MATCH_PARENT));
+      pieChartPlaceholder.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     } else {
       mChartView.repaint();
     }
     
     mRenderer.setClickEnabled(true);
     mChartView.setOnClickListener(new PieChartClickListener());
+    
+    showReport();
   }
   
   @Override

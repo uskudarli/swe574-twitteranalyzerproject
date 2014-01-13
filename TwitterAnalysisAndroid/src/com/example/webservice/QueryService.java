@@ -93,6 +93,7 @@ public class QueryService extends WebServiceCaller {
           return;
         }
         
+        pCampaign.addQuery(savedQuery);
         pCallback.onSave(savedQuery);
       }
       

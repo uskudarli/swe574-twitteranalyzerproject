@@ -19,11 +19,12 @@ import com.example.helper.WarningDialogBuilder;
 import com.example.twitteranalysisandroid.R;
 import com.example.webservice.SaveCallback;
 
-public class ProfileFragment extends Fragment {
+public class ChangePasswordFragment extends Fragment {
   
-  private EditText mFullNameEdit;
-  private EditText mEmailEdit;
-  private Button mUpdateButton;
+  private EditText mCurrentPassword;
+  private EditText mNewPassword;
+  private EditText mNewConfirmPassword;
+  private Button mChangePassButton;
   
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -33,16 +34,13 @@ public class ProfileFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
     // inflate the layout
-    View view = inflater.inflate(R.layout.fragment_profile, null);
+    View view = inflater.inflate(R.layout.fragment_change_password, null);
     
     // get references to some view objects
-    mUpdateButton = (Button) view.findViewById(R.id.button_update);
-    mEmailEdit = (EditText) view.findViewById(R.id.et_email);
-    mFullNameEdit = (EditText) view.findViewById(R.id.et_name);
-    
-    // set up email and password from disk
-    mEmailEdit.setText(User.getCurrentUser().getUserName());
-    mFullNameEdit.setText(User.getCurrentUser().getName());
+    mChangePassButton = (Button) view.findViewById(R.id.button_change_password);
+    mCurrentPassword = (EditText) view.findViewById(R.id.edit_current_password);
+    mNewPassword = (EditText) view.findViewById(R.id.edit_new_password);
+    mNewConfirmPassword = (EditText) view.findViewById(R.id.edit_confirm_new_password);
     
     return view;
   }
@@ -57,7 +55,7 @@ public class ProfileFragment extends Fragment {
     super.onResume();
     
     // start listening to the update button
-    mUpdateButton.setOnClickListener(new OnClickListener() {
+    mChangePassButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         // validate and submit the form
@@ -71,7 +69,7 @@ public class ProfileFragment extends Fragment {
     super.onPause();
     
     // stop listening to the login button
-    mUpdateButton.setOnClickListener(null);
+    mChangePassButton.setOnClickListener(null);
   }
   
   @Override
@@ -105,9 +103,21 @@ public class ProfileFragment extends Fragment {
     
     boolean isValid = true;
     
-    // check that a name exists
-    if(mFullNameEdit.getText().toString().trim().length()<1){
-      mFullNameEdit.setError(getString(R.string.err_name));
+    // check that the password is correct
+    if(!User.getCurrentUser().checkPassword(mCurrentPassword.getText().toString().trim())){
+      mCurrentPassword.setError(getString(R.string.err_current_pass));
+      isValid = false;
+    }
+    
+    // check that new password is long enough
+    if(mNewPassword.getText().toString().trim().length()<6){
+      mNewPassword.setError(getString(R.string.err_password));
+      isValid = false;
+    }
+    
+    // check that the password is correct
+    if(mNewPassword.getText().toString().trim().equals(mNewConfirmPassword.getText().toString().trim())){
+      mCurrentPassword.setError(getString(R.string.err_confirm_password));
       isValid = false;
     }
     
@@ -118,11 +128,11 @@ public class ProfileFragment extends Fragment {
    * Clears all errors from the form
    */
   private void clearFromErrors(){
-    mFullNameEdit.setError(null);
+    mCurrentPassword.setError(null);
   }
   
   /***
-   * Submits the form to update user profile
+   * Submits the form to change the user password
    * Displays loading dialog while processing request
    * Displays success or error message when done
    */
@@ -131,10 +141,8 @@ public class ProfileFragment extends Fragment {
     final ProgressDialog loadingDialog = new LoadingDialog(getActivity());
     loadingDialog.show();
     
-    User.getCurrentUser().setName(mFullNameEdit.getText().toString().trim());
-    
-    // call the login method with the parameters from the form
-    User.getCurrentUser().saveChanges(
+    // call the change password method with the new password
+    User.getCurrentUser().changePassword(mNewPassword.getText().toString().trim(), 
         new SaveCallback<User>(){
           @Override
           public void onSave(User pUser) {
@@ -144,7 +152,7 @@ public class ProfileFragment extends Fragment {
             // display success message
             new WarningDialogBuilder(getActivity())
             .setTitle(getString(R.string.txt_error))
-            .setMessage(getString(R.string.profile_updated))
+            .setMessage(getString(R.string.password_changed))
             .show();
           }
 
