@@ -4,7 +4,6 @@ import static com.example.helper.Constants.DEBUG;
 
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 import com.example.entity.Campaign;
 import com.example.entity.Query;
 import com.example.entity.TAError;
-import com.example.helper.LoadingDialog;
 import com.example.helper.WarningDialogBuilder;
 import com.example.twitteranalysisandroid.R;
 import com.example.webservice.CampaignService;
@@ -61,9 +59,7 @@ public class ViewQueryFragment extends Fragment {
   public void onResume(){
     super.onResume();
     
-    if(campaigns == null){
-      setupCampaignNames();
-    }
+    setupCampaignNames();
     
     mCampaignSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
@@ -101,13 +97,13 @@ public class ViewQueryFragment extends Fragment {
   private void setupCampaignNames() {
     currentCampaign = null;
 
-    final ProgressDialog loadingDialog = new LoadingDialog(getActivity());
-    loadingDialog.show();
+//    final ProgressDialog loadingDialog = new LoadingDialog(getActivity());
+//    loadingDialog.show();
     
     new CampaignService().get(new FindCallback<Campaign>() {
       @Override
       public void onError(TAError pError) {
-        loadingDialog.dismiss();
+//        loadingDialog.dismiss();
         
         if(DEBUG){
           new WarningDialogBuilder(getActivity().getApplicationContext())
@@ -124,7 +120,7 @@ public class ViewQueryFragment extends Fragment {
 
       @Override
       public void onFind(List<Campaign> pObjects) {
-        loadingDialog.dismiss();
+//        loadingDialog.dismiss();
         
         campaigns = pObjects;
         if(campaigns.size()>0){
@@ -166,8 +162,8 @@ public class ViewQueryFragment extends Fragment {
       return;
     }
     
-    final ProgressDialog loadingDialog = new LoadingDialog(getActivity());
-    loadingDialog.show();
+//    final ProgressDialog loadingDialog = new LoadingDialog(getActivity());
+//    loadingDialog.show();
 
     currentCampaign.getQueries(
         new FindCallback<Query>() {
@@ -177,12 +173,12 @@ public class ViewQueryFragment extends Fragment {
                 .setTitle(getString(R.string.txt_error))
                 .setMessage(pError.getMessage()).show();
 
-            loadingDialog.dismiss();
+//            loadingDialog.dismiss();
           }
 
           @Override
           public void onFind(List<Query> pObjects) {
-            loadingDialog.dismiss();
+//            loadingDialog.dismiss();
             
             queries = pObjects;
             if(queries.size()>0){

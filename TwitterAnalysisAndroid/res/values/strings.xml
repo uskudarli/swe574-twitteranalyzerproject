@@ -91,5 +91,5 @@
     <string name="button_change_password">Change Password</string>
     <string name="err_current_pass">Wrong password</string>
     <string name="password_changed">Password successfully changed</string>
-    <string name="txt_error_get">An error occured while retrieving your data</string>
+    <string name="txt_error_get">An error occurred while retrieving your data</string>
 </resources>
