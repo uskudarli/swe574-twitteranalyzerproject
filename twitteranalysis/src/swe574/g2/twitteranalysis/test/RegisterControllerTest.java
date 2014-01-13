@@ -40,7 +40,7 @@ public class RegisterControllerTest extends BaseTest {
 		confirmField.setValue("password");
 		
 		try {
-			controller.register(usernameField, passwordField, confirmField);
+			controller.register(usernameField, usernameField, passwordField, confirmField);
 			fail("register did not throw a RegistrationException where it was expected..");
 		} catch (RegistrationException re) {
 			// Success Case
@@ -55,7 +55,7 @@ public class RegisterControllerTest extends BaseTest {
 		confirmField.setValue("passwordX");
 		
 		try {
-			controller.register(usernameField, passwordField, confirmField);
+			controller.register(usernameField, usernameField, passwordField, confirmField);
 			fail("register did not throw a RegistrationException where it was expected..");
 		} catch (RegistrationException re) {
 			// Success Case
@@ -70,7 +70,7 @@ public class RegisterControllerTest extends BaseTest {
 		confirmField.setValue("password");
 		
 		try {
-			controller.register(usernameField, passwordField, confirmField);
+			controller.register(usernameField, usernameField, passwordField, confirmField);
 		} catch (RegistrationException re) {
 			fail("register threw a RegistrationException where it was not expected..");
 		}
@@ -86,13 +86,13 @@ public class RegisterControllerTest extends BaseTest {
 		confirmField.setValue("password");
 		
 		try {
-			controller.register(usernameField, passwordField, confirmField);
+			controller.register(usernameField, usernameField, passwordField, confirmField);
 		} catch (RegistrationException re) {
 			fail("register threw a RegistrationException where it was not expected..");
 		}
 		
 		try {
-			controller.register(usernameField, passwordField, confirmField);
+			controller.register(usernameField, usernameField, passwordField, confirmField);
 			fail("register did not throw a RegistrationException where it was expected..");
 		} catch (RegistrationException re) {
 			// Success Case

@@ -12,7 +12,7 @@ public class QueryExecuterService {
 
 	private static QueryExecuterService instance = new QueryExecuterService();
 
-	private static int PAUSE_TIME = 3000;
+	private static int PAUSE_TIME = 30000;
 	
 	static {
 		System.out.println("QueryExecuterService");
@@ -23,38 +23,40 @@ public class QueryExecuterService {
 			@Override
 			public void run(){
 				DatabaseConnector dbInstance = DatabaseConnector.getInstance();
-				Connection connection = null;
 				try {
 					Query[] fetchedQueries = null;
 					Query query = new Query();
 					query.setActive("Y");
 					
-					connection = dbInstance.getConnection();
-					connection.setAutoCommit(false);
-					
 					// there is an infinite loop here
 					while( true ) {
-						
 						try {
+							Connection connection = null;
+							
+							connection = dbInstance.getConnection();
 							fetchedQueries = new QueryDAO().get(connection, query);
+							System.out.println("Fetched: " + fetchedQueries.length);
 							
 					    	for (Query q : fetchedQueries) {
 								new ExecutableQuery(q, new DefaultQueryProcessor()).execute(connection);
-								connection.commit();
 								
 								requestCount += 1;
 								totalRequestCount += 1;
 					            
 								try {
-									// wait 1 seconds
+									// wait n seconds
 									Thread.sleep(PAUSE_TIME);
-									System.out.println("Paused.");
+									System.out.println("Paused inner.");
 								} 
 								catch (InterruptedException e) {
 								}
 							}
 					    	
+					    	dbInstance.closeConnection(connection);
+					    	
 					    	try {
+					    		System.gc();
+					    		
 								// wait 1 seconds
 								Thread.sleep(15000);
 								System.out.println("Paused.");
@@ -62,7 +64,7 @@ public class QueryExecuterService {
 							catch (InterruptedException e) {
 							}
 					    	
-							System.out.println("Fetched: " + fetchedQueries.length);
+							
 						} 
 						catch (SQLException e1) {
 							e1.printStackTrace();
@@ -74,16 +76,6 @@ public class QueryExecuterService {
 				catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				finally {
-					if (connection != null) {
-						try {
-							dbInstance.closeConnection(connection);
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
 				}
 			}
 		}).start();

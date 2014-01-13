@@ -45,7 +45,7 @@ public class LoginController extends AbstractController {
 	
 	public ApplicationUser checkUser(String username, String password) throws RuntimeException {
 		ApplicationUser queryUser = new ApplicationUser();
-		queryUser.setName(username);
+		queryUser.setEmail(username);
 		queryUser.setHashedPassword(password);
 		try 
 		{

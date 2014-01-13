@@ -80,7 +80,7 @@ public class ApplicationUserServlet extends HttpServlet {
 				json = "{" +
 						"  \"user\": {" +
 						"    \"userId\": \"" + user.getId() + "\", " + 
-						"    \"username\": \"" + user.getEmail() + "\" " +
+						"    \"username\": \"" + user.getEmail() + "\", " +
 						"    \"name\": \"" + user.getName() + "\" " +
 						"  } " + 
 						"}";
