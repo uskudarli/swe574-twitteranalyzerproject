@@ -19,13 +19,79 @@
             android:textColor="@color/twitter_blue"
             android:textSize="@dimen/font_size_large" />
         
-        <com.example.uiwidget.SquareLinearLayout 
-            android:id="@+id/pie_chart" 
+        <!-- campaign drop down list -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/txt_campaign"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <Spinner
+            android:id="@+id/spinner_campaign_name"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/light_margin"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <!-- query number dropdown -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/light_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/txt_query"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_regular" />
+
+        <Spinner
+            android:id="@+id/spinner_query_number"
+            android:layout_width="@dimen/form_item_wide"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/light_margin"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_size_regular" />
+        
+        <TableLayout 
+            android:id="@+id/positive_frequency" 
             android:orientation="horizontal"
             android:layout_width="match_parent" 
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/dark_gray"
-            android:textSize="@dimen/font_size_large" />
+            android:textSize="@dimen/font_size_large"
+            android:layout_margin="@dimen/medium_margin" />
+        
+        <TableLayout
+            android:id="@+id/negative_frequency" 
+            android:orientation="horizontal"
+            android:layout_width="match_parent" 
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_size_large"
+            android:layout_margin="@dimen/medium_margin" />
+        
+        <TableLayout 
+            android:id="@+id/neutral_frequency" 
+            android:orientation="horizontal"
+            android:layout_width="match_parent" 
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_size_large"
+            android:layout_margin="@dimen/medium_margin" />
+        
+        <TableLayout
+            android:id="@+id/all_frequency" 
+            android:orientation="horizontal"
+            android:layout_width="match_parent" 
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_size_large"
+            android:layout_margin="@dimen/medium_margin" />
         
     </LinearLayout>
     

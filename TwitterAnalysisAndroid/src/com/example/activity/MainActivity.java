@@ -18,12 +18,12 @@ import com.example.twitteranalysisandroid.R;
 
 public class MainActivity extends MenuActivity {
 
-	private static final int VIEW_REPORT_INDEX = 5;
-	private static final int VIEW_QUERY_INDEX = 0;
-	private static final int ADD_QUERY_INDEX = 1;
-	private static final int ADD_CAMPAIGN_INDEX = 2;
-	private static final int PROFILE_INDEX = 3;
-	private static final int CHANGE_PASSWORD_INDEX = 4;
+	private static final int VIEW_REPORT_INDEX = 0;
+	private static final int VIEW_QUERY_INDEX = 1;
+	private static final int ADD_QUERY_INDEX = 2;
+	private static final int ADD_CAMPAIGN_INDEX = 3;
+	private static final int PROFILE_INDEX = 4;
+	private static final int CHANGE_PASSWORD_INDEX = 5;
 
 	private View mMenuViewReport;
 	private View mMenuViewQuery;

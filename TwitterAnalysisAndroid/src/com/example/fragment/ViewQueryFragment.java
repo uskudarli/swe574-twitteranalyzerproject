@@ -106,12 +106,12 @@ public class ViewQueryFragment extends Fragment {
 //        loadingDialog.dismiss();
         
         if(DEBUG){
-          new WarningDialogBuilder(getActivity().getApplicationContext())
+          new WarningDialogBuilder(getActivity())
             .setTitle(getString(R.string.txt_error))
             .setMessage(pError.getMessage())
             .show();
         } else {
-          new WarningDialogBuilder(getActivity().getApplicationContext())
+          new WarningDialogBuilder(getActivity())
               .setTitle(getString(R.string.txt_error))
               .setMessage(getString(R.string.txt_error_get))
               .show();

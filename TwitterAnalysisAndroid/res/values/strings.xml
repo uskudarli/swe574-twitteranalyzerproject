@@ -61,6 +61,7 @@
     <string name="txt_positive">Positive</string>
     <string name="txt_negative">Negative</string>
     <string name="txt_neutral">Neutral</string>
+    <string name="txt_all">All</string>
     <string name="txt_new">New</string>
     <string name="txt_campaign_description">Campaign Description:</string>
     <string name="campaign_name_hint">Enter a campaign name</string>
@@ -92,4 +93,6 @@
     <string name="err_current_pass">Wrong password</string>
     <string name="password_changed">Password successfully changed</string>
     <string name="txt_error_get">An error occurred while retrieving your data</string>
+    <string name="txt_word">Word</string>
+    <string name="txt_frequency">Frequency</string>
 </resources>
